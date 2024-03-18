@@ -1,0 +1,50 @@
+/*!* LoyaltyPage.css *!*/
+
+.loyalty-page__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.loyalty-page__content p {
+    margin-top: 40px;
+    font-size: 26px;
+}
+
+.loyalty-page__content h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+.loyalty-page__content ul h1, h2 {
+    color: #333;
+    font-size: 30px;
+}
+
+.loyalty-page__content h2 {
+    margin-top: 50px;
+    font-size: 50px;
+}
+
+.loyalty-page__content ul {
+    list-style-type: square;
+    margin-left: 20px;
+    font-size: 22px;
+}
+
+.loyalty-page__content ul, li, ol {
+    margin-top: 25px;
+    font-size: 20px;
+}
+
+.loyalty-page__content__lastP {
+    margin: 80px auto;
+    color: #0f9b11;
+    font-family: Candara, serif;
+    font-size: 26px;
+    text-align: center;
+}

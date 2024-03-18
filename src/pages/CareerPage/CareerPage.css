@@ -1,0 +1,41 @@
+/*!* CareerPage.css *!*/
+
+.career-page__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.career-page__content p {
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+.career-page__content h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+.career-page__ul h1, h2 {
+    color: #333;
+    font-size: 50px;
+    margin-top: 40px;
+}
+
+.career-page__ul {
+    list-style-type: square;
+    margin-left: 20px;
+    font-size: 22px;
+}
+
+.career-page__ul li {
+    margin-top: 25px;
+}
+
+.career-page {
+    margin-top: 20px;
+}

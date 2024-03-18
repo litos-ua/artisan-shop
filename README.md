@@ -1,70 +1,122 @@
-# Getting Started with Create React App
+# Internet Shop
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## The list of table
 
-## Available Scripts
+### Products Table
+- product_id (PK)
+- description
+- price
+- category_id (FK linking to a **category** table)
+- image_url
 
-In the project directory, you can run:
+### ProductsOfCategoryPage Table
+- category_id (PK)
+- name
 
-### `npm start`
+### Customers Table (Users ???)
+- customer_id (PK)
+- first_name
+- last_name
+- email
+- password (hashed)
+- address
+- phone_number
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Orders Table
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- order_id (PK)
+- customer_id (FK linking to the **customers** table)
+- order_date
+- order_detail_id (FK linking to the **order details** table)
+- delivery_status ("pending" "delivered")
+- payment_status ("paid", "not paid")
 
-### `npm test`
+### Order Details Table (for storing individual products within an order)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- order_detail_id (PK)
+- order_id (FK linking to the **orders** table)
+- product_id (FK linking to the **products** table)
+- quantity
+- price
+- amount (calculated)
 
-### `npm run build`
+### Carts Table (for storing items in a user's shopping cart before purchase)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- cart_id (PK)
+- customer_id (FK linking to the **customers** table)
+- cart_item_id (FK linking to the **cart items** table)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Cart Items Table
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- cart_item_id (PK)
+- cart_id (FK linking to the **cart** table)
+- order_id (FK linking to the **orders** table)
+- product_id (FK linking to the **products** table)
+- quantity
+- price
+- amount (calculated)
 
-### `npm run eject`
+### Payments Table
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- payment_id
+- order_id (FK linking to the **orders** table)
+- transaction_date
+- amount
+- payment_method VARCHAR(50),
+- transaction_status (???)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Исходные положения
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Принцип работы интернет магазина:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Люди заходят на сайт первоначально без регистрации (аутентификации).
+- Все товары разделены на категории.
+- После выбора категории в основном блоке открываются товары в виде галереи с фото, с краткими характеристиками,
+  ценой и доступностью на складе.
+- Возможна сортировка товаров по цене, названию, популярности ...
+- При выборе интересующего товара в основном блоке открывается окно с более крупным фото и развернутыми
+  характеристиками. Также появлется кнопка для перемещения товара в корзину. Если товар перемещен в корзину,
+  то окно автоматически закрывается. Автоматического перехода в корзину не происходит и покупатель может
+  продолжить выбор товаров.
+- Если в корзине уже есть товары, то зачок индикации корзины меняется соответствующим образом.
+- При нажатии на значек корзины покупатель переходит в соответствующее окно корзины (или на страницу
+  корзины).
+- По умолчанию товар в корзине выбирается в единичном количестве.
+- Количество данного товара  можно менять в корзине.
+- Товары в корзине можно удалять. Если после удаления товара в корзине не осталось ни одного товара,
+  окно корзины автоматически закрывается.
+- Для покупателя выводится количество, ценна единицы товара и сумма. Также выводится и суммарная стоимость всех
+  выбранных товаров.
+- Если покупатель решил оформить заказ выбраных товаров, то в случае, если он уже прошел аутентификацию,
+- ему открывается форма для составления заказа. В противном случае, он отправляется на страницу регистрации.
+- В форме он заполняет (данные полей могут автоматически вводиться из заполненных при регистрации
+  или из данных кабинета пользователя) следующие данные:
+  - ФИО;
+  - email;
+  - адрес;
+  - телефон;
+  - ..........
+    Поля есть как обязательные так и нет.
+- После подтверждения отправки формы заказа, пользователь попадает на страницу оплаты, где происходит формальная
+  оплата заказов.
+- Платежи выполняются всегда удачно после заполнения платежной формы. Несоответствие (ошибка может
+  быть только в сумме).
+- Платеж может быть выполнен только полной суммой стоимости заказа.
+- Товары на складе находятся в установленном изначально количестве, которое потом можно изменять через
+  панель администратора.
+- Оплата, отгрузка и доставка товаров происходит пока в автоматическом режиме (виртуально).
+- После отгрузки со склада товаров их количество уменьшается.
+- Возможно сделать виртуальный счет магазина, который пополняется после оплаты.
+- У каждого пользователя существует свой личный кабинет, где он может просмотреть и изменить свои личные
+  данне, историю заказов и платежей.
+- Существует админ панель для управления интернет магазином. Добавление товаров, корректировка данных товара,
+  создание новых категорий ...
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- .............................................................
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

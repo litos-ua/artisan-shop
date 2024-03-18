@@ -1,0 +1,41 @@
+/* GiftCardsPage.css */
+
+.gift-cards-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+.gift-cards-page__content {
+    display: flex;
+    max-width: 800px;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
+.gift-cards-page__content__h2 {
+    margin-top: 40px;
+    color: #11298f;
+}
+
+.gift-cards-page__content ol, ul {
+    align-self: start;
+    margin-top: auto;
+    padding: 0;
+}
+
+.gift-cards-page__content p {
+    color: #026421;
+    font-family: "Arial Black", serif;
+    font-size: 16px;
+    text-align: center;
+}
+
+.gift-cards-page__lastP {
+    margin: 80px auto;
+    color: #56021f;
+    font-family: Candara, serif;
+    font-size: 26px;
+    text-align: center;
+}
