@@ -6,18 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->unique('name');
         });
     }
 
+
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropUnique('name'); //'categories_name_unique'
+        });
     }
 };
-
-//            $table->timestamps();
