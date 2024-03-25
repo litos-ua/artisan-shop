@@ -7,11 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+
     public function toArray(Request $request): array
     {
         return [
@@ -19,4 +15,25 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
         ];
     }
+
+//    public function toArray($request): array
+//    {
+////        $stop = 1;
+////        echo "request=" . $request . PHP_EOL;
+//        return [
+//            'data' => $this->collection->map(function ($category) {
+//                return [
+//                    'id' => $category->id,
+//                    'name' => $category->name,
+//                ];
+//            }),
+//        ];
+//    }
+
+//    public function with($request)
+//    {
+//        return [
+//            'categories' => $this->collection->toArray(),
+//        ];
+//    }
 }

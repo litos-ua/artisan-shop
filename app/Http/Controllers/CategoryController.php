@@ -15,12 +15,17 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
 //        return response()->json(['categories' => $categories], 200)
-        return CategoryResource::collection($categories)
+        $categoriesResponce = CategoryResource::collection($categories);
+        $categoriesResponce->wrap ('categories');
+        $stop = 1;
+        return $categoriesResponce       //CategoryResource::collection($categories)
             ->response()
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
             ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     }
+
+
 
     /**
      * Store a newly created category in storage.
