@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, IconButton } from "@mui/material";
@@ -38,9 +39,9 @@ export function DropDownMenu({ categories }) {
     }, [dropdownRef]);
 
     const handleListItemHover = (category, index) => {
+//        console.log('category=', category);
         if (category !== "Products") {
-            const products =
-                rangeOfProducts.categories[category]?.Products || {};
+            const products = rangeOfProducts.categories[category]?.Products || {};
             setHoveredCategory(category);
             setHoveredProducts(products);
 
@@ -105,9 +106,9 @@ export function DropDownMenu({ categories }) {
                 >
                     {categories.map((category, index) => (
                         <IconButton
-                            key={category}
-                            onMouseEnter={() => handleListItemHover(category, index)}
-                            onClick={() => handleCategoryClick(category)}
+                            key={category.id}
+                            onMouseEnter={() => handleListItemHover(category.name, index)}
+                            onClick={() => handleCategoryClick(category.name)}
                             ref={(el) => (categoryButtonRefs.current[index] = el)}
                             sx={{
                                 padding: "8px",
@@ -122,9 +123,10 @@ export function DropDownMenu({ categories }) {
                                 },
                             }}
                         >
-                            {category}
+                            {category.name}
                         </IconButton>
                     ))}
+
                     {hoveredCategory !== "" && (
                         <Box
                             sx={{
@@ -169,6 +171,8 @@ export function DropDownMenu({ categories }) {
         </Box>
     );
 }
+
+
 
 
 
