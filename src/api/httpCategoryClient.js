@@ -18,10 +18,9 @@ const handleError = (error) => {
     }
 };
 
-export const getCategories = async () => {
+export const fetchCategories = async () => {
     try {
         const response = await httpCategoryClient.get("categories");
-//        return response.data.data; //Corresponds to the standard wrapper at the server
         return response.data.categories; // Corresponds to the wrapper in the CategoryController on the server
     } catch (error) {
         handleError(error);
