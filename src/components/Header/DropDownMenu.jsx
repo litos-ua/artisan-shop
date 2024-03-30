@@ -195,6 +195,10 @@ export function DropDownMenu({ categories }) {
     const productsByCategory = useSelector((state) => state.productsByCategory);
 
     useEffect(() => {
+        categoryButtonRefs.current = categoryButtonRefs.current.map((_, index) => categoryButtonRefs.current[index] || React.createRef());
+    }, [categories.length]);
+
+    useEffect(() => {
         const handleMouseLeave = () => {
             setShowDropdown(false);
             setHoveredCategory("");
@@ -281,7 +285,8 @@ export function DropDownMenu({ categories }) {
     };
 
     const handleCategoryClick = (category) => {
-        navigate(`${ROUTE.CATEGORY_CURRENT.replace(":category", category.name)}`);
+//        navigate(`${ROUTE.CATEGORY_CURRENT.replace(":category", category.name)}`); //rangeOfProducts
+        navigate(`${ROUTE.CATEGORY_CURRENT.replace(":category", category.id)}`) //API
     };
 
     const handleButtonHover = () => {
