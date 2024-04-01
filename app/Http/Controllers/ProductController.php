@@ -21,7 +21,9 @@ class ProductController extends Controller
     {
         $products = Product::where('category_id', $categoryId)->get();
         $productsOfCategory = ProductResource::collection($products);
-        $productsOfCategory->wrap('productsOfCategory');
+//        $productsOfCategory->wrap('productsByCategory');
+        $wrapperName = "productsByCategory_" . $categoryId;
+        $productsOfCategory->wrap($wrapperName);
         return $productsOfCategory->response();
     }
 
