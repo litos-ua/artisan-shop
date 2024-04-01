@@ -88,22 +88,17 @@ import { setProductsByCategory } from '../../ducks';
 
 export const ProductsOfCategory = () => {
     const { category } = useParams();
-    console.log('category = ', category);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const productsByCategory = useSelector(state => state.productsByCategory);
     const categories = useSelector(state => state.categories);
     const categoryData = categories.find(cat => cat.id === parseInt(category));
-    console.log ('categories = ',categories);
-    console.log ('categoryData = ',categoryData);
 
     useEffect(() => {
         const fetchCategoryData = async () => {
             if (!productsByCategory[category]) {
                 try {
-                    console.log('categoryData.id = ', category);
                     const products = await fetchProductsByCategory(category);
-                    console.log('products1 = ', products);
                     dispatch(setProductsByCategory({ categoryId: category, products }));
                 } catch (error) {
                     console.error('Error fetching products:', error);
@@ -129,7 +124,6 @@ export const ProductsOfCategory = () => {
     }
 
     const products = productsByCategory[category] || [];
-//    console.log('products2 = ', products);
 
     return (
         <Paper sx={{ backgroundColor: '#e7d3a9', padding: '1vh 1vw' }}>
@@ -146,7 +140,7 @@ export const ProductsOfCategory = () => {
                         <Card sx={{ backgroundColor: '#9ac7e0', p: '0vh' }}>
                             <CardActionArea>
                                 <CardMedia
-                                    onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }}
+                                    onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
                                     component="img"
                                     image={`https://placehold.it/200x140/33bee5&text=${product.name}`}
                                     alt={product.id}
@@ -157,7 +151,7 @@ export const ProductsOfCategory = () => {
                                     p: '0 2vw 0 1vw'
                                 }}>
                                     <Typography
-                                        onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }}
+                                        onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
                                         gutterBottom variant="h5" component="div">
                                         {product.name}
                                     </Typography>
@@ -169,7 +163,7 @@ export const ProductsOfCategory = () => {
                             <CardActions sx={{ justifyContent: 'center', p: '0' }}>
                                 <Button
                                     size="small" color="primary"
-                                    onClick={() => handleAddToCart(product.id, product.price, product.image)} style={{ cursor: 'pointer' }}
+                                    onClick={() => handleAddToCart(product.name, product.price, product.image)} style={{ cursor: 'pointer' }}
                                 >
                                     У кошик
                                 </Button>
