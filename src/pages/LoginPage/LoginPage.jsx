@@ -1,7 +1,7 @@
 import React from "react";
 import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import "./LoginForm.css";
+import "./LoginPage.css";
 import {FaUser, FaLock} from "react-icons/fa";
 import {Header, Footer} from "../../components";
 import {ROUTE} from "../../router";
@@ -10,7 +10,7 @@ import { AuthButtons } from "../../components/Header/AuthButtons";
 import {loginSuccess} from "../../ducks/login.actions";
 import { useDispatch } from 'react-redux';
 
-export function LoginForm() {
+export function LoginPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 

@@ -4,8 +4,8 @@ import {Products} from '../pages';
 import {Cart} from '../pages'
 import {ProductsOfCategory} from "../pages";
 import {OrderForm} from "../pages";
-import {LoginForm} from "../pages";
-import {RegistrationForm} from "../pages";
+import {LoginPage} from "../pages";
+import {RegistrationPage} from "../pages";
 import {DeliveryPage} from "../pages";
 import {WarrantyPage} from "../pages";
 import {LoyaltyPage} from "../pages";
@@ -50,8 +50,8 @@ export const router = createBrowserRouter([
     {path: ROUTE.PRODUCT_CURRENT, element: <Products />,},
     {path: ROUTE.CART, element: <Cart />,},
     {path: ROUTE.ORDER_FORM, element: <OrderForm />,},
-    {path: ROUTE.LOGIN, element: <LoginForm />,},
-    {path: ROUTE.REGISTRATION, element: <RegistrationForm />,},
+    {path: ROUTE.LOGIN, element: <LoginPage />,},
+    {path: ROUTE.REGISTRATION, element: <RegistrationPage />,},
     {path: ROUTE.DELIVERY, element: <DeliveryPage />,},
     {path: ROUTE.WARRANTY, element: <WarrantyPage />,},
     {path: ROUTE.LOYALTY, element: <LoyaltyPage />,},

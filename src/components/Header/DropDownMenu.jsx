@@ -280,8 +280,8 @@ export function DropDownMenu({ categories }) {
         }
     };
 
-    const handleCurrentItemHover = (productId) => {
-        navigate(`${ROUTE.PRODUCT_CURRENT.replace(":productId", productId)}`);
+    const handleCurrentItemHover = (productKey) => {
+        navigate(`${ROUTE.PRODUCT_CURRENT.replace(":productKey", productKey)}`);
     };
 
     const handleCategoryClick = (category) => {
@@ -376,7 +376,7 @@ export function DropDownMenu({ categories }) {
                             {hoveredProducts.map((product) => (
                                 <IconButton
                                     key={product.id}
-                                    onClick={() => handleCurrentItemHover(product.id)}
+                                    onClick={() => handleCurrentItemHover(product.name)}
                                     sx={{
                                         padding: "8px",
                                         fontSize: "24px",
