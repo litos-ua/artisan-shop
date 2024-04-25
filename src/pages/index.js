@@ -16,3 +16,4 @@ export * from "./FaqPage";
 export * from "./ReturnsPage";
 export * from "./ServiceCenterPage";
 export * from "./SearchPage/SearchPage";
+export * from "./EmailVerificationPage/EmailVerificationPage";
