@@ -23,14 +23,6 @@ return [
     | Authentication Guards
     |--------------------------------------------------------------------------
     |
-    | Next, you may define every authentication guard for your application.
-    | Of course, a great default configuration has been defined for you
-    | here which uses session storage and the Eloquent user provider.
-    |
-    | All authentication drivers have a user provider. This defines how the
-    | users are actually retrieved out of your database or other storage
-    | mechanisms used by this application to persist your user's data.
-    |
     | Supported: "session"
     |
     */
@@ -40,20 +32,17 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+            'hash' => false,
+        ],
     ],
 
     /*
     |--------------------------------------------------------------------------
     | User Providers
     |--------------------------------------------------------------------------
-    |
-    | All authentication drivers have a user provider. This defines how the
-    | users are actually retrieved out of your database or other storage
-    | mechanisms used by this application to persist your user's data.
-    |
-    | If you have multiple user tables or models you may configure multiple
-    | sources which represent each model / table. These sources may then
-    | be assigned to any extra authentication guards you have defined.
     |
     | Supported: "database", "eloquent"
     |
@@ -111,5 +100,25 @@ return [
     */
 
     'password_timeout' => 10800,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Email Verification (my correction)
+    |--------------------------------------------------------------------------
+    |
+    | This option allows you to customize the email verification process for
+    | newly registered users. You can specify the expiration time for
+    | verification links and whether the user should be automatically logged
+    | in after verification.
+    |
+    */
+
+    'verification' => [
+        'expire' => 10080, // Expiration time for verification links in minutes
+        'redirectTo' => '/', // Where to redirect the user after successful verification
+        'email' => 'verification.send', // Name of the route used for sending verification emails
+        'notice' => 'verification.notice', // Name of the route for displaying the email verification notice
+        'verify' => 'verification.verify', // Name of the route for verifying the email
+    ],
 
 ];
