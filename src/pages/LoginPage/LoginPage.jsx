@@ -60,7 +60,6 @@ export function LoginPage() {
                 localStorage.setItem('token', token);
             } else if (status === 207 && token) {
                 // Partial authentication due to unverified email
-//                console.log('user.email:', user.email);
                 console.log('Token:', token);
                 navigate(`${ROUTE.EMAIL_VERIFICATION.replace(":email", user.email)}`);
                 setLoginError("Email not verified. You are partially authenticated. Please verify your email address.");

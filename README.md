@@ -6,30 +6,32 @@
 - product_id (PK)
 - description
 - price
-- category_id (FK linking to a **category** table)
+- category_id (FK linking to a **categories** table)
 - image_url
 
 ### ProductsOfCategoryPage Table
 - category_id (PK)
 - name
 
-### Customers Table (Users ???)
+### Customers Table 
 - customer_id (PK)
+- user_id (FK linking to a **users** table)
 - first_name
 - last_name
-- email
-- password (hashed)
-- address
+- email (FK linking to a **users** table)
 - phone_number
+- ZIP code
+- address
+
 
 ### Orders Table
 
 - order_id (PK)
 - customer_id (FK linking to the **customers** table)
-- order_date
-- order_detail_id (FK linking to the **order details** table)
-- delivery_status ("pending" "delivered")
-- payment_status ("paid", "not paid")
+- delivery_requirement ("needed - true"  "not needed - false") default - "false"
+- received_status ("pending - false" "delivered - true") default - "false"
+- type_of_payment ("cash" or "card") default "cash"
+- payment_status ("false - not paid", "true - paid") default - "false"
 
 ### Order Details Table (for storing individual products within an order)
 
@@ -37,7 +39,7 @@
 - order_id (FK linking to the **orders** table)
 - product_id (FK linking to the **products** table)
 - quantity
-- price
+- price  (FK linking to the **products** table)
 - amount (calculated)
 
 ### Carts Table (for storing items in a user's shopping cart before purchase)
@@ -143,14 +145,25 @@
 почты, приходящего с фронта, как полезная нагрузка. Убрал миддлваре auth. Верификационный
 емейл высылается.
 
-## 2024.04.25
+## 2024.04.25 _ 1
 Работает аутентификация с использованием токена. Sanctum используется часично. Токен
 генерируется при помощи Sanctum. Важно отбросить все перед превиксом (включая символ |).
 Миддлеваре 'auth:sanctum' не заработал. Создал свой 'auth_jwt'. 
 Верификацию по email тоже сделал самостоятельно.
 
-## 2024.04.25
+## 2024.04.25 _ 2
  В RegistrationPage добавил поле confirmPassword и чекбокс agreeToProcessing. Пользователь
  регистрируется. Высылается почему-то два емейла для подтверждения. Скорее всего надо
  убрать сервис повторной высылки емейла. При подтверждении емейла по ссылке все работае.
  В базе данных все записывается.
+
+## 2024.04.26
+Добавил кнопку аккаунта и подсказки ко всем кнопкам в заголовке. Создал болванку роута
+DASHBOARD.
+
+## 2024.04.28 
+Создал таблицы Orders, Order Details.
+
+## 2024.04.30
+Добавил текстовое поле 'customer_notes' в таблицу Orders. Сделал в реак миддлваре для 
+защиты маршрутов (<WithAuthCheck> <OrderForm /> </WithAuthCheck>). 

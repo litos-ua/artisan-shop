@@ -1,12 +1,13 @@
 import React from 'react';
-import { IconButton, Box } from '@mui/material';
+import { IconButton, Box, Tooltip } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ROUTE } from '../../router';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutSuccess, selectIsAuthenticated } from '../../ducks/login.actions';
+import { logoutSuccess, selectIsAuthenticated } from '../../ducks';
 
 export function AuthButtons() {
     const dispatch = useDispatch();
@@ -21,6 +22,10 @@ export function AuthButtons() {
         navigate(ROUTE.REGISTRATION);
     };
 
+    const handleDashboard = () => {
+        navigate(ROUTE.DASHBOARD);
+    };
+
     const handleLogOut = () => {
         dispatch(logoutSuccess());
     };
@@ -29,35 +34,63 @@ export function AuthButtons() {
         <Box className="authbuttons">
             {!isAuthenticated && (
                 <>
-                    <IconButton
-                        color="inherit"
-                        aria-label="login"
-                        onClick={handleSignIn}
-                        sx={{ marginRight: '0.5rem',  transform: 'scale(1.5)'}}
-                    >
-                        <LoginIcon />
-                    </IconButton>
-                    <IconButton
-                        color="inherit"
-                        aria-label="signup"
-                        onClick={handleSignUp}
-                        sx={{ transform: 'scale(1.5)'}}
-                    >
-                        <PersonAddIcon />
-                    </IconButton>
+                    <Tooltip title="Login">
+                        <IconButton
+                            color="inherit"
+                            aria-label="login"
+                            onClick={handleSignIn}
+                            sx={{ marginRight: '0.5rem', transform: 'scale(1.5)' }}
+                        >
+                            <LoginIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Sign Up">
+                        <IconButton
+                            color="inherit"
+                            aria-label="signup"
+                            onClick={handleSignUp}
+                            sx={{ transform: 'scale(1.5)' }}
+                        >
+                            <PersonAddIcon />
+                        </IconButton>
+                    </Tooltip>
                 </>
             )}
             {isAuthenticated && (
-                <IconButton
-                    color="inherit"
-                    aria-label="logout"
-                    onClick={handleLogOut}
-                    sx={{ transform: 'scale(1.5)'}}
-                >
-                    <LogoutIcon />
-                </IconButton>
+                <>
+                    <Tooltip title="Account">
+                        <IconButton
+                            color="inherit"
+                            aria-label="account"
+                            onClick={handleDashboard}
+                            sx={{ marginRight: '0.5rem', transform: 'scale(1.5)' }}
+                        >
+                            <AccountCircleIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Logout">
+                        <IconButton
+                            color="inherit"
+                            aria-label="logout"
+                            onClick={handleLogOut}
+                            sx={{ transform: 'scale(1.5)' }}
+                        >
+                            <LogoutIcon />
+                        </IconButton>
+                    </Tooltip>
+                </>
             )}
         </Box>
     );
 }
+
+
+// <IconButton
+//     color="inherit"
+//     aria-label="logout"
+//     onClick={handleLogOut}
+//     sx={{ transform: 'scale(1.5)'}}
+// >
+//     <LogoutIcon />
+// </IconButton>
 
