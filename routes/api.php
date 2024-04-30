@@ -66,29 +66,10 @@ Route::get('/email/verify', function () {
     // Return a response or redirect to a frontend route where you display the verification instructions
 })->middleware(['auth'])->name('verification.notice');
 
-// Handle the request generated when the user clicks the email verification link
-
-//Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
-//    $user = User::findOrFail($id);
-//
-//    if ($user->hasVerifiedEmail()) {
-//        return redirect('/'); // Redirect if email is already verified
-//    }
-//
-//    if (!hash_equals($hash, sha1($user->getEmailForVerification()))) {
-//        abort(403, 'Invalid verification link');
-//    }
-//
-//    $user->markEmailAsVerified();
-//
-//    return redirect('http://192.168.0.32:3000/'); // Redirect after verification
-//})->middleware(['signed'])->name('verification.verify');
-
 //Handling the request generated when the user clicks the email confirmation link
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'handleVerificationLink'])
     ->middleware(['signed'])
     ->name('verification.verify');
-
 
 // Resend email verification notification
 Route::post('/email/verification-notification', [VerificationController::class, 'resendVerificationEmail'])

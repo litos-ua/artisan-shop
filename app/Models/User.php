@@ -43,4 +43,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function customers()
+    {
+        return $this->hasOne(Customer::class);
+    }
+
+    public function customerById()
+    {
+        return $this->hasOne(Customer::class, 'user_id');
+    }
+
+    public function customerByEmail()
+    {
+        return $this->hasOne(Customer::class, 'email', 'email');
+    }
 }

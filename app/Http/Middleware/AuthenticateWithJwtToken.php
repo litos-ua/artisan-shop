@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -16,28 +15,6 @@ class AuthenticateWithJwtToken
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-//    public function handle(Request $request, Closure $next): Response
-//    {
-//        $bearerToken = $request->bearerToken();
-//        $email = $request->input('email');
-//
-//        // Implement my custom authentication logic here
-//        $tokenPrefix = config('sanctum.token_prefix', 'SANCTUM_TOKEN');
-//        $tokenParts = explode('|', $bearerToken);
-//        $tokenWithoutPrefix = $tokenParts[1] ?? $bearerToken;
-//        $hashedBearerToken = hash('sha256', $tokenWithoutPrefix);
-//
-//        // Check if the hashed token exists in the database
-//        $myAuth = PersonalAccessToken::where('token', $hashedBearerToken)->first();
-//        $user = User::where('email', $email)->first();
-//
-//        // Check if the authentication is successful
-//        if ($myAuth && $user && $myAuth->tokenable_id === $user->id) {
-//            return $next($request);
-//        } else {
-//            return response()->json(['error' => 'Unauthorized'], 401);
-//        }
-//    }
 
     public function handle(Request $request, Closure $next): Response
     {

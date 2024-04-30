@@ -17,4 +17,3 @@ class Authenticate extends Middleware
 
 }
 
-//        return $request->expectsJson() ? null : route('http://192.168.0.32:3000/login');
