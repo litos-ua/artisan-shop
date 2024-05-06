@@ -28,12 +28,12 @@
 
 
 .order__form_input {
-    width: 45%;
-    height: 50%;
+    width: 55%;
+    height: 55%;
     margin: 0 auto;
     border: 2px solid #1860e7;
     border-radius: 10px;
-    padding: 2vh;
+    padding: 3vh;
 }
 
 .order__form_input-group {
@@ -42,7 +42,7 @@
     align-items: flex-start;
     margin-top: 1vh;
     margin-bottom: 5vh;
-    height: 5vh;
+    height: 4vh;
 }
 
 .order__form_input label {
@@ -53,6 +53,7 @@
     display: flex;
     align-items: normal;
     margin-top: 0.5vh;
+    margin-bottom: 0vh;
     gap: 1.5vh;
 }
 
