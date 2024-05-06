@@ -16,6 +16,8 @@ class Order extends Model
         'received_status',
         'type_of_payment',
         'payment_status',
+        'advance_payment',
+        'customer_notes',
     ];
 
     // Define the relationship with Customer model

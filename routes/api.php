@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Mail\VerificationController;
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -85,45 +87,24 @@ Route::post('/email/verification-notification', [VerificationController::class, 
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth_jwt')->get('/user', function (Request $request) {
-//    $bearerToken = $request->bearerToken();
-//    $email = $request->input('email');
+//Route::middleware('auth_jwt')->get('/user', function (Request $request) {
 //
-//    $tokenPrefix = config('sanctum.token_prefix', 'SANCTUM_TOKEN');
-//    $tokenParts = explode('|', $bearerToken);
-//    $tokenWithoutPrefix = $tokenParts[1] ?? $bearerToken;
-//
-//    // Hash the token without the prefix
-//    $hashedBearerToken = hash('sha256', $tokenWithoutPrefix);
-//
-//    // Check if the hashed token exists in the database
-//    $myAuth = PersonalAccessToken::where('token', $hashedBearerToken)->first();
-//    $user = User::where('email', $email)->first();
-//
-//    // Check if the authentication is successful
-//    if (($myAuth) && ($user) && $myAuth->tokenable_id === $user->id) {
+//    if (Auth::user()) {
 //        $authVerification = true;
 //        return response()->json([
 //            'authenticated' => $authVerification,
-//            'user' => $user,
-//            ]);
+//            'user' => Auth::user(),
+//        ]);
 //    } else {
 //        $authVerification = false;
 //        return response()->json(['authenticated' => $authVerification]);
 //    }
-    if (Auth::user()) {
-        $authVerification = true;
-        return response()->json([
-            'authenticated' => $authVerification,
-            'user' => Auth::user(),
-        ]);
-    } else {
-        $authVerification = false;
-        return response()->json(['authenticated' => $authVerification]);
-    }
+//
+//});
 
-});
-
+//Route::middleware('auth_jwt')->get('/user', [UserController::class, 'getUser']);
+Route::middleware('auth_jwt')->post('/user', [UserController::class, 'getUserByEmail']);
+Route::middleware('auth_jwt')->post('/order', [OrderController::class, 'placeOrder']);
 
 Route::middleware('auth_jwt')->get('/jwt', function () {
     return response()->json(['authenticated' => 'user is authenticate']);
