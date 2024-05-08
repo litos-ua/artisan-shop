@@ -97,15 +97,13 @@ export const OrderForm = () => {
             }, { Authorization: `Bearer ${token}` }); //'Bearer 77|TOKEN'
 
             if (response && response.order_id) {
-                console.log('response', response);
-                console.log('responseID', response.order_id)
+                //console.log('response', response);
+                //console.log('responseID', response.order_id)
 
                 if (totalSum === response.total_amount) {
-                    //alert(`Ваше замовлення на сумму ${totalSum} прийнято в обробку`);
                     setOrderDetails(response);
                     handleOpenModal();
                     dispatch(clearReduxStore());
-                    //navigate(ROUTE.HOME);
                 } else {
                     setError('Arrears for the amount')
                     alert('Помилка у сумі замовлення');
