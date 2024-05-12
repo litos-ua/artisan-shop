@@ -27,14 +27,6 @@ export const fetchProducts = async () => {
     }
 };
 
-// export const fetchProductsByCategory = async (categoryId) => {
-//     try {
-//         const response = await httpProductClient.get(`products/category/${categoryId}`);
-//         return response.data.productsByCategory;
-//     } catch (error) {
-//         handleError(error);
-//     }
-// };
 
 export const fetchProductsByCategory = async (categoryId) => {
     try {

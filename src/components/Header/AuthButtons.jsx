@@ -26,6 +26,10 @@ export function AuthButtons() {
         navigate(ROUTE.DASHBOARD);
     };
 
+    const handleAccount = () => {
+        navigate(ROUTE.CUSTOMER_ACCOUNT);
+    };
+
     const handleLogOut = () => {
         dispatch(logoutSuccess());
     };
@@ -62,7 +66,7 @@ export function AuthButtons() {
                         <IconButton
                             color="inherit"
                             aria-label="account"
-                            onClick={handleDashboard}
+                            onClick={handleAccount}
                             sx={{ marginRight: '0.5rem', transform: 'scale(1.5)' }}
                         >
                             <AccountCircleIcon />

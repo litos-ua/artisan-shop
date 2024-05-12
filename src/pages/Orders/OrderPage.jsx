@@ -97,9 +97,6 @@ export const OrderForm = () => {
             }, { Authorization: `Bearer ${token}` }); //'Bearer 77|TOKEN'
 
             if (response && response.order_id) {
-                //console.log('response', response);
-                //console.log('responseID', response.order_id)
-
                 if (totalSum === response.total_amount) {
                     setOrderDetails(response);
                     handleOpenModal();
