@@ -59,9 +59,11 @@ Route::middleware('auth_jwt')->delete('/customers/{id}', [CustomerController::cl
 Route::group(['middleware' => 'auth:sanctum'], function () {
     // Logout route
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    //Route::put('/user/password/change', [UserController::class, 'changePassword']);
     // Other authenticated routes can go here...
 });
+Route::middleware('auth_jwt')->put('/user/password/change', [UserController::class, 'changePassword']);
+
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
