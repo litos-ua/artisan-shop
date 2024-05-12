@@ -129,7 +129,7 @@ const validationSchema = Yup.object().shape({
 
 const CustomerDataForm = ({ initialValues, onSubmit }) => {
     if (!initialValues) {
-        return null; 
+        return null;
     }
 
     return (

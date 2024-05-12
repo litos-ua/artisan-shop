@@ -55,5 +55,21 @@ export const get = async (url, headers = {}) => {
     }
 };
 
+export const put = async (url, data, headers = {}) => {
+    try {
+        console.log('PUT Request Data:', data);
+        const response = await httpAuthClient.put(url, data, {
+            headers: {
+                ...httpAuthClient.defaults.headers,
+                ...headers
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('PUT Request Error:', error);
+        throw error.response ? error.response.data : error;
+    }
+};
+
 export default httpAuthClient;
 

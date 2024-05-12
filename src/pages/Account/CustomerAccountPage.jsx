@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardContent, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
-import { getCustomer, updateCustomer } from '../../api';
+import { getCustomer, updateCustomer, put } from '../../api';
 import {Header} from "../../components";
 import CustomerDataForm from './CustomerDataForm';
 import PasswordChangeForm from './PasswordChangeForm'
@@ -44,8 +44,19 @@ export const CustomerAccountPage = () => {
         }
     };
 
-    const handlePasswordChangeSubmit = (values) => {
-        // Handle password change form submission
+
+    const handlePasswordChangeSubmit = async (values) => {
+        try {
+            const token = localStorage.getItem('token');
+            const newPassword = await put('/user/password/change', values, {
+                Authorization: `Bearer ${token}`
+            });
+            console.log("Password changed successfully:");
+            alert("Password changed successfully:");
+        } catch (error) {
+            console.error("Error changing password:", error);
+            alert("Error changing password:");
+        }
     };
 
     if (!customer) {
