@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
@@ -44,6 +45,15 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 Route::get('/products/search/{search}', [SearchController::class, 'searchProducts']);
 
 
+Route::middleware('auth_jwt')->post('/user', [UserController::class, 'getUserByEmail']);
+Route::middleware('auth_jwt')->post('/order', [OrderController::class, 'placeOrder']);
+
+Route::middleware('auth_jwt')->get('/customers', [CustomerController::class, 'index']);
+Route::middleware('auth_jwt')->post('/customers', [CustomerController::class, 'store']);
+Route::middleware('auth_jwt')->get('/customers/{id}', [CustomerController::class, 'show']);
+Route::middleware('auth_jwt')->get('/customer/token', [CustomerController::class, 'showCustomer']);
+Route::middleware('auth_jwt')->put('/customers/{id}', [CustomerController::class, 'update']);
+Route::middleware('auth_jwt')->delete('/customers/{id}', [CustomerController::class, 'destroy']);
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -102,9 +112,7 @@ Route::post('/email/verification-notification', [VerificationController::class, 
 //
 //});
 
-//Route::middleware('auth_jwt')->get('/user', [UserController::class, 'getUser']);
-Route::middleware('auth_jwt')->post('/user', [UserController::class, 'getUserByEmail']);
-Route::middleware('auth_jwt')->post('/order', [OrderController::class, 'placeOrder']);
+
 
 Route::middleware('auth_jwt')->get('/jwt', function () {
     return response()->json(['authenticated' => 'user is authenticate']);
