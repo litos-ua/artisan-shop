@@ -55,6 +55,8 @@ Route::middleware('auth_jwt')->get('/customer/token', [CustomerController::class
 Route::middleware('auth_jwt')->put('/customers/{id}', [CustomerController::class, 'update']);
 Route::middleware('auth_jwt')->delete('/customers/{id}', [CustomerController::class, 'destroy']);
 
+Route::middleware('auth_jwt')->get('/customers', [OrderController::class, 'index']);
+Route::middleware('auth_jwt')->get('/customer/orders', [OrderController::class, 'indexForCustomer']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     // Logout route

@@ -4,16 +4,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Http\Resources\OrderResource;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use App\Models\Order;
 use App\Mail\OrderPlaced;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
+    public function index()
+    {
+        $orders = Order::all();
+        return response()->json($orders);
+    }
+
     public function placeOrder(Request $request)
     {
         try {
@@ -144,5 +152,39 @@ class OrderController extends Controller
             throw $e;
         }
     }
+
+
+    public function indexForCustomer(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+
+        // Fetch the customer associated with the user
+        $userCustomer = $user->customers;
+
+        // Check if the authenticated user has a customer relationship
+        if (!$userCustomer) {
+            return response()->json(['error' => 'Customer not found'], 404);
+        }
+
+        // Assuming $userCustomer is a collection, you might want to fetch the first customer
+        $customer = $userCustomer->first();
+        if (!$customer) {
+            return response()->json(['error' => 'Customer not found'], 404);
+        }
+
+        $orders = Order::where('customer_id', $customer->id)
+            ->has('orderDetails')
+            ->with('orderDetails.product')
+            ->get();
+
+        //return response()->json($orders);
+        //return OrderResource::collection($orders);
+        return response()->json(OrderResource::collection($orders));
+    }
+
 }
 
