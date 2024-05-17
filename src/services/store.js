@@ -4,6 +4,7 @@ import authReducer from '../ducks/login.actions';
 import categoriesReducer from '../ducks/categories.duck';
 import productsByCategoryReducer from '../ducks/productsByCategory.duck';
 import productDetailsReducer from '../ducks/product.duck';
+import ordersReducer from '../ducks/orders.duck';
 import { loadState, saveState } from './localStorage';
 import { combineReducers } from 'redux';
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     categories: categoriesReducer,
     productsByCategory: productsByCategoryReducer,
     productDetails: productDetailsReducer,
+    orders: ordersReducer,
 });
 
 const preloadedState = loadState();

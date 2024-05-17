@@ -111,7 +111,16 @@ const PasswordChangeForm = ({ onSubmit }) => {
         <Formik
             initialValues={{ currentPassword: '', newPassword: '', confirmPassword: '' }}
             validationSchema={passwordValidationSchema}
-            onSubmit={onSubmit}
+            // onSubmit={onSubmit}
+            onSubmit={async (values, { resetForm }) => {
+                try {
+                    await onSubmit(values);
+                    resetForm(); // Reset form values after successful submission
+                } catch (error) {
+                    console.error("Error submitting form:", error);
+                    // Handle error
+                }
+            }}
         >
             {(formik) => (
                 <form onSubmit={formik.handleSubmit}>
