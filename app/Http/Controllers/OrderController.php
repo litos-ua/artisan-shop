@@ -41,7 +41,8 @@ class OrderController extends Controller
 
             return response()->json(['message' => 'Order placed successfully',
                                      'total_amount' => $totalAmount,
-                                     'order_id' => $order->order_id,
+                                     //'order_id' => $order->order_id,
+                                     'order_id' => $order->id,
                                      'created_at' => $order->created_at,], 201);
         } catch (QueryException $e) {
             return response()->json(['error' => 'Database error: ' . $e->getMessage()], 500);
@@ -125,12 +126,14 @@ class OrderController extends Controller
 
     protected function saveOrderDetails(Request $request, $order)
     {
-    // !!! $order->id - 'wrong' $order->order_id - 'true' !!!
+    // !!! $order->order_id - 'wrong' $order->id - 'true' !!!
         try {
             $totalAmount = 0;
+            $tmp = $request->cartItems;
             foreach ($request->cartItems as $item) {
                 $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->order_id;
+                //$orderDetail->order_id = $order->order_id;
+                $orderDetail->order_id = $order->id;
                 $product = Product::where('name', $item['productKey'])->first();
                 $orderDetail->product_id = $product->id;
                 $orderDetail->quantity = $item['quantityCount'];
@@ -163,15 +166,18 @@ class OrderController extends Controller
         }
 
         // Fetch the customer associated with the user
-        $userCustomer = $user->customers;
+        //$userCustomer = $user->customers;
 
         // Check if the authenticated user has a customer relationship
-        if (!$userCustomer) {
-            return response()->json(['error' => 'Customer not found'], 404);
-        }
+        //if (!$userCustomer) {
+        //    return response()->json(['error' => 'Customer not found'], 404);
+        //}
 
         // Assuming $userCustomer is a collection, you might want to fetch the first customer
-        $customer = $userCustomer->first();
+        //$customer = $userCustomer->first();
+
+        $customer = $user->customers()->first();
+
         if (!$customer) {
             return response()->json(['error' => 'Customer not found'], 404);
         }
@@ -181,8 +187,6 @@ class OrderController extends Controller
             ->with('orderDetails.product')
             ->get();
 
-        //return response()->json($orders);
-        //return OrderResource::collection($orders);
         return response()->json(OrderResource::collection($orders));
     }
 
