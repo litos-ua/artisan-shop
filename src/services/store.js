@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { resetOrders } from '../ducks/orders.duck';
 import cartReducer from '../ducks/cart.duck';
 import authReducer from '../ducks/login.actions';
 import categoriesReducer from '../ducks/categories.duck';
@@ -29,5 +30,7 @@ export const store = configureStore({
 store.subscribe(() => {
     saveState(store.getState());
 });
+
+store.dispatch(resetOrders());
 
 export default store;
