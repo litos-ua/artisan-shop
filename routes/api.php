@@ -35,6 +35,13 @@ Route::get('/categories/{id}', [CategoryController::class, 'show']);
 Route::put('/categories/{id}', [CategoryController::class, 'update']);
 Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 
+// Routes for the admin panel
+Route::get('/admin/categories', [CategoryController::class, 'adminIndex']);
+Route::get('/admin/categories/{id}', [CategoryController::class, 'adminShow']);
+Route::get('/admin/products', [ProductController::class, 'adminIndex']);
+
+
+
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/category/{categoryId}', [ProductController::class, 'indexByCategory']);
 Route::post('/products', [ProductController::class, 'store']);
@@ -94,33 +101,37 @@ Route::post('/email/verification-notification', [VerificationController::class, 
 
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Temporary routes
 |--------------------------------------------------------------------------
 */
 
-//Route::middleware('auth_jwt')->get('/user', function (Request $request) {
-//
-//    if (Auth::user()) {
-//        $authVerification = true;
-//        return response()->json([
-//            'authenticated' => $authVerification,
-//            'user' => Auth::user(),
-//        ]);
-//    } else {
-//        $authVerification = false;
-//        return response()->json(['authenticated' => $authVerification]);
-//    }
-//
-//});
-
-
-
 Route::middleware('auth_jwt')->get('/jwt', function () {
     return response()->json(['authenticated' => 'user is authenticate']);
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Route descriptions
+|--------------------------------------------------------------------------
+*/
+// get('/customer/orders', [OrderController::class, 'indexForCustomer'] - используетс для вывода списка
+// заказов текущего пользователя в личном кабинете в react процедуре <OrdersOfCustomer />
+
+// get('/products/category/{categoryId}', [ProductController::class, 'indexByCategory'])
+//
+
+// get('/categories', [CategoryController::class, 'index']) - используется для вывода списка категорий в
+// компоненте <Header/> (fetchCategories)
+
+// get('/products/{id}', [ProductController::class, 'show']) - используется для вывода списка категорий в меню
+// через react процедуру <ProductsOfCategoryPage/> (fetchCategoryData)
+
+// get('/products/{id}', [ProductController::class, 'show']) - используется для вывода данных конкретного продукта
+// при нажатии на него <ProductPage/> (getProductById(productKey))
+
+// get('/products/search/{search}', [SearchController::class, 'searchProducts']) - используется для поска продукта
+// по названию <SearchPage/> (fetchProductsBySearchParam(searchParam))
 
