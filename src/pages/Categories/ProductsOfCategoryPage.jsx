@@ -140,7 +140,7 @@ export const ProductsOfCategory = () => {
                         <Card sx={{ backgroundColor: '#9ac7e0', p: '0vh' }}>
                             <CardActionArea>
                                 <CardMedia
-                                    onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
+                                    onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }} //'id' for API
                                     component="img"
                                     image={`https://placehold.it/200x140/33bee5&text=${product.name}`}
                                     alt={product.id}
@@ -151,7 +151,7 @@ export const ProductsOfCategory = () => {
                                     p: '0 2vw 0 1vw'
                                 }}>
                                     <Typography
-                                        onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
+                                        onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }} //'id' for API
                                         gutterBottom variant="h5" component="div">
                                         {product.name}
                                     </Typography>

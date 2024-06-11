@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { resetOrders } from '../ducks/orders.duck';
+import { resetOrders } from '../ducks';
 import cartReducer from '../ducks/cart.duck';
 import authReducer from '../ducks/login.actions';
 import categoriesReducer from '../ducks/categories.duck';

@@ -87,7 +87,7 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Typography, Button, Grid, Card, CardContent, CardMedia, CardActions, CardActionArea } from '@mui/material';
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchProductsBySearchParam } from '../../api/httpSearchClient';
+import { fetchProductsBySearchParam } from '../../api';
 import { Footer, Header } from "../../components";
 import { ROUTE } from "../../router";
 

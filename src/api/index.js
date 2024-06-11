@@ -4,3 +4,4 @@ export * from './httpAuthClient';
 export * from './httpCustomerClient';
 export * from './httpSearchClient';
 export * from './httpOrderClient';
+export * from './httpOrderClient';

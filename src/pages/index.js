@@ -20,3 +20,10 @@ export * from "./EmailVerificationPage/EmailVerificationPage";
 export * from "./Account/AdminAccountPage";
 export * from "./Account/CustomerAccountPage";
 export * from "./Layout/BaseAccountLayout";
+export * from "./Admin/AdminDashboard";
+export * from "./Admin/Categories/Categories";
+export * from "./Admin/Categories/CategoryList";
+export * from "./Admin/Products/Products";
+
+
+

@@ -23,7 +23,6 @@ export const CustomerAccountPage = () => {
 
         if (token) {
             fetchCustomerDetails(token);
-//            console.log('customer:', customer);
         }
     }, []);
 
