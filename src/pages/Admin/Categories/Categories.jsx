@@ -81,18 +81,39 @@
 //     );
 // };
 
-import React from 'react';
-import { List, Datagrid, TextField } from 'react-admin';
+// import React from 'react';
+// import { List, Datagrid, TextField } from 'react-admin';
+//
+//
+// export const CategoryList = (props) => {
+//
+//     return (
+//         <List {...props}>
+//             <Datagrid>
+//                 <TextField source="id" />
+//                 <TextField source="name" />
+//             </Datagrid>
+//         </List>
+//     );
+// };
+
+// import React from 'react';
+// import { Datagrid, List, TextField, Loading} from 'react-admin';
+//
+// export const CategoryList = (props) => {
+//
+//     if (!props) {
+//         return <Loading />;
+//     }
+//
+//     return (
+//         <List {...props} resource="categories">
+//             <Datagrid>
+//                 <TextField source="id" />
+//                 <TextField source="name" />
+//             </Datagrid>
+//         </List>
+//     );
+// };
 
 
-export const CategoryList = (props) => {
-
-    return (
-        <List {...props}>
-            <Datagrid>
-                <TextField source="id" />
-                <TextField source="name" />
-            </Datagrid>
-        </List>
-    );
-};

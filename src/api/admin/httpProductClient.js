@@ -30,10 +30,6 @@ export const fetchProducts = async (params = {}) => {
         };
         const response = await httpProductClient.get("admin/products", { params: query });
         return response.data;
-        // return {
-        //     data: response.data.products, // Adjust this if the response structure is different
-        //     total: response.data.total
-        // };
     } catch (error) {
         handleError(error);
     }

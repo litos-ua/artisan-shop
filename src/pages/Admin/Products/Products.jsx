@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    List, Datagrid, TextField, ReferenceField, EditButton, DeleteButton, Edit, SimpleForm,
+    List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm,
     TextInput, Create, Loading
 } from 'react-admin';
 import {ItemCharacteristicsField} from './ItemCharacteristicsField';
@@ -50,4 +50,4 @@ const Products = () => {
     return <div>Products Component</div>;
 };
 
-export default Products;
+// export default Products;

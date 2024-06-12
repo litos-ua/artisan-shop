@@ -25,9 +25,9 @@
 // export default CategoryList;
 
 import React from 'react';
-import { Datagrid, List, TextField, Loading} from 'react-admin';
+import {Datagrid, List, TextField, Loading, EditButton, DeleteButton} from 'react-admin';
 
-const CategoryList = (props) => {
+export const CategoryList = (props) => {
 
     if (!props) {
         return <Loading />;
@@ -38,9 +38,11 @@ const CategoryList = (props) => {
             <Datagrid>
                 <TextField source="id" />
                 <TextField source="name" />
+                <EditButton />
+                <DeleteButton />
             </Datagrid>
         </List>
     );
 };
 
-export default CategoryList;
+// export default CategoryList;

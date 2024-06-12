@@ -114,8 +114,13 @@ export const dataProvider = {
     deleteMany: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                await Promise.all(params.ids.map(id => deleteCategory(id)));
-                return { data: params.ids };
+                // await Promise.all(params.ids.map(id => deleteCategory(id)));
+                // return { data: params.ids };
+                if (resource === 'categories') {
+                    const deletedCategory = await deleteCategory(params.id);
+                    return { data: deletedCategory };
+                }
+                throw new Error(`Unsupported resource: ${resource}`);
             case 'products':
                 await Promise.all(params.ids.map(id => deleteProduct(id)));
                 return { data: params.ids };

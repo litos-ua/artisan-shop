@@ -47,7 +47,7 @@ export const createCategory = async (categoryData) => {
 export const getCategoryById = async (categoryId) => {
     try {
         const response = await httpCategoryClient.get(`admin/categories/${categoryId}`);
-        return response.data;
+        return response.data.data;
     } catch (error) {
         handleError(error);
     }
@@ -56,7 +56,7 @@ export const getCategoryById = async (categoryId) => {
 export const updateCategory = async (categoryId, categoryData) => {
     try {
         const response = await httpCategoryClient.put(`admin/categories/${categoryId}`, categoryData);
-        return response.data;
+        return response.data.data;
     } catch (error) {
         handleError(error);
     }
@@ -64,8 +64,10 @@ export const updateCategory = async (categoryId, categoryData) => {
 
 export const deleteCategory = async (categoryId) => {
     try {
+        // const response = await httpCategoryClient.delete(`admin/categories/${categoryId}`);
+        // return response.data.data;
         const response = await httpCategoryClient.delete(`admin/categories/${categoryId}`);
-        return response.data;
+        return { data: { id: categoryId } };
     } catch (error) {
         handleError(error);
     }

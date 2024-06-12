@@ -125,10 +125,9 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import {
-    CategoryList, Products, ProductsOfCategory, Cart, OrderForm,
-    LoginPage, RegistrationPage, DeliveryPage, WarrantyPage, LoyaltyPage,
-    GiftCardsPage, AboutPage, ContactsPage, CareerPage, FaqPage, ReturnsPage,
-    ServiceCenterPage, SearchPage, EmailVerificationPage, CustomerAccountPage
+    EmailVerificationPage, ProductsOfCategory, Cart, OrderForm, LoginPage, RegistrationPage,
+    DeliveryPage, WarrantyPage, LoyaltyPage, GiftCardsPage, AboutPage, ContactsPage, Products,
+    CareerPage, FaqPage, ReturnsPage, ServiceCenterPage, SearchPage, CustomerAccountPage,
 } from '../pages';
 import { AdminPanel } from '../pages/Admin';
 import { App } from '../App';
@@ -136,11 +135,11 @@ import { AdminRoute } from './AdminRoute';
 import { WithAuthCheck } from './WithAuthCheck'
 
 export const ROUTE = {
-    HOME: "/",
+    HOME: "/*",
     DASHBOARD: "/dashboard/*",
-    CATEGORIES: "/categories",
+    DASHBOARD1: "/dashboard",
     CATEGORY_CURRENT: "/categories/:category",
-    PRODUCTS: "/products",
+    //PRODUCTS: "/products",
     PRODUCT_CURRENT: "/products/:productKey",
     CART: "/cart",
     ORDER_FORM: "/order_form",
@@ -164,9 +163,8 @@ export const ROUTE = {
 export const router = createBrowserRouter([
     { path: ROUTE.HOME, element: <App /> },
     { path: ROUTE.DASHBOARD, element: <AdminRoute><AdminPanel /></AdminRoute> },
-    { path: ROUTE.CATEGORIES, element: <CategoryList /> },
     { path: ROUTE.CATEGORY_CURRENT, element: <ProductsOfCategory /> },
-    { path: ROUTE.PRODUCTS, element: <Products /> },
+    //{ path: ROUTE.PRODUCTS, element: <Products /> },
     { path: ROUTE.PRODUCT_CURRENT, element: <Products /> },
     { path: ROUTE.CART, element: <Cart /> },
     { path: ROUTE.ORDER_FORM, element: <WithAuthCheck><OrderForm /></WithAuthCheck> },
