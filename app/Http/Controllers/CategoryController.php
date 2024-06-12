@@ -57,6 +57,19 @@ class CategoryController extends Controller
         // Logic to create a new category
     }
 
+    public function adminStore(Request $request)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        $category = Category::create($request->only('name'));
+
+        return response()->json(['data' => $category], 201)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    }
+
+
+
     /**
      * Display the specified category.
      */
@@ -109,11 +122,34 @@ class CategoryController extends Controller
         // Logic to update a category
     }
 
+    public function adminUpdate(Request $request, string $id)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        $category = Category::findOrFail($id);
+        $category->update($request->only('name'));
+
+        return response()->json(['data' => $category], 200)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    }
+
     /**
      * Remove the specified category from storage.
      */
     public function destroy(string $id)
     {
         // Logic to delete a category
+    }
+
+    public function adminDestroy(string $id)
+    {
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return response()->json(null, 204)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     }
 }

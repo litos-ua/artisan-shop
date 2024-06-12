@@ -39,7 +39,16 @@ Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 Route::get('/admin/categories', [CategoryController::class, 'adminIndex']);
 Route::get('/admin/categories/{id}', [CategoryController::class, 'adminShow']);
 Route::get('/admin/products', [ProductController::class, 'adminIndex']);
+Route::post('/admin/categories', [CategoryController::class, 'adminStore']); //Create
+Route::put('/admin/categories/{id}', [CategoryController::class, 'adminUpdate']); //Updata
+Route::delete('/admin/categories/{id}', [CategoryController::class, 'adminDestroy']);
 
+// Product routes for admin panel (assuming similar CRUD operations for products)
+Route::get('/admin/products', [ProductController::class, 'adminIndex']);
+Route::get('/admin/products/{id}', [ProductController::class, 'adminShow']);
+Route::post('/admin/products', [ProductController::class, 'adminStore']);
+Route::put('/admin/products/{id}', [ProductController::class, 'adminUpdate']);
+Route::delete('/admin/products/{id}', [ProductController::class, 'adminDestroy']);
 
 
 Route::get('/products', [ProductController::class, 'index']);
