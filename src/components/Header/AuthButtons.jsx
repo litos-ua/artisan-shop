@@ -121,7 +121,7 @@ export function AuthButtons() {
 
     const handleAccount = () => {
         if (userRole === 3) {
-            navigate(ROUTE.DASHBOARD); // Admin role
+            navigate(ROUTE.DASHBOARD1); // Admin role
         } else {
             navigate(ROUTE.CUSTOMER_ACCOUNT); // Other roles
         }

@@ -1,28 +1,30 @@
 
 import React from 'react';
-import { Admin, Menu, MenuItemLink, Resource } from 'react-admin';
+import { Admin,  Resource } from 'react-admin';
 import { dataProvider } from "../../api/dataProvider";
 import { CategoryList } from "./Categories";
 import { CategoryCreate } from "./Categories";
 import { CategoryEdit } from "./Categories";
-import { ProductList } from "./Products/Products";
+import {ProductCreate, ProductEdit, ProductList} from "./Products/Products";
 import {Dashboard} from "./AdminDashboard"
-//import {CustomLayout} from "./CustomLayout";
+import {CustomLayout} from "../../components"
 
-const CustomMenu = (props) => (
-    <Menu {...props}>
-        <MenuItemLink to="/dashboard/categories" primaryText="Categories" />
-        <MenuItemLink to="/dashboard/products" primaryText="Products" />
-    </Menu>
-);
+
+//Menu, MenuItemLink, CustomMenu
+// const CustomMenu = (props) => (
+//     <Menu {...props}>
+//         <MenuItemLink to="/dashboard/categories" primaryText="Categories" />
+//         <MenuItemLink to="/dashboard/products" primaryText="Products" />
+//     </Menu>
+// );
 
 export const AdminPanel = () => (
     <Admin
         dataProvider={dataProvider}
-        menu={CustomMenu}
+        //menu={CustomMenu}
         basename="/dashboard"
         dashboard={Dashboard}
-        //layout={CustomLayout}
+        layout={CustomLayout}
     >
         <Resource
             name="categories"
@@ -30,7 +32,12 @@ export const AdminPanel = () => (
             create={CategoryCreate}
             edit={CategoryEdit}
         />
-        <Resource name="products" list={ProductList} />
+        <Resource
+            name="products"
+            list={ProductList}
+            create={ProductCreate}
+            edit={ProductEdit}
+        />
     </Admin>
 );
 

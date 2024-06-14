@@ -16,6 +16,29 @@ import {
 // Import other HTTP clients similarly
 
 export const dataProvider = {
+    // getList: async (resource, params) => {
+    //     switch (resource) {
+    //         case 'categories':
+    //             const categories = await fetchCategories();
+    //             return {
+    //                 data: categories,
+    //                 total: categories.length,
+    //             };
+    //         case 'products':
+    //             const products = await fetchProducts(
+    //                 {pagination: { page: 1, perPage: 10 },
+    //                         sort: { field: 'id', order: 'ASC' },
+    //                         filter: {},});
+    //             return {
+    //                 data: products,
+    //                 total: products.length,
+    //             };
+    //         // Add other resources similarly
+    //         default:
+    //             throw new Error(`Unknown resource: ${resource}`);
+    //     }
+    // },
+
     getList: async (resource, params) => {
         switch (resource) {
             case 'categories':
@@ -25,16 +48,17 @@ export const dataProvider = {
                     total: categories.length,
                 };
             case 'products':
-                const products = await fetchProducts();
+                const { data: products, total } = await fetchProducts(params);
                 return {
                     data: products,
-                    total: products.length,
+                    total: total,
                 };
             // Add other resources similarly
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
     },
+
 
     getOne: async (resource, params) => {
         switch (resource) {

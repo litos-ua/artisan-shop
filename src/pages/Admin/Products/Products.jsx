@@ -1,9 +1,14 @@
 import React from 'react';
 import {
     List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm,
-    TextInput, Create, Loading
+    TextInput, Create, Loading, ReferenceInput, SelectInput, NumberInput
 } from 'react-admin';
-import {ItemCharacteristicsField} from './ItemCharacteristicsField';
+//import {ItemCharacteristicsField} from './ItemCharacteristicsField';
+import {CollapsibleItemCharacteristicsField} from "./CollapsibleItemCharacteristicsField";
+import ItemCharacteristicsInput from './ItemCharacteristicsInput';
+import CustomCancelToolbar from '../../../components/Admin/CustomCancelToolbar';
+import CustomPagination from './../../../components/Admin/CustomPagination';
+
 
 export const ProductList = (props) => {
 
@@ -12,17 +17,16 @@ export const ProductList = (props) => {
     }
 
     return(
-    <List {...props} perPage={5}>
+    <List {...props} pagination={<CustomPagination />} perPage={10}>
 
         <Datagrid>
             <TextField source="id" />
             <TextField source="name" />
             <TextField source="category.name" label="Category"/>
-            {/*<ReferenceField source="category_id" reference="categories">*/}
-            {/*    <TextField source="name" />*/}
-            {/*</ReferenceField>*/}
-            <TextField source="price" />
-            <ItemCharacteristicsField source="item_characteristics" />
+            <TextField source="image" />
+            <TextField source="name" />
+            {/*<ItemCharacteristicsField source="item_characteristics" />*/}
+            <CollapsibleItemCharacteristicsField source="item_characteristics" />
             <EditButton />
             <DeleteButton />
         </Datagrid>
@@ -30,24 +34,34 @@ export const ProductList = (props) => {
     );
 };
 
-export const ProductCreate = (props) => (
-    <Create {...props}>
-        <SimpleForm>
-            <TextInput source="name" />
-        </SimpleForm>
-    </Create>
-);
-
 export const ProductEdit = (props) => (
     <Edit {...props}>
-        <SimpleForm>
+        <SimpleForm toolbar={<CustomCancelToolbar />}>
             <TextInput source="name" />
+            <ReferenceInput source="category_id" reference="categories">
+                <SelectInput optionText="name" />
+            </ReferenceInput>
+            <NumberInput source="price" />
+            <TextInput source="image" />
+            <TextInput source="title" />
+            <ItemCharacteristicsInput source="item_characteristics" />
         </SimpleForm>
     </Edit>
 );
 
-const Products = () => {
-    return <div>Products Component</div>;
-};
+export const ProductCreate = (props) => (
+    <Create {...props}>
+        <SimpleForm toolbar={<CustomCancelToolbar />} >
+            <TextInput source="name" />
+            <ReferenceInput source="category_id" reference="categories">
+                <SelectInput optionText="name" />
+            </ReferenceInput>
+            <NumberInput source="price" />
+            <TextInput source="image" />
+            <TextInput source="title" />
+            <ItemCharacteristicsInput source="item_characteristics" />
+        </SimpleForm>
+    </Create>
+);
 
-// export default Products;
+
