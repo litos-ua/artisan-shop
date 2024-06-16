@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -55,4 +56,70 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Password changed successfully'], 200);
     }
+
+    public function adminIndex()
+    {
+        // Only allow admins to list users
+        if (Auth::user()->role !== 3) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        $users = User::where('role', '!=', 3)->get(['id', 'name', 'email', 'role']);
+        return response()->json($users);
+    }
+
+    public function adminShow($id)
+    {
+        // Only allow admins to view user details
+        if (Auth::user()->role !== 3) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        $user = User::find($id, ['id', 'name', 'email', 'role']);
+        if (!$user || $user->role === 3) {
+            return response()->json(['error' => 'User not found or access forbidden'], 404);
+        }
+        return response()->json($user);
+    }
+
+    public function adminUpdate(Request $request, $id)
+    {
+        // Only allow admins to update user details
+        if (Auth::user()->role !== 3) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        $user = User::find($id);
+        if (!$user || $user->role === 3) {
+            return response()->json(['error' => 'User not found or access forbidden'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
+            'role' => 'sometimes|integer',
+        ]);
+
+        $user->update($validatedData);
+
+        return response()->json(['message' => 'User updated successfully']);
+    }
+
+    public function adminDestroy($id)
+    {
+        // Only allow admins to delete users except other admins
+        if (Auth::user()->role !== 3) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        $user = User::find($id);
+        if (!$user || $user->role === 3) {
+            return response()->json(['error' => 'User not found or access forbidden'], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully']);
+    }
+
 }

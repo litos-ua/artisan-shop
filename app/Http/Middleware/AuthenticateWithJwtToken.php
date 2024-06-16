@@ -39,7 +39,7 @@ class AuthenticateWithJwtToken
 
         // Authenticate the user
         Auth::login($user);
-//        $authUser =Auth::user();
+       $authUser =Auth::user();
 
         // Proceed with the request
         return $next($request);

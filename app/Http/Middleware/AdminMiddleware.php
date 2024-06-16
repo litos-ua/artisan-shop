@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+//Don't use at this moment. I am using middleware AdminCheck.
 class AdminMiddleware
 {
     /**

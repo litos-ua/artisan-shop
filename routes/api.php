@@ -35,22 +35,6 @@ Route::get('/categories/{id}', [CategoryController::class, 'show']);
 Route::put('/categories/{id}', [CategoryController::class, 'update']);
 Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 
-// Routes for the admin panel
-Route::get('/admin/categories', [CategoryController::class, 'adminIndex']);
-Route::get('/admin/categories/{id}', [CategoryController::class, 'adminShow']);
-Route::get('/admin/products', [ProductController::class, 'adminIndex']);
-Route::post('/admin/categories', [CategoryController::class, 'adminStore']); //Create
-Route::put('/admin/categories/{id}', [CategoryController::class, 'adminUpdate']); //Updata
-Route::delete('/admin/categories/{id}', [CategoryController::class, 'adminDestroy']);
-
-// Product routes for admin panel (assuming similar CRUD operations for products)
-Route::get('/admin/products', [ProductController::class, 'adminIndex']);
-Route::get('/admin/products/{id}', [ProductController::class, 'adminShow']);
-Route::post('/admin/products', [ProductController::class, 'adminStore']);
-Route::put('/admin/products/{id}', [ProductController::class, 'adminUpdate']);
-Route::delete('/admin/products/{id}', [ProductController::class, 'adminDestroy']);
-
-
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/category/{categoryId}', [ProductController::class, 'indexByCategory']);
 Route::post('/products', [ProductController::class, 'store']);
@@ -59,6 +43,29 @@ Route::put('/products/{id}', [ProductController::class, 'update']);
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
 Route::get('/products/search/{search}', [SearchController::class, 'searchProducts']);
+
+//// Routes for the admin panel
+Route::prefix('admin')->middleware(['auth_jwt', 'admin_check'])->group(function () {
+    // Category routes for the admin panel
+    Route::get('/categories', [CategoryController::class, 'adminIndex']);
+    Route::get('/categories/{id}', [CategoryController::class, 'adminShow']);
+    Route::post('/categories', [CategoryController::class, 'adminStore']); // Create
+    Route::put('/categories/{id}', [CategoryController::class, 'adminUpdate']); // Update
+    Route::delete('/categories/{id}', [CategoryController::class, 'adminDestroy']); // Delete
+
+    // Product routes for admin panel
+    Route::get('/products', [ProductController::class, 'adminIndex']);
+    Route::get('/products/{id}', [ProductController::class, 'adminShow']);
+    Route::post('/products', [ProductController::class, 'adminStore']); // Create
+    Route::put('/products/{id}', [ProductController::class, 'adminUpdate']); // Update
+    Route::delete('/products/{id}', [ProductController::class, 'adminDestroy']); // Delete
+
+    // User routes for the admin panel
+    Route::get('/users', [UserController::class, 'adminIndex']);
+    Route::get('/users/{id}', [UserController::class, 'adminShow']);
+    Route::put('/users/{id}', [UserController::class, 'adminUpdate']);
+    Route::delete('/users/{id}', [UserController::class, 'adminDestroy']);
+});
 
 
 Route::middleware('auth_jwt')->post('/user', [UserController::class, 'getUserByEmail']);
