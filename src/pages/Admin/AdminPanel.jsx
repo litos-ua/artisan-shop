@@ -10,6 +10,7 @@ import {ProductCreate, ProductEdit, ProductList} from "./Products/Products";
 import {Dashboard} from "./AdminDashboard"
 import {CustomLayout} from "../../components"
 import { UserList, UserEdit, UserShow } from "./Users/Users";
+import { CustomerList, CustomerEdit } from "./Customers/Customers";
 
 
 const lightTheme = defaultTheme;
@@ -57,6 +58,11 @@ export const AdminPanel = () => (
             list={UserList}
             edit={UserEdit}
             show={UserShow}
+        />
+        <Resource
+            name="customers"
+            list={CustomerList}
+            edit={CustomerEdit}
         />
     </Admin>
 );

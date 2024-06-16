@@ -4,21 +4,21 @@ import {
     createCategory,
     getCategoryById,
     updateCategory,
-    deleteCategory
-} from './admin';
-import {
+    deleteCategory,
     fetchProducts,
     createProduct,
     getProductById,
     updateProduct,
-    deleteProduct
-} from './admin';
-import {
+    deleteProduct,
     fetchUsers,
     fetchUserById,
     updateUser,
-    deleteUser
-} from './admin'
+    deleteUser,
+    fetchCustomers,
+    fetchCustomerById,
+    updateCustomer,
+    deleteCustomer
+} from './admin';
 
 const token = localStorage.getItem('token');
 const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
@@ -45,6 +45,12 @@ export const dataProvider = {
                     data: users,
                     total: users.length,
                 };
+            case 'customers':
+                const customers = await fetchCustomers(authHeaders);
+                return {
+                    data: customers,
+                    total: customers.length,
+                };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -61,6 +67,9 @@ export const dataProvider = {
             case 'users':
                 const user = await fetchUserById(params.id, authHeaders);
                 return { data: user };
+            case 'customers':
+                const customer = await fetchCustomerById(params.id, authHeaders);
+                return { data: customer };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -107,6 +116,9 @@ export const dataProvider = {
             case 'users':
                 const updatedUser = await updateUser(params.id, params.data, authHeaders);
                 return { data: updatedUser };
+            case 'customers':
+                const updatedCustomer = await updateCustomer(params.id, params.data, authHeaders);
+                return { data: updatedCustomer };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -122,6 +134,9 @@ export const dataProvider = {
                 return { data: params.previousData };
             case 'users':
                 await deleteUser(params.id, authHeaders);
+                return { data: params.previousData };
+            case 'customers':
+                await deleteCustomer(params.id, authHeaders);
                 return { data: params.previousData };
             default:
                 throw new Error(`Unknown resource: ${resource}`);

@@ -11,5 +11,6 @@ export const CustomMenu = (props) => (
         <MenuItemLink to="/dashboard/categories" primaryText="Categories" />
         <MenuItemLink to="/dashboard/products" primaryText="Products" />
         <MenuItemLink to="/dashboard/users" primaryText="Users" />
+        <MenuItemLink to="/dashboard/customers" primaryText="Customers" />
     </Menu>
 );

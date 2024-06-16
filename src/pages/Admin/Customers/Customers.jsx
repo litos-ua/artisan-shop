@@ -1,37 +1,35 @@
+
 import React from 'react';
-import { List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm,
-    TextInput, Create } from 'react-admin';
+import { List, Datagrid, TextField, EmailField, EditButton, DeleteButton, Edit, SimpleForm, TextInput } from 'react-admin';
+import CustomPagination from './../../../components/Admin/CustomPagination';
+import CustomCancelToolbar from "../../../components/Admin/CustomCancelToolbar";
 
 
 export const CustomerList = (props) => (
-    <List {...props}>
+    <List {...props} pagination={<CustomPagination />} perPage={10}>
         <Datagrid>
             <TextField source="id" />
-            <TextField source="name" />
-            <EditButton basePath="/customers" />
-            <DeleteButton basePath="/customers" />
+            <TextField source="first_name" />
+            <TextField source="last_name" />
+            <EmailField source="email" />
+            <TextField source="phone_number" />
+            <TextField source="zip_code" />
+            <TextField source="address" />
+            <EditButton />
+            <DeleteButton />
         </Datagrid>
     </List>
 );
 
-export const CustomerCreate = (props) => (
-    <Create {...props}>
-        <SimpleForm>
-            <TextInput source="name" />
-        </SimpleForm>
-    </Create>
-);
-
 export const CustomerEdit = (props) => (
     <Edit {...props}>
-        <SimpleForm>
-            <TextInput source="name" />
+        <SimpleForm toolbar={<CustomCancelToolbar />}>
+            <TextInput source="first_name" />
+            <TextInput source="last_name" />
+            <TextInput source="phone_number" />
+            <TextInput source="zip_code" />
+            <TextInput source="address" />
         </SimpleForm>
     </Edit>
 );
 
-const Customers = () => {
-    return <div>Customers Component</div>;
-};
-
-export default Customers;
