@@ -15,6 +15,12 @@ class CustomerController extends Controller
         return response()->json($customers);
     }
 
+    public function adminIndex()
+    {
+        $customers = Customer::all();
+        return response()->json($customers);
+    }
+
     public function store(Request $request)
     {
         // Validate and store a new customer
@@ -29,6 +35,12 @@ class CustomerController extends Controller
     public function show($id)
     {
         // Retrieve a specific customer by ID
+        $customer = Customer::findOrFail($id);
+        return response()->json($customer);
+    }
+
+    public function adminShow($id)
+    {
         $customer = Customer::findOrFail($id);
         return response()->json($customer);
     }
@@ -71,9 +83,33 @@ class CustomerController extends Controller
         return response()->json($customer, 200);
     }
 
+    public function adminUpdate(Request $request, $id)
+    {
+        $customer = Customer::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'first_name' => 'nullable|string|min:3|max:60',
+            'last_name' => 'nullable|string|min:3|max:100',
+            'phone_number' => 'nullable|string|max:20',
+            'zip_code' => 'nullable|string|max:10',
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        $customer->update($validatedData);
+        return response()->json($customer, 200);
+    }
+
+
     public function destroy($id)
     {
         // Delete a specific customer by ID
+        $customer = Customer::findOrFail($id);
+        $customer->delete();
+        return response()->json(null, 204);
+    }
+
+    public function adminDestroy($id)
+    {
         $customer = Customer::findOrFail($id);
         $customer->delete();
         return response()->json(null, 204);

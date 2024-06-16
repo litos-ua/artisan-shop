@@ -44,7 +44,7 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
 Route::get('/products/search/{search}', [SearchController::class, 'searchProducts']);
 
-//// Routes for the admin panel
+// Routes for the admin panel
 Route::prefix('admin')->middleware(['auth_jwt', 'admin_check'])->group(function () {
     // Category routes for the admin panel
     Route::get('/categories', [CategoryController::class, 'adminIndex']);
@@ -65,6 +65,12 @@ Route::prefix('admin')->middleware(['auth_jwt', 'admin_check'])->group(function 
     Route::get('/users/{id}', [UserController::class, 'adminShow']);
     Route::put('/users/{id}', [UserController::class, 'adminUpdate']);
     Route::delete('/users/{id}', [UserController::class, 'adminDestroy']);
+
+    // Customer routes for the admin panel
+    Route::get('/customers', [CustomerController::class, 'adminIndex']);
+    Route::get('/customers/{id}', [CustomerController::class, 'adminShow']);
+    Route::put('/customers/{id}', [CustomerController::class, 'adminUpdate']);
+    Route::delete('/customers/{id}', [CustomerController::class, 'adminDestroy']);
 });
 
 
