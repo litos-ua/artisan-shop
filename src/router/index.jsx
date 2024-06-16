@@ -162,7 +162,7 @@ export const ROUTE = {
 
 export const router = createBrowserRouter([
     { path: ROUTE.HOME, element: <App /> },
-    { path: ROUTE.DASHBOARD, element: <AdminRoute><AdminPanel /></AdminRoute> },
+    { path: ROUTE.DASHBOARD, element: <WithAuthCheck><AdminRoute><AdminPanel /></AdminRoute></WithAuthCheck> },
     { path: ROUTE.CATEGORY_CURRENT, element: <ProductsOfCategory /> },
     //{ path: ROUTE.PRODUCTS, element: <Products /> },
     { path: ROUTE.PRODUCT_CURRENT, element: <Products /> },

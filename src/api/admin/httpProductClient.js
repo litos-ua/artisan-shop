@@ -1,3 +1,110 @@
+// import axios from "axios";
+// import { configObj } from "../../resources";
+//
+// const baseURL = configObj.axiosUrl;
+//
+// const httpProductClient = axios.create({
+//     baseURL,
+//     headers: {
+//         "Content-Type": "application/json",
+//     },
+// });
+//
+// const handleError = (error) => {
+//     if (axios.isAxiosError(error) && error.response) {
+//         throw error.response.data;
+//     } else {
+//         throw new Error("Unknown Error");
+//     }
+// };
+//
+//
+// //export const fetchProducts = async (params = {}) => {
+// export const fetchProducts = async (params = {}, headers = {}) => {
+//     try {
+//         const { pagination, sort, filter } = params;
+//         const { page, perPage } = pagination || {};
+//         const { field: sortField, order: sortOrder } = sort || {};
+//
+//         const query = {
+//             _page: page,
+//             _limit: perPage,
+//             _sort: sortField,
+//             _order: sortOrder,
+//             ...filter
+//         };
+// //        const response = await httpProductClient.get("admin/products", { params: query });
+//         const response = await httpProductClient.get("admin/products", {
+//             params: query,
+//             headers: {
+//                 ...httpProductClient.defaults.headers,
+//                 ...headers
+//             }
+//         });
+//
+//         return {
+//             data: response.data,
+//             total: parseInt(response.headers['x-total-count'], 10)
+//         };
+//     } catch (error) {
+//         handleError(error);
+//     }
+// };
+//
+// export const fetchProductsByCategory = async (categoryId, params = {}) => {
+//     try {
+//         const { page, perPage, sortField, sortOrder, filter } = params;
+//         const query = {
+//             _page: page,
+//             _limit: perPage,
+//             _sort: sortField,
+//             _order: sortOrder,
+//             ...filter
+//         };
+//         const response = await httpProductClient.get(`admin/products/category/${categoryId}`, { params: query });
+//         const wrapperName = `productsByCategory_${categoryId}`;
+//         return response.data[wrapperName];
+//     } catch (error) {
+//         handleError(error);
+//     }
+// };
+//
+// export const createProduct = async (productData) => {
+//     try {
+//         const response = await httpProductClient.post("admin/products", productData);
+//         return response.data;
+//     } catch (error) {
+//         handleError(error);
+//     }
+// };
+//
+// export const getProductById = async (productId) => {
+//     try {
+//         const response = await httpProductClient.get(`admin/products/${productId}`);
+//         return response.data.data;
+//     } catch (error) {
+//         handleError(error);
+//     }
+// };
+//
+// export const updateProduct = async (productId, productData) => {
+//     try {
+//         const response = await httpProductClient.put(`admin/products/${productId}`, productData);
+//         return response.data.data;
+//     } catch (error) {
+//         handleError(error);
+//     }
+// };
+//
+// export const deleteProduct = async (productId) => {
+//     try {
+//         const response = await httpProductClient.delete(`admin/products/${productId}`);
+//         return { data: { id: productId } };
+//     } catch (error) {
+//         handleError(error);
+//     }
+// };
+
 import axios from "axios";
 import { configObj } from "../../resources";
 
@@ -18,28 +125,7 @@ const handleError = (error) => {
     }
 };
 
-// export const fetchProducts = async (params = {}) => {
-//     try {
-//        // const { page, perPage, sortField, sortOrder, filter } = params;
-//         const { pagination, sort, filter } = params;
-//         const { page, perPage } = pagination || {};
-//         const { sortField, sortOrder } = sort || {};
-//
-//         const query = {
-//             _page: page,
-//             _limit: perPage,
-//             _sort: sortField,
-//             _order: sortOrder,
-//             ...filter
-//         };
-//         const response = await httpProductClient.get("admin/products", { params: query });
-//         return response.data;
-//     } catch (error) {
-//         handleError(error);
-//     }
-// };
-
-export const fetchProducts = async (params = {}) => {
+export const fetchProducts = async (params = {}, headers = {}) => {
     try {
         const { pagination, sort, filter } = params;
         const { page, perPage } = pagination || {};
@@ -52,7 +138,13 @@ export const fetchProducts = async (params = {}) => {
             _order: sortOrder,
             ...filter
         };
-        const response = await httpProductClient.get("admin/products", { params: query });
+        const response = await httpProductClient.get("admin/products", {
+            params: query,
+            headers: {
+                ...httpProductClient.defaults.headers,
+                ...headers
+            }
+        });
 
         return {
             data: response.data,
@@ -63,7 +155,7 @@ export const fetchProducts = async (params = {}) => {
     }
 };
 
-export const fetchProductsByCategory = async (categoryId, params = {}) => {
+export const fetchProductsByCategory = async (categoryId, params = {}, headers = {}) => {
     try {
         const { page, perPage, sortField, sortOrder, filter } = params;
         const query = {
@@ -73,7 +165,13 @@ export const fetchProductsByCategory = async (categoryId, params = {}) => {
             _order: sortOrder,
             ...filter
         };
-        const response = await httpProductClient.get(`admin/products/category/${categoryId}`, { params: query });
+        const response = await httpProductClient.get(`admin/products/category/${categoryId}`, {
+            params: query,
+            headers: {
+                ...httpProductClient.defaults.headers,
+                ...headers
+            }
+        });
         const wrapperName = `productsByCategory_${categoryId}`;
         return response.data[wrapperName];
     } catch (error) {
@@ -81,38 +179,59 @@ export const fetchProductsByCategory = async (categoryId, params = {}) => {
     }
 };
 
-export const createProduct = async (productData) => {
+export const createProduct = async (productData, headers = {}) => {
     try {
-        const response = await httpProductClient.post("admin/products", productData);
+        const response = await httpProductClient.post("admin/products", productData, {
+            headers: {
+                ...httpProductClient.defaults.headers,
+                ...headers
+            }
+        });
         return response.data;
     } catch (error) {
         handleError(error);
     }
 };
 
-export const getProductById = async (productId) => {
+export const getProductById = async (productId, headers = {}) => {
     try {
-        const response = await httpProductClient.get(`admin/products/${productId}`);
+        const response = await httpProductClient.get(`admin/products/${productId}`, {
+            headers: {
+                ...httpProductClient.defaults.headers,
+                ...headers
+            }
+        });
         return response.data.data;
     } catch (error) {
         handleError(error);
     }
 };
 
-export const updateProduct = async (productId, productData) => {
+export const updateProduct = async (productId, productData, headers = {}) => {
     try {
-        const response = await httpProductClient.put(`admin/products/${productId}`, productData);
+        const response = await httpProductClient.put(`admin/products/${productId}`, productData, {
+            headers: {
+                ...httpProductClient.defaults.headers,
+                ...headers
+            }
+        });
         return response.data.data;
     } catch (error) {
         handleError(error);
     }
 };
 
-export const deleteProduct = async (productId) => {
+export const deleteProduct = async (productId, headers = {}) => {
     try {
-        const response = await httpProductClient.delete(`admin/products/${productId}`);
+        const response = await httpProductClient.delete(`admin/products/${productId}`, {
+            headers: {
+                ...httpProductClient.defaults.headers,
+                ...headers
+            }
+        });
         return { data: { id: productId } };
     } catch (error) {
         handleError(error);
     }
 };
+

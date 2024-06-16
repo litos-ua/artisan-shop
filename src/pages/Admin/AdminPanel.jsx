@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Admin,  Resource } from 'react-admin';
+import { Admin,  Resource, defaultTheme } from 'react-admin';
+import { createTheme } from '@mui/material/styles';
 import { dataProvider } from "../../api/dataProvider";
 import { CategoryList } from "./Categories";
 import { CategoryCreate } from "./Categories";
@@ -8,15 +9,26 @@ import { CategoryEdit } from "./Categories";
 import {ProductCreate, ProductEdit, ProductList} from "./Products/Products";
 import {Dashboard} from "./AdminDashboard"
 import {CustomLayout} from "../../components"
+import { UserList, UserEdit, UserShow } from "./Users/Users";
 
 
-//Menu, MenuItemLink, CustomMenu
-// const CustomMenu = (props) => (
-//     <Menu {...props}>
-//         <MenuItemLink to="/dashboard/categories" primaryText="Categories" />
-//         <MenuItemLink to="/dashboard/products" primaryText="Products" />
-//     </Menu>
-// );
+const lightTheme = defaultTheme;
+const darkTheme = createTheme({
+    ...defaultTheme,
+    palette: {
+        mode: 'dark',
+        primary: {
+            main: '#90caf9',
+        },
+        secondary: {
+            main: '#f48fb1',
+        },
+        background: {
+            default: '#303030',
+            paper: '#424242',
+        },
+    },
+});
 
 export const AdminPanel = () => (
     <Admin
@@ -25,6 +37,8 @@ export const AdminPanel = () => (
         basename="/dashboard"
         dashboard={Dashboard}
         layout={CustomLayout}
+        theme={lightTheme}
+        darkTheme={darkTheme}
     >
         <Resource
             name="categories"
@@ -37,6 +51,12 @@ export const AdminPanel = () => (
             list={ProductList}
             create={ProductCreate}
             edit={ProductEdit}
+        />
+        <Resource
+            name="users"
+            list={UserList}
+            edit={UserEdit}
+            show={UserShow}
         />
     </Admin>
 );

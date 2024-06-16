@@ -5,70 +5,62 @@ import {
     getCategoryById,
     updateCategory,
     deleteCategory
-} from './admin/httpCategoryClient';
+} from './admin';
 import {
     fetchProducts,
     createProduct,
     getProductById,
     updateProduct,
     deleteProduct
-} from './admin/httpProductClient';
-// Import other HTTP clients similarly
+} from './admin';
+import {
+    fetchUsers,
+    fetchUserById,
+    updateUser,
+    deleteUser
+} from './admin'
+
+const token = localStorage.getItem('token');
+const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
 export const dataProvider = {
-    // getList: async (resource, params) => {
-    //     switch (resource) {
-    //         case 'categories':
-    //             const categories = await fetchCategories();
-    //             return {
-    //                 data: categories,
-    //                 total: categories.length,
-    //             };
-    //         case 'products':
-    //             const products = await fetchProducts(
-    //                 {pagination: { page: 1, perPage: 10 },
-    //                         sort: { field: 'id', order: 'ASC' },
-    //                         filter: {},});
-    //             return {
-    //                 data: products,
-    //                 total: products.length,
-    //             };
-    //         // Add other resources similarly
-    //         default:
-    //             throw new Error(`Unknown resource: ${resource}`);
-    //     }
-    // },
 
     getList: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                const categories = await fetchCategories();
+                const categories = await fetchCategories(params, authHeaders);
                 return {
                     data: categories,
                     total: categories.length,
                 };
             case 'products':
-                const { data: products, total } = await fetchProducts(params);
+                const { data: products, total } = await fetchProducts(params, authHeaders);
                 return {
                     data: products,
                     total: total,
                 };
-            // Add other resources similarly
+            case 'users':
+                const users = await fetchUsers(authHeaders);
+                return {
+                    data: users,
+                    total: users.length,
+                };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
     },
 
-
     getOne: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                const category = await getCategoryById(params.id);
+                const category = await getCategoryById(params.id, authHeaders);
                 return { data: category };
             case 'products':
-                const product = await getProductById(params.id);
+                const product = await getProductById(params.id, authHeaders);
                 return { data: product };
-            // Add other resources similarly
+            case 'users':
+                const user = await fetchUserById(params.id, authHeaders);
+                return { data: user };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -77,31 +69,28 @@ export const dataProvider = {
     getMany: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                const categories = await Promise.all(params.ids.map(id => getCategoryById(id)));
+                const categories = await Promise.all(params.ids.map(id => getCategoryById(id, authHeaders)));
                 return { data: categories };
             case 'products':
-                const products = await Promise.all(params.ids.map(id => getProductById(id)));
+                const products = await Promise.all(params.ids.map(id => getProductById(id, authHeaders)));
                 return { data: products };
-            // Add other resources similarly
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
     },
 
     getManyReference: async (resource, params) => {
-        // Implement if you need to support reference fetching
         return { data: [], total: 0 };
     },
 
     create: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                const newCategory = await createCategory(params.data);
+                const newCategory = await createCategory(params.data, authHeaders);
                 return { data: { ...params.data, id: newCategory.id } };
             case 'products':
-                const newProduct = await createProduct(params.data);
+                const newProduct = await createProduct(params.data, authHeaders);
                 return { data: { ...params.data, id: newProduct.id } };
-            // Add other resources similarly
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -110,12 +99,14 @@ export const dataProvider = {
     update: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                const updatedCategory = await updateCategory(params.id, params.data);
+                const updatedCategory = await updateCategory(params.id, params.data, authHeaders);
                 return { data: updatedCategory };
             case 'products':
-                const updatedProduct = await updateProduct(params.id, params.data);
+                const updatedProduct = await updateProduct(params.id, params.data, authHeaders);
                 return { data: updatedProduct };
-            // Add other resources similarly
+            case 'users':
+                const updatedUser = await updateUser(params.id, params.data, authHeaders);
+                return { data: updatedUser };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -124,12 +115,14 @@ export const dataProvider = {
     delete: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                await deleteCategory(params.id);
+                await deleteCategory(params.id, authHeaders);
                 return { data: params.previousData };
             case 'products':
-                await deleteProduct(params.id);
+                await deleteProduct(params.id, authHeaders);
                 return { data: params.previousData };
-            // Add other resources similarly
+            case 'users':
+                await deleteUser(params.id, authHeaders);
+                return { data: params.previousData };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -138,22 +131,16 @@ export const dataProvider = {
     deleteMany: async (resource, params) => {
         switch (resource) {
             case 'categories':
-                // await Promise.all(params.ids.map(id => deleteCategory(id)));
-                // return { data: params.ids };
-                if (resource === 'categories') {
-                    const deletedCategory = await deleteCategory(params.id);
-                    return { data: deletedCategory };
-                }
-                throw new Error(`Unsupported resource: ${resource}`);
-            case 'products':
-                await Promise.all(params.ids.map(id => deleteProduct(id)));
+                await Promise.all(params.ids.map(id => deleteCategory(id, authHeaders)));
                 return { data: params.ids };
-            // Add other resources similarly
+            case 'products':
+                await Promise.all(params.ids.map(id => deleteProduct(id, authHeaders)));
+                return { data: params.ids };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
     },
 };
 
-// export default dataProvider;
+
 

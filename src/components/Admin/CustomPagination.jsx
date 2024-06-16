@@ -7,7 +7,7 @@ const CustomPagination = (props) => {
             sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center', // Ensure the container itself centers its children vertically
+                alignItems: 'center', // The children in the container are centers vertically
                 'ul.MuiPagination-ul': {
                     display: 'flex',
                     alignItems: 'center', // Center all items in the ul vertically
