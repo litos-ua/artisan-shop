@@ -145,7 +145,7 @@ export const fetchProducts = async (params = {}, headers = {}) => {
                 ...headers
             }
         });
-
+        //console.log('ResponseProducts:',response.data);
         return {
             data: response.data,
             total: parseInt(response.headers['x-total-count'], 10)

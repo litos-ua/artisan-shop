@@ -9,8 +9,9 @@ import { CategoryEdit } from "./Categories";
 import {ProductCreate, ProductEdit, ProductList} from "./Products/Products";
 import {Dashboard} from "./AdminDashboard"
 import {CustomLayout} from "../../components"
-import { UserList, UserEdit, UserShow } from "./Users/Users";
-import { CustomerList, CustomerEdit } from "./Customers/Customers";
+import {UserList, UserEdit, UserShow} from "./Users/Users";
+import {CustomerList, CustomerEdit} from "./Customers/Customers";
+import {OrderList, OrderCreate, OrderEdit, OrderShow} from './Orders/Orders';
 
 
 const lightTheme = defaultTheme;
@@ -63,6 +64,13 @@ export const AdminPanel = () => (
             name="customers"
             list={CustomerList}
             edit={CustomerEdit}
+        />
+        <Resource
+            name="orders"
+            list={OrderList}
+            create={OrderCreate} //Creating orders somehow works, the question is whether this function is needed?
+            edit={OrderEdit}
+            show={OrderShow}
         />
     </Admin>
 );

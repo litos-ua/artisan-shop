@@ -1,23 +1,10 @@
 
 import {
-    fetchCategories,
-    createCategory,
-    getCategoryById,
-    updateCategory,
-    deleteCategory,
-    fetchProducts,
-    createProduct,
-    getProductById,
-    updateProduct,
-    deleteProduct,
-    fetchUsers,
-    fetchUserById,
-    updateUser,
-    deleteUser,
-    fetchCustomers,
-    fetchCustomerById,
-    updateCustomer,
-    deleteCustomer
+    fetchCategories, createCategory, getCategoryById, updateCategory, deleteCategory,
+    fetchProducts, createProduct, getProductById, updateProduct, deleteProduct,
+    fetchUsers, fetchUserById, updateUser, deleteUser,
+    fetchCustomers, fetchCustomerById, updateCustomer, deleteCustomer,
+    fetchOrders, fetchOrderById, createOrder, updateOrder, deleteOrder,
 } from './admin';
 
 const token = localStorage.getItem('token');
@@ -51,6 +38,26 @@ export const dataProvider = {
                     data: customers,
                     total: customers.length,
                 };
+            // case 'orders':
+            //     const orders = await fetchOrders(authHeaders);
+            //     return {
+            //         data: orders,
+            //         total: orders.length,
+            //     };
+
+            // case 'orders':
+            //     const orders = await fetchOrders(params, authHeaders);
+            //     return {
+            //         data: orders,
+            //         total: orders.length,
+            //     };
+            case 'orders':
+                const { data: orders, total: orderTotal } = await fetchOrders(params, authHeaders);
+                return {
+                    data: orders,
+                    total: orderTotal,
+                };
+
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -70,6 +77,9 @@ export const dataProvider = {
             case 'customers':
                 const customer = await fetchCustomerById(params.id, authHeaders);
                 return { data: customer };
+            case 'orders':
+                const order = await fetchOrderById(params.id, authHeaders);
+                return { data: order };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -100,6 +110,9 @@ export const dataProvider = {
             case 'products':
                 const newProduct = await createProduct(params.data, authHeaders);
                 return { data: { ...params.data, id: newProduct.id } };
+            case 'orders':
+                const newOrder = await createOrder(params.data, authHeaders);
+                return { data: { ...params.data, id: newOrder.id } };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -119,6 +132,9 @@ export const dataProvider = {
             case 'customers':
                 const updatedCustomer = await updateCustomer(params.id, params.data, authHeaders);
                 return { data: updatedCustomer };
+            case 'orders':
+                const updatedOrder = await updateOrder(params.id, params.data, authHeaders);
+                return { data: updatedOrder };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -137,6 +153,9 @@ export const dataProvider = {
                 return { data: params.previousData };
             case 'customers':
                 await deleteCustomer(params.id, authHeaders);
+                return { data: params.previousData };
+            case 'orders':
+                await deleteOrder(params.id, authHeaders);
                 return { data: params.previousData };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
