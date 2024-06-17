@@ -26,6 +26,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'customer_id' => $this->customer_id,
+            'customer' => new CustomerResource($this->whenLoaded('customer')),
             'delivery_requirement' => $this->delivery_requirement,
             'received_status' => $this->received_status,
             'type_of_payment' => $this->type_of_payment,

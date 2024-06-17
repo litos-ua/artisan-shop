@@ -71,6 +71,12 @@ Route::prefix('admin')->middleware(['auth_jwt', 'admin_check'])->group(function 
     Route::get('/customers/{id}', [CustomerController::class, 'adminShow']);
     Route::put('/customers/{id}', [CustomerController::class, 'adminUpdate']);
     Route::delete('/customers/{id}', [CustomerController::class, 'adminDestroy']);
+
+    Route::get('/orders', [OrderController::class, 'adminIndex']);
+    Route::get('/orders/{id}', [OrderController::class, 'adminShow']);
+    Route::post('/orders', [OrderController::class, 'adminStore']); // Create
+    Route::put('/orders/{id}', [OrderController::class, 'adminUpdate']); // Update
+    Route::delete('/orders/{id}', [OrderController::class, 'adminDestroy']); // Delete
 });
 
 

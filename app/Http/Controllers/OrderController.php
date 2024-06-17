@@ -190,5 +190,84 @@ class OrderController extends Controller
         return response()->json(OrderResource::collection($orders));
     }
 
+//Methods for the admin routes
+    // Fetch all orders for admin
+//    public function adminIndex()
+//    {
+//        $orders = Order::with('orderDetails.product', 'customer')->get();
+//        $ord = OrderResource::collection($orders);
+//        //return response()->json($orders); //react return response.data
+//        return OrderResource::collection($orders); //react return response.data.data
+//    }
+
+    public function adminIndex(Request $request)
+    {
+        $page = $request->input('_page', 1);
+        $perPage = $request->input('_limit', 10);
+
+        $sortField = $request->input('_sort', 'id');
+        $sortOrder = $request->input('_order', 'ASC');
+
+        $query = Order::with('orderDetails.product', 'customer')
+            ->orderBy($sortField, $sortOrder);
+
+        $orders = $query->paginate($perPage, ['*'], 'page', $page);
+        $total = $orders->total();
+
+        return response()->json([
+            'data' => OrderResource::collection($orders->items()),
+            'total' => $total
+        ])->header('X-Total-Count', $total)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+            ->header('Access-Control-Expose-Headers', 'X-Total-Count');
+    }
+
+    // Fetch a single order for admin by its ID
+    public function adminShow($id)
+    {
+        $order = Order::with('orderDetails.product', 'customer')->findOrFail($id);
+        return new OrderResource($order);
+    }
+
+    // Create a new order for admin
+    public function adminStore(Request $request)
+    {
+        $order = Order::create($request->all());
+        if ($request->has('order_details')) {
+            foreach ($request->order_details as $detail) {
+                $order->orderDetails()->create($detail);
+            }
+        }
+        return new OrderResource($order->load('orderDetails.product'));
+    }
+
+    // Update an existing order for admin by its ID
+    public function adminUpdate(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->update($request->all());
+        // Update order details
+        foreach ($request->order_details as $detail) {
+            $orderDetail = $order->orderDetails()->find($detail['id']);
+            if ($orderDetail) {
+                $orderDetail->update($detail);
+            } else {
+                $order->orderDetails()->create($detail);
+            }
+        }
+        return new OrderResource($order->load('orderDetails.product'));
+    }
+
+    // Delete an order for admin by its ID
+    public function adminDestroy($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->orderDetails()->delete();
+        $order->delete();
+        return response()->json(['message' => 'Order deleted successfully']);
+    }
+
 }
 
