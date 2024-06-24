@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
@@ -93,6 +94,11 @@ Route::middleware('auth_jwt')->delete('/customers/{id}', [CustomerController::cl
 Route::middleware('auth_jwt')->get('/customers', [OrderController::class, 'index']); //???
 Route::middleware('auth_jwt')->get('/customer/orders', [OrderController::class, 'indexForCustomer']);
 
+/*
+|--------------------------------------------------------------------------
+| Authentication routes
+|--------------------------------------------------------------------------
+*/
 Route::group(['middleware' => 'auth:sanctum'], function () {
     // Logout route
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -105,6 +111,20 @@ Route::middleware('auth_jwt')->put('/user/password/change', [UserController::cla
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+//---------------------------------------------------------------------------------------------------------------
+
+
+/*
+|--------------------------------------------------------------------------
+| Routes for the chat
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth_jwt')->group(function () {
+    Route::post('/messages', [MessageController::class,'sendMessage']);
+    Route::get('/messages', [MessageController::class,'getMessages']);
+    Route::get('/messages/{userId}', [MessageController::class,'getMessages']);
+});
+//----------------------------------------------------------------------------------------------------------------
 
 /*
 |--------------------------------------------------------------------------
@@ -126,7 +146,7 @@ Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'handleV
 Route::post('/email/verification-notification', [VerificationController::class, 'resendVerificationEmail'])
     ->middleware(['throttle:6,1']) //->middleware(['auth_jwt', 'throttle:6,1'])
     ->name('verification.send');
-
+//-----------------------------------------------------------------------------------------------------------------
 
 
 /*
