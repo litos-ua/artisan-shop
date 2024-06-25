@@ -57,18 +57,3 @@ export const put = async (url, data, headers = {}) => {
 
 export default httpAuthClient;
 
-// export const post = async (url, data, headers = {}) => {
-//     try {
-//         const requestHeaders = {
-//             ...httpAuthClient.defaults.headers,
-//             ...headers,
-//         };
-//
-//         const response = await httpAuthClient.post(url, data, {
-//             headers: requestHeaders,
-//         });
-//         return response.data;
-//     } catch (error) {
-//         throw error.response ? error.response.data : error;
-//     }
-// };

@@ -2,17 +2,6 @@
 // import { List, Datagrid, TextField, EditButton, DeleteButton, Edit, SimpleForm,
 //           TextInput, Create, useResourceContext } from 'react-admin';
 //
-// // export const CategoryList = (props) => (
-// //     <List {...props}>
-// //         <Datagrid>
-// //             <TextField source="id" />
-// //             <TextField source="name" />
-// //             <EditButton basePath="/categories" />
-// //             <DeleteButton basePath="/categories" />
-// //         </Datagrid>
-// //     </List>
-// // );
-//
 // const ResourceName = () => {
 //     const resource = useResourceContext();
 //     return <>{resource}</>;
@@ -29,22 +18,6 @@
 //         </>
 //     </List>
 // )
-//
-// // export const CategoryCreate = (props) => (
-// //     <Create {...props}>
-// //         <SimpleForm>
-// //             <TextInput source="name" />
-// //         </SimpleForm>
-// //     </Create>
-// // );
-// //
-// // export const CategoryEdit = (props) => (
-// //     <Edit {...props}>
-// //         <SimpleForm>
-// //             <TextInput source="name" />
-// //         </SimpleForm>
-// //     </Edit>
-// // );
 //
 // const Categories = () => {
 //     return <div>Categories Component</div>;

@@ -5,6 +5,7 @@ import {
     fetchUsers, fetchUserById, updateUser, deleteUser,
     fetchCustomers, fetchCustomerById, updateCustomer, deleteCustomer,
     fetchOrders, fetchOrderById, createOrder, updateOrder, deleteOrder,
+    fetchMessages, sendMessage,
 } from './admin';
 
 const token = localStorage.getItem('token');
@@ -38,26 +39,19 @@ export const dataProvider = {
                     data: customers,
                     total: customers.length,
                 };
-            // case 'orders':
-            //     const orders = await fetchOrders(authHeaders);
-            //     return {
-            //         data: orders,
-            //         total: orders.length,
-            //     };
-
-            // case 'orders':
-            //     const orders = await fetchOrders(params, authHeaders);
-            //     return {
-            //         data: orders,
-            //         total: orders.length,
-            //     };
             case 'orders':
                 const { data: orders, total: orderTotal } = await fetchOrders(params, authHeaders);
                 return {
                     data: orders,
                     total: orderTotal,
                 };
-
+            case 'messages':
+                console.log('params.userId:', params);
+                const messages = await fetchMessages(params.userId, authHeaders);
+                return {
+                    data: messages,
+                    total: messages.length,
+                };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }
@@ -113,6 +107,9 @@ export const dataProvider = {
             case 'orders':
                 const newOrder = await createOrder(params.data, authHeaders);
                 return { data: { ...params.data, id: newOrder.id } };
+            case 'messages':
+                const newMessage = await sendMessage(params.data, authHeaders);
+                return { data: { ...params.data, id: newMessage.id } };
             default:
                 throw new Error(`Unknown resource: ${resource}`);
         }

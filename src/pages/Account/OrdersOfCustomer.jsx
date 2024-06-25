@@ -1,6 +1,4 @@
 
-
-
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchOrders } from '../../ducks';
@@ -35,7 +33,7 @@ const CustomerOrdersList = () => {
         setCurrentPage(value);
     };
 
-    // Calculate the orders to display on the current page
+    // Calculate the orders to display on current page
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
     const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);

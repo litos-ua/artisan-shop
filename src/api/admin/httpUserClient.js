@@ -26,6 +26,7 @@ export const fetchUsers = async (headers = {}) => {
                 ...headers
             }
         });
+        console.log('Users:', response);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -54,6 +55,7 @@ export const updateUser = async (userId, userData, headers = {}) => {
                 ...headers
             }
         });
+        console.log('Users:', response);
         return response.data;
     } catch (error) {
         handleError(error);

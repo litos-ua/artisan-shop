@@ -7,7 +7,6 @@ import CustomPagination from './../../../components/Admin/CustomPagination';
 import CustomCancelToolbar from '../../../components/Admin/CustomCancelToolbar';
 
 
-//Order List Component
 export const OrderList = (props) => (
     <List {...props} pagination={<CustomPagination />} perPage={10}>
         <Datagrid>
@@ -56,7 +55,6 @@ export const OrderCreate = (props) => (
     </Create>
 );
 
-// Order Edit Component
 export const OrderEdit = (props) => (
     <Edit {...props}>
         <SimpleForm toolbar={<CustomCancelToolbar />}>
@@ -85,7 +83,6 @@ export const OrderEdit = (props) => (
     </Edit>
 );
 
-// Order Show Component
 export const OrderShow = (props) => (
     <Show {...props}>
         <SimpleShowLayout>

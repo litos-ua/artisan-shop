@@ -16,7 +16,6 @@ import { clearProductsByCategory } from '../../ducks'
 export function Header() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    // The array of categories from the Redux store is read
     const categories = useSelector((state) => state.categories);
     const dispatch = useDispatch();
 
@@ -51,7 +50,7 @@ export function Header() {
     }, [categories, dispatch]);
 
 
-// Update the ref when the component is unmounted
+    // Update the ref when the component is unmounted
     useEffect(() => {
         return () => {
             isUnmounted.current = true;

@@ -49,13 +49,14 @@ export function LoginPage() {
 
             const response = await post('/login', { email, password });
             const {user, status, token} = response;
-            console.log('USER', user);
+            console.log('USER', user.id);
             console.log('response', response);
 
             if (status === 201 && token) {
                 // Login successful
                 //dispatch(loginSuccess());
-                dispatch(loginSuccess(user.role));
+                //console.log('id:', user.id, 'role:', user.role)
+                dispatch(loginSuccess({ id: user.id, role: user.role }));
                 navigate(ROUTE.HOME);
                 setEmailConfirmed(true);
                 localStorage.setItem('token', token);

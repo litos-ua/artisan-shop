@@ -55,7 +55,7 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
                                 name="first_name"
                                 error={formik.touched.first_name && Boolean(formik.errors.first_name)}
                                 helperText={formik.touched.first_name && formik.errors.first_name}
-                                InputProps={{ sx: { backgroundColor: '#ffffff' } }} // Change background color here
+                                InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
@@ -67,7 +67,7 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
                                 name="last_name"
                                 error={formik.touched.last_name && Boolean(formik.errors.last_name)}
                                 helperText={formik.touched.last_name && formik.errors.last_name}
-                                InputProps={{ sx: { backgroundColor: '#ffffff' } }} // Change background color here
+                                InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
@@ -79,7 +79,7 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
                                 name="phone_number"
                                 error={formik.touched.phone_number && Boolean(formik.errors.phone_number)}
                                 helperText={formik.touched.phone_number && formik.errors.phone_number}
-                                InputProps={{ sx: { backgroundColor: '#ffffff' } }} // Change background color here
+                                InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
@@ -91,7 +91,7 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
                                 name="zip_code"
                                 error={formik.touched.zip_code && Boolean(formik.errors.zip_code)}
                                 helperText={formik.touched.zip_code && formik.errors.zip_code}
-                                InputProps={{ sx: { backgroundColor: '#ffffff' } }} // Change background color here
+                                InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
@@ -103,7 +103,7 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
                                 name="address"
                                 error={formik.touched.address && Boolean(formik.errors.address)}
                                 helperText={formik.touched.address && formik.errors.address}
-                                InputProps={{ sx: { backgroundColor: '#ffffff' } }} // Change background color here
+                                InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>

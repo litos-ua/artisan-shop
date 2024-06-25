@@ -1,36 +1,3 @@
-//import React from 'react';
-// import { useInput } from 'react-admin';
-// import { TextField, Grid } from '@mui/material';
-//
-// const ItemCharacteristicsInput = ({ source }) => {
-//     const {
-//         field: { value, onChange }
-//     } = useInput({ source });
-//
-//     const handleChange = (key, newValue) => {
-//         onChange({
-//             ...value,
-//             [key]: newValue,
-//         });
-//     };
-//
-//     return (
-//         <Grid container spacing={2}>
-//             {Object.keys(value || {}).map(key => (
-//                 <Grid item xs={6} key={key}>
-//                     <TextField
-//                         label={key}
-//                         value={value[key]}
-//                         onChange={(e) => handleChange(key, e.target.value)}
-//                         fullWidth
-//                     />
-//                 </Grid>
-//             ))}
-//         </Grid>
-//     );
-// };
-//
-// export default ItemCharacteristicsInput;
 
 import React, { useState } from 'react';
 import { useInput } from 'react-admin';

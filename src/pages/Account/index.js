@@ -1,4 +1,4 @@
-export * from "./AdminAccountPage";
+//export * from "./AdminAccountPage";
 export * from "./CustomerAccountPage";
 export * from "./PasswordChangeForm";
 export * from "./CustomerDataForm";

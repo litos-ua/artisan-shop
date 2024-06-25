@@ -1,77 +1,70 @@
 
 import React from 'react';
-import { Admin,  Resource, defaultTheme } from 'react-admin';
-import { createTheme } from '@mui/material/styles';
+import { Admin, Resource} from 'react-admin';
+import { useSelector } from 'react-redux';
 import { dataProvider } from "../../api/dataProvider";
-import { CategoryList } from "./Categories";
-import { CategoryCreate } from "./Categories";
-import { CategoryEdit } from "./Categories";
-import {ProductCreate, ProductEdit, ProductList} from "./Products/Products";
-import {Dashboard} from "./AdminDashboard"
-import {CustomLayout} from "../../components"
-import {UserList, UserEdit, UserShow} from "./Users/Users";
-import {CustomerList, CustomerEdit} from "./Customers/Customers";
-import {OrderList, OrderCreate, OrderEdit, OrderShow} from './Orders/Orders';
+import { CategoryList, CategoryCreate, CategoryEdit } from "./Categories";
+import { ProductCreate, ProductEdit, ProductList } from "./Products";
+import { Dashboard } from "./AdminDashboard";
+import { CustomLayout } from "../../components";
+import { UserList, UserEdit, UserShow } from "./Users";
+import { CustomerList, CustomerEdit } from "./Customers";
+import { OrderList, OrderCreate, OrderEdit, OrderShow } from './Orders';
+import { MessageList, MessageCreate } from './Messages';
+import { selectUserId } from '../../ducks';
+import { lightTheme, darkTheme } from '../../components';
+import { configObj } from "../../resources";
+
+export const AdminPanel = () => {
+    const userId = useSelector(selectUserId);
+    const currentUserId = userId;
+    const adminId = configObj.adminUserId;
 
 
-const lightTheme = defaultTheme;
-const darkTheme = createTheme({
-    ...defaultTheme,
-    palette: {
-        mode: 'dark',
-        primary: {
-            main: '#90caf9',
-        },
-        secondary: {
-            main: '#f48fb1',
-        },
-        background: {
-            default: '#303030',
-            paper: '#424242',
-        },
-    },
-});
-
-export const AdminPanel = () => (
-    <Admin
-        dataProvider={dataProvider}
-        //menu={CustomMenu}
-        basename="/dashboard"
-        dashboard={Dashboard}
-        layout={CustomLayout}
-        theme={lightTheme}
-        darkTheme={darkTheme}
-    >
-        <Resource
-            name="categories"
-            list={CategoryList}
-            create={CategoryCreate}
-            edit={CategoryEdit}
-        />
-        <Resource
-            name="products"
-            list={ProductList}
-            create={ProductCreate}
-            edit={ProductEdit}
-        />
-        <Resource
-            name="users"
-            list={UserList}
-            edit={UserEdit}
-            show={UserShow}
-        />
-        <Resource
-            name="customers"
-            list={CustomerList}
-            edit={CustomerEdit}
-        />
-        <Resource
-            name="orders"
-            list={OrderList}
-            create={OrderCreate} //Creating orders somehow works, the question is whether this function is needed?
-            edit={OrderEdit}
-            show={OrderShow}
-        />
-    </Admin>
-);
-
+    return (
+        <Admin
+            dataProvider={dataProvider}
+            basename="/dashboard"
+            dashboard={Dashboard}
+            layout={CustomLayout}
+            theme={lightTheme}
+            darkTheme={darkTheme}
+        >
+            <Resource
+                name="categories"
+                list={CategoryList}
+                create={CategoryCreate}
+                edit={CategoryEdit}
+            />
+            <Resource
+                name="products"
+                list={ProductList}
+                create={ProductCreate}
+                edit={ProductEdit}
+            />
+            <Resource
+                name="users"
+                list={UserList}
+                edit={UserEdit}
+                show={UserShow}
+            />
+            <Resource
+                name="customers"
+                list={CustomerList}
+                edit={CustomerEdit}
+            />
+            <Resource
+                name="orders"
+                list={OrderList}
+                create={OrderCreate}
+                edit={OrderEdit}
+                show={OrderShow}
+            />
+            <Resource
+                name="messages"
+                list={(props) => <MessageList {...props} userId={currentUserId} adminId={adminId} />}
+                create={(props) => <MessageCreate {...props} currentUserId={currentUserId} />} // Pass currentUserId here
+            />
+        </Admin>
+    );
+};

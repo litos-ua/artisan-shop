@@ -10,6 +10,10 @@ import CustomerDataForm from './CustomerDataForm';
 import PasswordChangeForm from './PasswordChangeForm'
 import OrdersOfCustomer from "./OrdersOfCustomer";
 import OrderEmptyPage from "./OrderEmptyPage";
+import ChatInterface from './ChatInterface';
+import {useSelector} from "react-redux";
+import {selectUserId} from "../../ducks";
+import { configObj } from "../../resources";
 
 
 export const CustomerAccountPage = () => {
@@ -17,6 +21,7 @@ export const CustomerAccountPage = () => {
     const [activeMenuItem, setActiveMenuItem] = useState('');
     const [content, setContent] = useState(null);
     const navigate = useNavigate();
+    const userId = useSelector(selectUserId);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -26,10 +31,10 @@ export const CustomerAccountPage = () => {
         }
     }, []);
 
-    // useEffect(() => {
-    //     // Set default content when component mounts
-    //     handleMenuItemClick('Settings');
-    // }, []);
+    useEffect(() => {
+        // Set default content when component mounts
+        handleMenuItemClick('Settings');
+    }, []);
 
 
     const fetchCustomerDetails = async (token) => {
@@ -38,19 +43,20 @@ export const CustomerAccountPage = () => {
             setCustomer(customerData);
         } catch (error) {
             console.error("Error fetching customer details:", error);
-            // Handle error
         }
     };
 
 
     const handleMenuItemClick = (menuItem) => {
+        const {id} = userId;
+        const idAdmin = configObj.adminUserId;
+        console.log('CA_userID:', id, 'CA_AdminID:', idAdmin);
         setActiveMenuItem(menuItem);
         switch (menuItem) {
             case 'Home':
                 navigate(ROUTE.HOME);
                 break;
             case 'Orders':
-                // setContent(<Typography>List of Orders</Typography>);
                 setContent(<OrdersOfCustomer />);
                 break;
             case 'Payments':
@@ -58,8 +64,7 @@ export const CustomerAccountPage = () => {
                 alert(menuItem);
                 break;
             case 'Messages':
-                setContent(<OrderEmptyPage />);
-                alert(menuItem);
+                setContent(<ChatInterface userId={id} adminId={idAdmin}/>);
                 break;
             case 'Settings':
                 setContent(
@@ -219,7 +224,6 @@ export const CustomerAccountPage = () => {
                         <CardContent>
                             <Typography>Email: {customer.email}</Typography>
                             <Typography>Telephone: {customer.phone_number}</Typography>
-                            {/* Other user details */}
                         </CardContent>
                     </Card>
 
@@ -229,7 +233,7 @@ export const CustomerAccountPage = () => {
 
                     {/* Message Exchange Form Section */}
                     <Box sx={{ padding: '0.5vw' }}>
-                        {/* Your message exchange form */}
+                        {/* Message exchange form */}
                     </Box>
                 </Box>
             </Box>

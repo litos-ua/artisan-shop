@@ -17,7 +17,7 @@ export * from "./ReturnsPage";
 export * from "./ServiceCenterPage";
 export * from "./SearchPage/SearchPage";
 export * from "./EmailVerificationPage/EmailVerificationPage";
-export * from "./Account/AdminAccountPage";
+//export * from "./Account/AdminAccountPage";
 export * from "./Account/CustomerAccountPage";
 export * from "./Layout/BaseAccountLayout";
 export * from "./Admin/AdminDashboard";

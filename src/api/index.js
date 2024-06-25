@@ -5,4 +5,10 @@ export * from './httpCustomerClient';
 export * from './httpSearchClient';
 export * from './httpOrderClient';
 export * from './httpOrderClient';
-//export * from './admin';
+
+//export * from './admin/httpCategoryClient'
+//export * from './admin/httpCustomerClient';
+export * from './admin/httpMessageClient';
+export * from './admin/httpOrderClient';
+//export * from './admin/httpProductClient';
+export * from './admin/httpUserClient';

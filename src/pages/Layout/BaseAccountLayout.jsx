@@ -1,21 +1,3 @@
-// import React from 'react';
-// import { Container, Box } from '@mui/material';
-// import { ErrorBoundary, Header } from "../../components";
-//
-// export function BaseAccountLayout({ children }) {
-//     return (
-//         <ErrorBoundary>
-//             <Box>
-//                 <Header />
-//                 {/* Main Content Section */}
-//                 <Container>
-//                     {children}
-//                     {/* Add additional main content here */}
-//                 </Container>
-//             </Box>
-//         </ErrorBoundary>
-//     );
-// }
 
 import React from 'react';
 import { Container, Box, Grid, MenuItem, Typography } from '@mui/material';
@@ -45,7 +27,6 @@ export function BaseAccountLayout({ children }) {
                             <MenuItem onClick={() => handleNavigation('/Cart')}>
                                 Cart
                             </MenuItem>
-                            {/* Add more menu items as needed */}
                         </Grid>
                         <Grid item xs={9}>
                             <Typography>Grid item for the main content</Typography>

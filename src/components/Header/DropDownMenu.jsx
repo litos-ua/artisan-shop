@@ -46,45 +46,7 @@ export function DropDownMenu({ categories }) {
             }
         };
     }, [dropdownRef]);
-    // working only with fetch
-    // const handleListItemHover = async (category, index) => {
-    //     if (category !== "Products") {
-    //         setHoveredCategory(category);
-    //         try {
-    //             const products = await fetchProductsByCategory(category.id);
-    //             setHoveredProducts(products);
-    //             const categoryButtonRect = categoryButtonRefs.current[index].getBoundingClientRect();
-    //             const productMenuTop =
-    //                 categoryButtonRect.top + categoryButtonRect.height - 750*100/screenHeight;
-    //             setProductMenuPosition({ top: productMenuTop });
-    //         } catch (error) {
-    //             console.error('Error fetching products:', error);
-    //             setHoveredProducts([]);
-    //         }
-    //     }
-    // };
 
-    // load with fetch but displayed only from the store
-    // const handleListItemHover = async (category, index) => {
-    //     if (category !== "Products") {
-    //         setHoveredCategory(category);
-    //         if (!productsByCategory[category.id]) { // Check if products are already in Redux store
-    //             try {
-    //                 const products = await fetchProductsByCategory(category.id);
-    //                 dispatch(setProductsByCategory({ categoryId: category.id, products })); // Dispatch action to set products by category
-    //                 const categoryButtonRect = categoryButtonRefs.current[index].getBoundingClientRect();
-    //                 const productMenuTop =
-    //                     categoryButtonRect.top + categoryButtonRect.height - 750*100/screenHeight;
-    //                 setProductMenuPosition({ top: productMenuTop });
-    //             } catch (error) {
-    //                 console.error('Error fetching products:', error);
-    //                 setHoveredProducts([]);
-    //             }
-    //         } else {
-    //             setHoveredProducts(productsByCategory[category.id]); // Set products from Redux store
-    //         }
-    //     }
-    // };
 
     const handleListItemHover = async (category, index) => {
         if (category !== "Products") {

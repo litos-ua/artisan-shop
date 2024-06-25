@@ -18,44 +18,6 @@ const handleError = (error) => {
     }
 };
 
-// export const fetchOrders = async (headers = {}) => {
-//     try {
-//         const response = await httpOrderClient.get("admin/orders", {
-//             headers: {
-//                 ...httpOrderClient.defaults.headers,
-//                 ...headers
-//             }
-//         });
-//         //console.log('ResponseOrders:',response);
-//         return response.data.data;
-//     } catch (error) {
-//         handleError(error);
-//     }
-// };
-
-// export const fetchOrders = async (headers = {}) => {
-//     try {
-//         const response = await httpOrderClient.get("admin/orders", {
-//             headers: {
-//                 ...httpOrderClient.defaults.headers,
-//                 ...headers
-//             }
-//         });
-//
-//         console.log('Response:', response.data);
-//         const orders = response.data.data.map(order => ({
-//             ...order,
-//             delivery_requirement: order.delivery_requirement === 0 ? 'Pickup' : 'Delivery',
-//             received_status: order.received_status === 0 ? 'Pending' : 'Received',
-//             payment_status: order.payment_status === 0 ? 'Not paid' : 'Paid',
-//             advance_payment: order.advance_payment === 0 ? 'Payment upon receipt' : 'Prepayment'
-//         }));
-//         console.log('Orders:', orders);
-//         return orders;
-//     } catch (error) {
-//         handleError(error);
-//     }
-// };
 
 export const fetchOrders = async (params = {}, headers = {}) => {
     try {
@@ -79,15 +41,6 @@ export const fetchOrders = async (params = {}, headers = {}) => {
             }
         });
 
-        console.log('Response:', response);
-
-        // const orders = response.data.data.map(order => ({
-        //     ...order,
-        //     delivery_requirement: order.delivery_requirement === 0 ? 'Pickup' : 'Delivery',
-        //     received_status: order.received_status === 0 ? 'Pending' : 'Received',
-        //     payment_status: order.payment_status === 0 ? 'Not paid' : 'Paid',
-        //     advance_payment: order.advance_payment === 0 ? 'Payment upon receipt' : 'Prepayment'
-        // }));
 
         const orders = response.data.data.map(order => {
             // Format order_details as {product:name}:quantity
@@ -107,8 +60,6 @@ export const fetchOrders = async (params = {}, headers = {}) => {
         });
 
         const total = response.data.total;
-        console.log('Parsed Orders:', orders);
-        console.log('Total Orders:', total);
 
         return {
             data: orders,
