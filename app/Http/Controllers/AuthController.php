@@ -114,14 +114,6 @@ class AuthController extends Controller
         // Generate a new token
         $token = $user->createToken('AuthToken')->plainTextToken;
 
-        // Save the token to the database
-//        if ($token) {
-//            $user->tokens()->create([
-//                'name' => 'AuthToken',
-//                'token' => $token,
-//            ]);
-//        }
-
         return $token;
     }
 

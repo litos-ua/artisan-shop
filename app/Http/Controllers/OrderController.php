@@ -41,7 +41,6 @@ class OrderController extends Controller
 
             return response()->json(['message' => 'Order placed successfully',
                                      'total_amount' => $totalAmount,
-                                     //'order_id' => $order->order_id,
                                      'order_id' => $order->id,
                                      'created_at' => $order->created_at,], 201);
         } catch (QueryException $e) {
@@ -165,17 +164,6 @@ class OrderController extends Controller
             return response()->json(['error' => 'User not authenticated'], 401);
         }
 
-        // Fetch the customer associated with the user
-        //$userCustomer = $user->customers;
-
-        // Check if the authenticated user has a customer relationship
-        //if (!$userCustomer) {
-        //    return response()->json(['error' => 'Customer not found'], 404);
-        //}
-
-        // Assuming $userCustomer is a collection, you might want to fetch the first customer
-        //$customer = $userCustomer->first();
-
         $customer = $user->customers()->first();
 
         if (!$customer) {
@@ -190,15 +178,8 @@ class OrderController extends Controller
         return response()->json(OrderResource::collection($orders));
     }
 
-//Methods for the admin routes
+    //Methods for the admin routes
     // Fetch all orders for admin
-//    public function adminIndex()
-//    {
-//        $orders = Order::with('orderDetails.product', 'customer')->get();
-//        $ord = OrderResource::collection($orders);
-//        //return response()->json($orders); //react return response.data
-//        return OrderResource::collection($orders); //react return response.data.data
-//    }
 
     public function adminIndex(Request $request)
     {

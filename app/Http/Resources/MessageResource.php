@@ -30,18 +30,8 @@ class MessageResource extends JsonResource
             'sender_last_name' => $this->senderCustomer ? $this->senderCustomer->last_name : 'Unknown',
             'receiver_first_name' => $this->receiverCustomer ? $this->receiverCustomer->first_name : 'Unknown',
             'receiver_last_name' => $this->receiverCustomer ? $this->receiverCustomer->last_name : 'Unknown',
-            //'customers' => CustomerResource::collection($this->customers ?? []),
-            //'customers' => CustomerResource::collection($this->whenLoaded('customers')),
         ];
     }
 }
 
-//        return [
-//            'id' => $this->id,
-//            'sender' => $this->sender->customers ? $this->sender->customers->first_name . ' ' . $this->sender->customers->last_name : 'Unknown',
-//            'receiver' => $this->receiver->customers ? $this->receiver->customers->first_name . ' ' . $this->receiver->customers->last_name : 'Unknown',
-//            'message' => $this->message,
-//            'read_status' => $this->read_status,
-//            'created_at' => $this->created_at,
-//            'updated_at' => $this->updated_at,
-//        ];
+

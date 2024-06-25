@@ -16,7 +16,6 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-//        return response()->json(['categories' => $categories], 200)
         $categoriesResponce = CategoryResource::collection($categories);
         $categoriesResponce->wrap ('categories');
         $stop = 1;
@@ -31,7 +30,7 @@ class CategoryController extends Controller
     public function adminIndex(Request $request)
     {
         // Paginate the categories
-        $perPage = $request->input('perPage', 5); // Default to 10 per page if not specified
+        $perPage = $request->input('perPage', 5);
         $categories = Category::paginate($perPage);
 
         // Get the total count for the X-Total-Count header
@@ -93,20 +92,15 @@ class CategoryController extends Controller
     public function adminShow($id)
     {
         try {
-            // Fetch the category by ID
             $category = Category::findOrFail($id);
-
-            // Return the category as a JSON response
             return response()->json([
                 'data' => $category,
             ], 200);
         } catch (ModelNotFoundException $e) {
-            // Handle the case where the category is not found
             return response()->json([
                 'error' => 'Category not found',
             ], 404);
         } catch (Exception $e) {
-            // Handle any other exceptions
             return response()->json([
                 'error' => 'An error occurred',
             ], 500);

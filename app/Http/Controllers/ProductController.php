@@ -19,31 +19,6 @@ class ProductController extends Controller
         return $productsResponce->response();
     }
 
-
-//    public function adminIndex(Request $request)
-//    {
-//        $start = $request->input('_start', 0);
-//        $end = $request->input('_end', 5);
-//        $perPage = $end - $start;
-//        $page = ($start / $perPage) + 1;
-//
-//        $sortField = $request->input('_sort', 'id');
-//        $sortOrder = $request->input('_order', 'ASC');
-//
-//        $query = Product::with('category')
-//            ->orderBy($sortField, $sortOrder);
-//
-//        $products = $query->paginate($perPage, ['*'], 'page', $page);
-//        $total = $products->total();
-//
-//        return response()->json($products->items())
-//            ->header('X-Total-Count', $total)
-//            ->header('Access-Control-Allow-Origin', '*')
-//            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-//            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-//            ->header('Access-Control-Expose-Headers', 'X-Total-Count');
-//    }
-
     public function adminIndex(Request $request)
     {
         $page = $request->input('_page', 1);
@@ -68,37 +43,10 @@ class ProductController extends Controller
 
 
 
-//    public function adminIndex(Request $request)
-//    {
-//        $page = $request->input('_page', 1);
-//        $perPage = $request->input('_limit', 5);
-//
-//        $sortField = $request->input('_sort', 'id');
-//        $sortOrder = $request->input('_order', 'ASC');
-//
-//        $query = Product::with('category')
-//            ->orderBy($sortField, $sortOrder);
-//
-//        $products = $query->paginate($perPage, ['*'], 'page', $page);
-//        $total = $products->total();
-//
-//        return response()->json([
-//            'data' => $products->items(),
-//            'total' => $total
-//        ])
-//            ->header('X-Total-Count', $total)
-//            ->header('Access-Control-Allow-Origin', '*')
-//            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-//            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-//            ->header('Access-Control-Expose-Headers', 'X-Total-Count');
-//    }
-
-
     public function indexByCategory($categoryId)
     {
         $products = Product::where('category_id', $categoryId)->get();
         $productsOfCategory = ProductResource::collection($products);
-//        $productsOfCategory->wrap('productsByCategory');
         $wrapperName = "productsByCategory_" . $categoryId;
         $productsOfCategory->wrap($wrapperName);
         return $productsOfCategory->response();
@@ -133,7 +81,7 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['error' => 'Product not found'], 404);
         }
-//        return new ProductResource($product);
+
         $productResource = new ProductResource($product);
         $productResource->wrap('product');
         return $productResource->response();

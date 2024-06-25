@@ -14,7 +14,6 @@ class UserController extends Controller
         // Get the authenticated user
         $user = $request->user();
 
-        // Retrieve the user's email
         $email = $user->email;
 
         return response()->json(['email' => $email]);
@@ -37,7 +36,6 @@ class UserController extends Controller
     public function changePassword(Request $request)
     {
         $user = $request->user();
-        //$user =Auth::user();
 
         // Validate the request data
         $validatedData = $request->validate([
