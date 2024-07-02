@@ -46,7 +46,7 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 Route::get('/products/search/{search}', [SearchController::class, 'searchProducts']);
 
 // Routes for the admin panel
-Route::prefix('admin')->middleware(['auth_jwt', 'admin_check'])->group(function () {
+Route::prefix('admin')->middleware(['auth_jwt', 'admin_check', 'log.exceptions'])->group(function () {
     // Category routes for the admin panel
     Route::get('/categories', [CategoryController::class, 'adminIndex']);
     Route::get('/categories/{id}', [CategoryController::class, 'adminShow']);
@@ -81,18 +81,18 @@ Route::prefix('admin')->middleware(['auth_jwt', 'admin_check'])->group(function 
 });
 
 
-Route::middleware('auth_jwt')->post('/user', [UserController::class, 'getUserByEmail']);
-Route::middleware('auth_jwt')->post('/order', [OrderController::class, 'placeOrder']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->post('/user', [UserController::class, 'getUserByEmail']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->post('/order', [OrderController::class, 'placeOrder']);
 
-Route::middleware('auth_jwt')->get('/customers', [CustomerController::class, 'index']);
-Route::middleware('auth_jwt')->post('/customers', [CustomerController::class, 'store']);
-Route::middleware('auth_jwt')->get('/customers/{id}', [CustomerController::class, 'show']);
-Route::middleware('auth_jwt')->get('/customer/token', [CustomerController::class, 'showCustomer']);
-Route::middleware('auth_jwt')->put('/customers/{id}', [CustomerController::class, 'update']);
-Route::middleware('auth_jwt')->delete('/customers/{id}', [CustomerController::class, 'destroy']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->get('/customers', [CustomerController::class, 'index']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->post('/customers', [CustomerController::class, 'store']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->get('/customers/{id}', [CustomerController::class, 'show']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->get('/customer/token', [CustomerController::class, 'showCustomer']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->put('/customers/{id}', [CustomerController::class, 'update']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->delete('/customers/{id}', [CustomerController::class, 'destroy']);
 
-Route::middleware('auth_jwt')->get('/customers', [OrderController::class, 'index']); //???
-Route::middleware('auth_jwt')->get('/customer/orders', [OrderController::class, 'indexForCustomer']);
+Route::middleware(['auth_jwt', 'log.exceptions'])->get('/customers', [OrderController::class, 'index']); //???
+Route::middleware(['auth_jwt', 'log.exceptions'])->get('/customer/orders', [OrderController::class, 'indexForCustomer']);
 
 /*
 |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ Route::post('/register', [AuthController::class, 'register']);
 | Routes for the chat
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth_jwt')->group(function () {
+Route::middleware(['auth_jwt', 'log.exceptions'])->group(function () {
     Route::post('/messages', [MessageController::class,'sendMessage']);
     Route::get('/messages', [MessageController::class,'getMessages']);
     Route::get('/messages/{userId}', [MessageController::class,'getMessages']);

@@ -57,14 +57,15 @@ class Kernel extends HttpKernel
     protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth_jwt' => \App\Http\Middleware\AuthenticateWithJwtToken::class,
-//        'admin' => \App\Http\Middleware\AdminMiddleware::class,
-        'admin_check' => \App\Http\Middleware\AdminCheck::class,
+//        'admin' => \App\Http\Middleware\AdminMiddleware::class, // new middleware
+        'admin_check' => \App\Http\Middleware\AdminCheck::class,  //new middleware
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         // 'cors' => \App\Http\Middleware\Cors::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'log.exceptions' => \App\Http\Middleware\LogExceptions::class, // new middleware
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,
