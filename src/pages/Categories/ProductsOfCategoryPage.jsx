@@ -1,13 +1,124 @@
 
-import React, { useEffect } from 'react';
+// import React, { useEffect } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { useParams, useNavigate } from 'react-router-dom';
+// import { Paper, Grid, Card, CardContent, CardMedia, CardActions, CardActionArea,
+//     Typography, Button } from '@mui/material';
+// import { Footer, Header } from '../../components';
+// import { ROUTE } from '../../router';
+// import { fetchProductsByCategory } from "../../api";
+// import { setProductsByCategory } from '../../ducks';
+//
+// export const ProductsOfCategory = () => {
+//     const { category } = useParams();
+//     const navigate = useNavigate();
+//     const dispatch = useDispatch();
+//     const productsByCategory = useSelector(state => state.productsByCategory);
+//     const categories = useSelector(state => state.categories);
+//     const categoryData = categories.find(cat => cat.id === parseInt(category));
+//
+//     useEffect(() => {
+//         const fetchCategoryData = async () => {
+//             if (!productsByCategory[category]) {
+//                 try {
+//                     const products = await fetchProductsByCategory(category);
+//                     dispatch(setProductsByCategory({ categoryId: category, products }));
+//                 } catch (error) {
+//                     console.error('Error fetching products:', error);
+//                 }
+//             }
+//         };
+//
+//         if (category) {
+//             fetchCategoryData();
+//         }
+//     }, [category, dispatch, productsByCategory]);
+//
+//     const handleProductClick = (productKey) => {
+//         navigate(`${ROUTE.PRODUCT_CURRENT.replace(":productKey", productKey)}`);
+//     };
+//
+//     const handleAddToCart = (productKey, Price, image) => {
+//         navigate(`${ROUTE.CART}?productKey=${productKey}&price=${Price}&image=${image}`);
+//     };
+//
+//     if (!category) {
+//         return <p>Category not found</p>;
+//     }
+//
+//     const products = productsByCategory[category] || [];
+//
+//     return (
+//         <Paper sx={{ backgroundColor: '#e7d3a9', padding: '1vh 1vw' }}>
+//             <Header />
+//             {categoryData && (
+//                 <Typography
+//                     variant="h3" align="center" sx={{ p: '1vh 5vw 1vh 5vw' }}>
+//                     Category: {categoryData.name}
+//                 </Typography>
+//             )}
+//             <Grid container spacing={3} sx={{ p: '1vh 5vw 1vh 5vw' }}>
+//                 {products.map(product => (
+//                     <Grid item key={product.id} xs={12} sm={6} md={4}>
+//                         <Card sx={{ backgroundColor: '#9ac7e0', p: '0vh' }}>
+//                             <CardActionArea>
+//                                 <CardMedia
+//                                     onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }} //'id' for API
+//                                     component="img"
+//                                     image={`https://placehold.it/200x140/33bee5&text=${product.name}`}
+//                                     alt={product.id}
+//                                     sx={{ height: '32vh', objectFit: 'cover', p: '1vh 1vh 1vh 1vh' }}
+//                                 />
+//                                 <CardContent sx={{
+//                                     display: 'flex', justifyContent: 'space-between',
+//                                     p: '0 2vw 0 1vw'
+//                                 }}>
+//                                     <Typography
+//                                         onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }} //'id' for API
+//                                         gutterBottom variant="h5" component="div">
+//                                         {product.name}
+//                                     </Typography>
+//                                     <Typography variant="body2" color="text.secondary">
+//                                         Ціна: {product.price}
+//                                     </Typography>
+//                                 </CardContent>
+//                             </CardActionArea>
+//                             <CardActions sx={{ justifyContent: 'center', p: '0' }}>
+//                                 <Button
+//                                     size="small" color="primary"
+//                                     onClick={() => handleAddToCart(product.name, product.price, product.image)} style={{ cursor: 'pointer' }}
+//                                 >
+//                                     У кошик
+//                                 </Button>
+//                             </CardActions>
+//                         </Card>
+//                     </Grid>
+//                 ))}
+//             </Grid>
+//             <Footer />
+//         </Paper>
+//     );
+// };
+
+
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Paper, Grid, Card, CardContent, CardMedia, CardActions, CardActionArea,
-    Typography, Button } from '@mui/material';
+import { Paper, Grid, Card, CardContent, CardMedia, CardActions, CardActionArea, Typography, Button } from '@mui/material';
 import { Footer, Header } from '../../components';
 import { ROUTE } from '../../router';
 import { fetchProductsByCategory } from "../../api";
 import { setProductsByCategory } from '../../ducks';
+import axios from 'axios';
+
+const checkImageExists = async (url) => {
+    try {
+        const response = await axios.head(url);
+        return response.status === 200;
+    } catch (error) {
+        return false;
+    }
+};
 
 export const ProductsOfCategory = () => {
     const { category } = useParams();
@@ -16,6 +127,8 @@ export const ProductsOfCategory = () => {
     const productsByCategory = useSelector(state => state.productsByCategory);
     const categories = useSelector(state => state.categories);
     const categoryData = categories.find(cat => cat.id === parseInt(category));
+
+    const [imagesExist, setImagesExist] = useState({});
 
     useEffect(() => {
         const fetchCategoryData = async () => {
@@ -33,6 +146,21 @@ export const ProductsOfCategory = () => {
             fetchCategoryData();
         }
     }, [category, dispatch, productsByCategory]);
+
+    useEffect(() => {
+        const checkImages = async () => {
+            const results = {};
+            for (const product of productsByCategory[category] || []) {
+                const exists = await checkImageExists(product.image);
+                results[product.id] = exists;
+            }
+            setImagesExist(results);
+        };
+
+        if (productsByCategory[category]) {
+            checkImages();
+        }
+    }, [category, productsByCategory]);
 
     const handleProductClick = (productKey) => {
         navigate(`${ROUTE.PRODUCT_CURRENT.replace(":productKey", productKey)}`);
@@ -63,10 +191,12 @@ export const ProductsOfCategory = () => {
                         <Card sx={{ backgroundColor: '#9ac7e0', p: '0vh' }}>
                             <CardActionArea>
                                 <CardMedia
-                                    onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }} //'id' for API
+                                    onClick={() => handleProductClick(product.id)}
+                                    style={{ cursor: 'pointer' }}
                                     component="img"
-                                    image={`https://placehold.it/200x140/33bee5&text=${product.name}`}
-                                    alt={product.id}
+                                    //image={imagesExist[product.id] ? product.image : `https://placehold.it/200x140/33bee5&text=${product.name}`}
+                                    image={imagesExist[product.id] ? product.image.replace(/img/, 'imgsmall') : `https://placehold.it/200x140/33bee5&text=${product.name}`}
+                                    alt={product.name}
                                     sx={{ height: '32vh', objectFit: 'cover', p: '1vh 1vh 1vh 1vh' }}
                                 />
                                 <CardContent sx={{
@@ -74,21 +204,23 @@ export const ProductsOfCategory = () => {
                                     p: '0 2vw 0 1vw'
                                 }}>
                                     <Typography
-                                        onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }} //'id' for API
+                                        onClick={() => handleProductClick(product.id)}
+                                        style={{ cursor: 'pointer' }}
                                         gutterBottom variant="h5" component="div">
                                         {product.name}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Ціна: {product.price}
+                                        Price: {product.price}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
                             <CardActions sx={{ justifyContent: 'center', p: '0' }}>
                                 <Button
                                     size="small" color="primary"
-                                    onClick={() => handleAddToCart(product.name, product.price, product.image)} style={{ cursor: 'pointer' }}
+                                    onClick={() => handleAddToCart(product.name, product.price, product.image)}
+                                    style={{ cursor: 'pointer' }}
                                 >
-                                    У кошик
+                                    Add to Cart
                                 </Button>
                             </CardActions>
                         </Card>
@@ -99,6 +231,4 @@ export const ProductsOfCategory = () => {
         </Paper>
     );
 };
-
-
 

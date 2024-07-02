@@ -20,6 +20,7 @@ const handleError = (error) => {
 };
 
 export const fetchProducts = async (params = {}, headers = {}) => {
+    //console.log('fetchProductsParams:', params);
     try {
         const { pagination, sort, filter } = params;
         const { page, perPage } = pagination || {};
@@ -32,6 +33,8 @@ export const fetchProducts = async (params = {}, headers = {}) => {
             _order: sortOrder,
             ...filter
         };
+
+
         const response = await httpProductClient.get("admin/products", {
             params: query,
             headers: {

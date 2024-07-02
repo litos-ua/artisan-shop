@@ -24,7 +24,7 @@ export const ProductList = (props) => {
             <TextField source="name" />
             <TextField source="category.name" label="Category"/>
             <TextField source="image" />
-            <TextField source="name" />
+            <TextField source="title" />
             {/*<ItemCharacteristicsField source="item_characteristics" />*/}
             <CollapsibleItemCharacteristicsField source="item_characteristics" />
             <EditButton />

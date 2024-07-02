@@ -47,7 +47,6 @@ export const Products = () => {
 //    const { image, ItemCharacteristics, Price } = productDetails;
     const { name: itemName, image, item_characteristics: ItemCharacteristics, price: Price } = productDetails;
 
-
     return (
         <Paper sx={{ padding: '1rem', marginBottom: '1rem' }}>
             <Header />

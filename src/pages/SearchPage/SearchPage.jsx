@@ -84,17 +84,116 @@
 //
 // };
 
+// import React, { useState, useEffect } from 'react';
+// import { Paper, Typography, Button, Grid, Card, CardContent, CardMedia, CardActions, CardActionArea } from '@mui/material';
+// import { useNavigate, useParams } from "react-router-dom";
+// import { fetchProductsBySearchParam } from '../../api';
+// import { Footer, Header } from "../../components";
+// import { ROUTE } from "../../router";
+//
+// export const SearchPage = () => {
+//     const navigate = useNavigate();
+//     const { searchParam } = useParams();
+//     const [searchResults, setSearchResults] = useState([]);
+//
+//     useEffect(() => {
+//         const fetchData = async () => {
+//             try {
+//                 const products = await fetchProductsBySearchParam(searchParam);
+//                 setSearchResults(products);
+//             } catch (error) {
+//                 console.error('Error fetching search results:', error);
+//             }
+//         };
+//
+//         if (searchParam) {
+//             fetchData();
+//         }
+//     }, [searchParam]);
+//
+//     const handleProductClick = (productKey) => {
+//         navigate(`${ROUTE.PRODUCT_CURRENT.replace(":productKey", productKey)}`);
+//     };
+//
+//     const handleAddToCart = (productKey, Price, image) => {
+//         navigate(`${ROUTE.CART}?productKey=${productKey}&price=${Price}&image=${image}`);
+//     };
+//
+//     return (
+//         <Paper sx={{ backgroundColor: '#e7d3a9', padding: '1vh 1vw' }}>
+//             <Header />
+//             <Typography
+//                 variant="h5"
+//                 align="center"
+//                 sx={{ p: '1vh 5vw 1vh 5vw' }}
+//             >
+//                 Search Results for "{searchParam}"
+//             </Typography>
+//             <Grid container spacing={3} sx={{ p: '1vh 5vw 1vh 5vw' }}>
+//                 {searchResults.map(product => (
+//                     <Grid item key={product.id} xs={12} sm={6} md={4}>
+//                         <Card sx={{ backgroundColor: '#9ac7e0', p: '0vh' }}>
+//                             <CardActionArea>
+//                                 <CardMedia
+//                                     onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
+//                                     component="img"
+//                                     image={`https://placehold.it/200x140/33bee5&text=${product.name}`}
+//                                     alt={product.id}
+//                                     sx={{ height: '32vh', objectFit: 'cover', p: '1vh 1vh 1vh 1vh' }}
+//                                 />
+//                                 <CardContent sx={{
+//                                     display: 'flex', justifyContent: 'space-between',
+//                                     p: '0 2vw 0 1vw'
+//                                 }}>
+//                                     <Typography
+//                                         onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
+//                                         gutterBottom variant="h5" component="div">
+//                                         {product.name}
+//                                     </Typography>
+//                                     <Typography variant="body2" color="text.secondary">
+//                                         Ціна: {product.price}
+//                                     </Typography>
+//                                 </CardContent>
+//                             </CardActionArea>
+//                             <CardActions sx={{ justifyContent: 'center', p: '0' }}>
+//                                 <Button
+//                                     size="small" color="primary"
+//                                     onClick={() => handleAddToCart(product.id, product.price, product.image)} style={{ cursor: 'pointer' }}
+//                                 >
+//                                     У кошик
+//                                 </Button>
+//                             </CardActions>
+//                         </Card>
+//                     </Grid>
+//                 ))}
+//             </Grid>
+//             <Footer />
+//         </Paper>
+//     );
+// };
+
 import React, { useState, useEffect } from 'react';
 import { Paper, Typography, Button, Grid, Card, CardContent, CardMedia, CardActions, CardActionArea } from '@mui/material';
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchProductsBySearchParam } from '../../api';
 import { Footer, Header } from "../../components";
 import { ROUTE } from "../../router";
+import axios from 'axios';
+
+const checkImageExists = async (url) => {
+    try {
+        const response = await axios.head(url);
+        return response.status === 200;
+    } catch (error) {
+        return false;
+    }
+};
 
 export const SearchPage = () => {
     const navigate = useNavigate();
     const { searchParam } = useParams();
     const [searchResults, setSearchResults] = useState([]);
+    const [imagesExist, setImagesExist] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -110,6 +209,21 @@ export const SearchPage = () => {
             fetchData();
         }
     }, [searchParam]);
+
+    useEffect(() => {
+        const checkImages = async () => {
+            const results = {};
+            for (const product of searchResults) {
+                const exists = await checkImageExists(product.image);
+                results[product.id] = exists;
+            }
+            setImagesExist(results);
+        };
+
+        if (searchResults.length > 0) {
+            checkImages();
+        }
+    }, [searchResults]);
 
     const handleProductClick = (productKey) => {
         navigate(`${ROUTE.PRODUCT_CURRENT.replace(":productKey", productKey)}`);
@@ -135,10 +249,10 @@ export const SearchPage = () => {
                         <Card sx={{ backgroundColor: '#9ac7e0', p: '0vh' }}>
                             <CardActionArea>
                                 <CardMedia
-                                    onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
+                                    onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }}
                                     component="img"
-                                    image={`https://placehold.it/200x140/33bee5&text=${product.name}`}
-                                    alt={product.id}
+                                    image={imagesExist[product.id] ? product.image.replace(/img/, 'imgsmall') : `https://placehold.it/200x140/33bee5&text=${product.name}`}
+                                    alt={product.name}
                                     sx={{ height: '32vh', objectFit: 'cover', p: '1vh 1vh 1vh 1vh' }}
                                 />
                                 <CardContent sx={{
@@ -146,12 +260,12 @@ export const SearchPage = () => {
                                     p: '0 2vw 0 1vw'
                                 }}>
                                     <Typography
-                                        onClick={() => handleProductClick(product.name)} style={{ cursor: 'pointer' }}
+                                        onClick={() => handleProductClick(product.id)} style={{ cursor: 'pointer' }}
                                         gutterBottom variant="h5" component="div">
                                         {product.name}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Ціна: {product.price}
+                                        Price: {product.price}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
@@ -160,7 +274,7 @@ export const SearchPage = () => {
                                     size="small" color="primary"
                                     onClick={() => handleAddToCart(product.id, product.price, product.image)} style={{ cursor: 'pointer' }}
                                 >
-                                    У кошик
+                                    Add to Cart
                                 </Button>
                             </CardActions>
                         </Card>
@@ -171,5 +285,6 @@ export const SearchPage = () => {
         </Paper>
     );
 };
+
 
 

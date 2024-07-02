@@ -23,6 +23,7 @@ export const dataProvider = {
                 };
             case 'products':
                 const { data: products, total } = await fetchProducts(params, authHeaders);
+                const prod = { data: products, total };
                 return {
                     data: products,
                     total: total,
@@ -46,7 +47,7 @@ export const dataProvider = {
                     total: orderTotal,
                 };
             case 'messages':
-                console.log('params.userId:', params);
+                //console.log('params.userId:', params);
                 const messages = await fetchMessages(params.userId, authHeaders);
                 return {
                     data: messages,
