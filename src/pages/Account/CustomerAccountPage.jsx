@@ -257,6 +257,7 @@ import { selectUserId } from "../../ducks";
 import { configObj } from "../../resources";
 import {ErrorBoundary} from './../../components/Errors';
 
+
 export const CustomerAccountPage = () => {
     const [customer, setCustomer] = useState(null);
     const [activeMenuItem, setActiveMenuItem] = useState('');
@@ -265,7 +266,8 @@ export const CustomerAccountPage = () => {
     const userId = useSelector(selectUserId);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        //const token = localStorage.getItem('token');
+        const token = configObj.getToken()
         if (token) {
             fetchCustomerDetails(token);
         }
@@ -327,7 +329,8 @@ export const CustomerAccountPage = () => {
 
     const handleSubmit = async (values) => {
         try {
-            const token = localStorage.getItem('token');
+            //const token = localStorage.getItem('token');
+            const token = configObj.getToken();
             const updatedCustomer = await updateCustomer('/customers/' + customer.id, values, {
                 Authorization: `Bearer ${token}`
             });
@@ -342,7 +345,8 @@ export const CustomerAccountPage = () => {
 
     const handlePasswordChangeSubmit = async (values) => {
         try {
-            const token = localStorage.getItem('token');
+            //const token = localStorage.getItem('token');
+            const token = configObj.getToken();
             await put('/user/password/change', values, {
                 Authorization: `Bearer ${token}`
             });

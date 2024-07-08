@@ -12,6 +12,7 @@ import OrderTable from './OrderTable';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { post } from "../../api";
+import {configObj} from "../../resources";
 
 export const OrderForm = () => {
     const navigate = useNavigate();
@@ -41,7 +42,8 @@ export const OrderForm = () => {
     }, [cartItems]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        //const token = localStorage.getItem('token');
+        const token = configObj.getToken();
 
         if (isAuthenticated && token) {
             fetchUserEmail(token);
@@ -90,7 +92,8 @@ export const OrderForm = () => {
 
         try {
             console.log(values);
-            const token = localStorage.getItem('token');
+            //const token = localStorage.getItem('token');
+            const token = configObj.getToken();
             const response = await post('/order', {
                 ...values,
                 cartItems: cartItems.map(item => ({ productKey: item.productKey,quantityCount: item.quantityCount, price: item.price }))

@@ -9,6 +9,7 @@ import { ROUTE } from "../../router";
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from "../../ducks";
 import { post } from "../../api";
+import { configObj } from '../../resources';
 
 export function LoginPage() {
     const navigate = useNavigate();
@@ -49,8 +50,8 @@ export function LoginPage() {
 
             const response = await post('/login', { email, password });
             const {user, status, token} = response;
-            console.log('USER', user.id);
-            console.log('response', response);
+            //console.log('USER', user.id);
+            //console.log('response', response);
 
             if (status === 201 && token) {
                 // Login successful
@@ -59,13 +60,15 @@ export function LoginPage() {
                 dispatch(loginSuccess({ id: user.id, role: user.role }));
                 navigate(ROUTE.HOME);
                 setEmailConfirmed(true);
-                localStorage.setItem('token', token);
+                //localStorage.setItem('token', token);
+                const token = configObj.getToken();
             } else if (status === 207 && token) {
                 // Partial authentication due to unverified email
                 console.log('Token:', token);
                 navigate(`${ROUTE.EMAIL_VERIFICATION.replace(":email", user.email)}`);
                 setLoginError("Email not verified. You are partially authenticated. Please verify your email address.");
-                localStorage.setItem('token', token);
+                //localStorage.setItem('token', token);
+                const token = configObj.getToken()
             }
         } catch (error) {
             console.error("Login failed:", error);

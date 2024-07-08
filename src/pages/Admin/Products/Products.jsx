@@ -17,7 +17,7 @@ export const ProductList = (props) => {
     }
 
     return(
-    <List {...props} pagination={<CustomPagination />} perPage={10}>
+    <List {...props} pagination={<CustomPagination />} perPage={8}>
 
         <Datagrid>
             <TextField source="id" />

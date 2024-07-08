@@ -20,7 +20,7 @@ const handleError = (error) => {
 };
 
 export const fetchProducts = async (params = {}, headers = {}) => {
-    //console.log('fetchProductsParams:', params);
+
     try {
         const { pagination, sort, filter } = params;
         const { page, perPage } = pagination || {};

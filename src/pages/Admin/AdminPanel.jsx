@@ -14,6 +14,7 @@ import { MessageList, MessageCreate } from './Messages';
 import { selectUserId } from '../../ducks';
 import { lightTheme, darkTheme } from '../../components';
 import { configObj } from "../../resources";
+import CustomPagination from "../../components/Admin/CustomPagination";
 
 export const AdminPanel = () => {
     const userId = useSelector(selectUserId);

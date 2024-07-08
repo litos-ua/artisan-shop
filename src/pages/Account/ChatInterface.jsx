@@ -116,6 +116,7 @@ import {
 } from '@mui/material';
 import { getMessages, sendMessage } from '../../api';
 import * as Yup from 'yup';
+import { configObj } from '../../resources';
 
 const MessagesTable = ({ userId, adminId }) => {
     const [messages, setMessages] = useState([]);
@@ -136,7 +137,8 @@ const MessagesTable = ({ userId, adminId }) => {
 
     const fetchMessages = async () => {
         try {
-            const token = localStorage.getItem('token');
+            //const token = localStorage.getItem('token');
+            const token = configObj.getToken();
             const fetchedMessages = await getMessages(userId, adminId, { Authorization: `Bearer ${token}` });
             setMessages(fetchedMessages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
         } catch (error) {
@@ -147,7 +149,8 @@ const MessagesTable = ({ userId, adminId }) => {
     const handleSendMessage = async () => {
         try {
             await validationSchema.validate({ message: newMessage });
-            const token = localStorage.getItem('token');
+            //const token = localStorage.getItem('token');
+            const token = configObj.getToken();
             const messageData = {
                 sender_id: userId,
                 receiver_id: adminId,

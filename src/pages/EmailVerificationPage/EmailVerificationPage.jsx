@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
-import { post } from '../../api'; // Import your API request functions
+import { post } from '../../api';
+import { configObj } from '../../resources'
 
 export function EmailVerificationPage() {
     const { email } = useParams(); // Get the parameters from the URL
@@ -12,7 +13,8 @@ export function EmailVerificationPage() {
     const handleResendVerificationEmail = async () => {
         try {
             // Get token from LocalStorage
-            const token = localStorage.getItem('token');
+            //const token = localStorage.getItem('token');
+            const token = configObj.getToken();
 
             // Check if token exists
             if (!token) {

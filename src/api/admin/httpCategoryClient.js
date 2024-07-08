@@ -21,7 +21,20 @@ const handleError = (error) => {
 
 export const fetchCategories = async (params = {}, headers = {}) => {
     try {
-        const { page, perPage, sortField, sortOrder, filter } = params;
+        // const { page, perPage, sortField, sortOrder, filter } = params;
+        // const query = {
+        //     _page: page,
+        //     _limit: perPage,
+        //     _sort: sortField,
+        //     _order: sortOrder,
+        //     ...filter
+        // };
+
+        const { pagination, sort, filter } = params;
+        const { page, perPage } = pagination || {};
+        const { field: sortField, order: sortOrder } = sort || {};
+
+
         const query = {
             _page: page,
             _limit: perPage,
@@ -29,6 +42,7 @@ export const fetchCategories = async (params = {}, headers = {}) => {
             _order: sortOrder,
             ...filter
         };
+
         const response = await httpCategoryClient.get("admin/categories", {
             params: query,
             headers: {

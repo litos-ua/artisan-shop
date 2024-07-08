@@ -7,8 +7,12 @@ import {
     fetchOrders, fetchOrderById, createOrder, updateOrder, deleteOrder,
     fetchMessages, sendMessage,
 } from './admin';
+import { configObj } from '../resources';
 
-const token = localStorage.getItem('token');
+
+
+//const token = localStorage.getItem('token');
+const token = configObj.getToken();
 const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
 export const dataProvider = {
