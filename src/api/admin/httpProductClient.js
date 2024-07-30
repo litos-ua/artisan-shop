@@ -6,6 +6,7 @@ const baseURL = configObj.axiosUrl;
 
 const httpProductClient = axios.create({
     baseURL,
+    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
     },

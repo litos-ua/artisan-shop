@@ -5,6 +5,7 @@ const baseURL = configObj.axiosUrl;
 
 const httpCategoryClient = axios.create({
     baseURL,
+    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
     },
@@ -21,7 +22,7 @@ const handleError = (error) => {
 export const fetchCategories = async () => {
     try {
         const response = await httpCategoryClient.get("categories");
-        console.log("CategoryResponse", response)
+        //console.log("CategoryResponse", response)
         return response.data.categories; // Corresponds to the wrapper in the CategoryController on the server
     } catch (error) {
         handleError(error);

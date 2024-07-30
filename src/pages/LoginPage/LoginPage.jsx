@@ -61,14 +61,14 @@ export function LoginPage() {
                 navigate(ROUTE.HOME);
                 setEmailConfirmed(true);
                 //localStorage.setItem('token', token);
-                const token = configObj.getToken();
+                configObj.setToken(token);
             } else if (status === 207 && token) {
                 // Partial authentication due to unverified email
                 console.log('Token:', token);
                 navigate(`${ROUTE.EMAIL_VERIFICATION.replace(":email", user.email)}`);
                 setLoginError("Email not verified. You are partially authenticated. Please verify your email address.");
                 //localStorage.setItem('token', token);
-                const token = configObj.getToken()
+                configObj.setToken(token);
             }
         } catch (error) {
             console.error("Login failed:", error);

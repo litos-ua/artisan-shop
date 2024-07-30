@@ -129,6 +129,7 @@ export function AuthButtons() {
 
     const handleLogOut = () => {
         dispatch(logoutAndClearData());
+        localStorage.removeItem('token');
     };
 
     return (

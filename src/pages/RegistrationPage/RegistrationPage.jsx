@@ -107,7 +107,8 @@ export function RegistrationPage() {
 
     const handleResendVerificationEmail = async () => {
         try {
-            const response = await post('/resend-verification-email', { email });
+            //const response = await post('/resend-verification-email', { email });
+            const response = await post('/email/verification-notification', { email });
             setRegistrationMessage("Verification email resent. Please check your email.");
             console.log("Resend verification email successful:", response);
         } catch (error) {

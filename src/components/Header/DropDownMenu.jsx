@@ -22,6 +22,8 @@ export function DropDownMenu({ categories }) {
     const dispatch = useDispatch();
     const productsByCategory = useSelector((state) => state.productsByCategory);
 
+    //console.log('categoriesDrop:', categories);
+
     useEffect(() => {
         categoryButtonRefs.current = categoryButtonRefs.current.map((_, index) => categoryButtonRefs.current[index] || React.createRef());
     }, [categories.length]);
@@ -49,17 +51,26 @@ export function DropDownMenu({ categories }) {
 
 
     const handleListItemHover = async (category, index) => {
+        //console.log('ListItemHover_category:', category, ' , ListItemHover_index:', index);
+
         if (category !== "Products") {
             setHoveredCategory(category);
+
             if (!productsByCategory[category.id]) { // Check if products are already in Redux store
                 try {
-                    const products = await fetchProductsByCategory(category.id);
+                    const categoryId = category.id ?? '1';
+                    const products = await fetchProductsByCategory(categoryId);
                     dispatch(setProductsByCategory({ categoryId: category.id, products })); // Dispatch action to set products by category
                     setHoveredProducts(products); // Update hoveredProducts state after dispatching the action
-                    const categoryButtonRect = categoryButtonRefs.current[index].getBoundingClientRect();
-                    const productMenuTop =
-                        categoryButtonRect.top + categoryButtonRect.height - 750*100/screenHeight;
-                    setProductMenuPosition({ top: productMenuTop });
+
+                    // Ensure categoryButtonRefs.current[index] exists before accessing its properties
+                    if (categoryButtonRefs.current[index]) {
+                        const categoryButtonRect = categoryButtonRefs.current[index].getBoundingClientRect();
+                        const productMenuTop = categoryButtonRect.top + categoryButtonRect.height - (750 * 100 / screenHeight);
+                        setProductMenuPosition({ top: productMenuTop });
+                    } else {
+                        //console.warn(`Category button ref not found for index ${index}`);
+                    }
                 } catch (error) {
                     console.error('Error fetching products:', error);
                     setHoveredProducts([]);
@@ -70,12 +81,14 @@ export function DropDownMenu({ categories }) {
         }
     };
 
+
     const handleCurrentItemHover = (productKey) => {
         navigate(`${ROUTE.PRODUCT_CURRENT.replace(":productKey", productKey)}`);
     };
 
     const handleCategoryClick = (category) => {
 //        navigate(`${ROUTE.CATEGORY_CURRENT.replace(":category", category.name)}`); //rangeOfProducts
+        //console.log('CategoryID_out:', category.id);
         navigate(`${ROUTE.CATEGORY_CURRENT.replace(":category", category.id)}`) //API
     };
 
@@ -190,6 +203,8 @@ export function DropDownMenu({ categories }) {
         </Box>
     );
 }
+
+
 
 
 
