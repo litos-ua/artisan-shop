@@ -36,8 +36,15 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         try {
+            //$inputData = $request->all();
             $validatedData = $request->validate([
-                // You can define validation rules here
+                'first_name' => 'required|string|min:1|max:60',
+                'last_name' => 'required|string|min:1|max:100',
+                'email' => 'required|email|max:255',
+                'phone_number' => 'required|string|regex:/^\+38\d{10}$/',
+                'zip_code' => 'nullable|string|max:10',
+                'address' => 'nullable|string|max:255',
+                'user_id' => 'required|integer|exists:users,id',
             ]);
 
             $customer = Customer::create($validatedData);
