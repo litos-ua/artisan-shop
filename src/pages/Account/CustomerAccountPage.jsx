@@ -1,19 +1,19 @@
 
-
 // import React, { useState, useEffect } from 'react';
 // import { ROUTE } from "../../router";
 // import { useNavigate } from 'react-router-dom';
 // import { Card, CardHeader, CardContent, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
 // import { getCustomer, updateCustomer, put } from '../../api';
-// import {Header} from "../../components";
+// import { Header } from "../../components";
 // import CustomerDataForm from './CustomerDataForm';
-// import PasswordChangeForm from './PasswordChangeForm'
+// import PasswordChangeForm from './PasswordChangeForm';
 // import OrdersOfCustomer from "./OrdersOfCustomer";
 // import OrderEmptyPage from "./OrderEmptyPage";
 // import ChatInterface from './ChatInterface';
-// import {useSelector} from "react-redux";
-// import {selectUserId} from "../../ducks";
+// import { useSelector } from "react-redux";
+// import { selectUserId } from "../../ducks";
 // import { configObj } from "../../resources";
+// import {ErrorBoundary} from './../../components/Errors';
 //
 //
 // export const CustomerAccountPage = () => {
@@ -24,68 +24,60 @@
 //     const userId = useSelector(selectUserId);
 //
 //     useEffect(() => {
-//         const token = localStorage.getItem('token');
-//
+//         //const token = localStorage.getItem('token');
+//         const token = configObj.getToken()
 //         if (token) {
 //             fetchCustomerDetails(token);
 //         }
 //     }, []);
 //
 //     useEffect(() => {
-//         // Set default content when component mounts
 //         handleMenuItemClick('Settings');
 //     }, []);
 //
-//
 //     const fetchCustomerDetails = async (token) => {
 //         try {
-//             const customerData = await getCustomer('/customer/token',{ Authorization: `Bearer ${token}` });
+//             const customerData = await getCustomer('/customer/token', { Authorization: `Bearer ${token}` });
 //             setCustomer(customerData);
 //         } catch (error) {
 //             console.error("Error fetching customer details:", error);
 //         }
 //     };
 //
-//
 //     const handleMenuItemClick = (menuItem) => {
-//         const {id} = userId;
+//         const { id } = userId;
 //         const idAdmin = configObj.adminUserId;
-//         console.log('CA_userID:', id, 'CA_AdminID:', idAdmin);
 //         setActiveMenuItem(menuItem);
 //         switch (menuItem) {
 //             case 'Home':
 //                 navigate(ROUTE.HOME);
 //                 break;
 //             case 'Orders':
-//                 setContent(<OrdersOfCustomer />);
+//                 setContent(<ErrorBoundary><OrdersOfCustomer /></ErrorBoundary>);
 //                 break;
 //             case 'Payments':
-//                 setContent(<OrderEmptyPage />);
+//                 setContent(<ErrorBoundary><OrderEmptyPage /></ErrorBoundary>);
 //                 alert(menuItem);
 //                 break;
 //             case 'Messages':
-//                 setContent(<ChatInterface userId={id} adminId={idAdmin}/>);
+//                 setContent(<ErrorBoundary><ChatInterface userId={id} adminId={idAdmin} /></ErrorBoundary>);
 //                 break;
 //             case 'Settings':
 //                 setContent(
-//                     <>
+//                     <ErrorBoundary>
 //                         <CustomerDataForm initialValues={customer} onSubmit={handleSubmit} />
-//                     </>
+//                     </ErrorBoundary>
 //                 );
 //                 break;
 //             case 'Passwords':
 //                 setContent(
-//                     <>
+//                     <ErrorBoundary>
 //                         <PasswordChangeForm onSubmit={handlePasswordChangeSubmit} />
-//                     </>
+//                     </ErrorBoundary>
 //                 );
 //                 break;
 //             case 'Logout':
-//                 setContent(
-//                     <>
-//                         <OrderEmptyPage />
-//                     </>
-//                 );
+//                 setContent(<ErrorBoundary><OrderEmptyPage /></ErrorBoundary>);
 //                 alert(menuItem);
 //                 break;
 //             default:
@@ -95,7 +87,8 @@
 //
 //     const handleSubmit = async (values) => {
 //         try {
-//             const token = localStorage.getItem('token');
+//             //const token = localStorage.getItem('token');
+//             const token = configObj.getToken();
 //             const updatedCustomer = await updateCustomer('/customers/' + customer.id, values, {
 //                 Authorization: `Bearer ${token}`
 //             });
@@ -105,15 +98,14 @@
 //         } catch (error) {
 //             console.error("Error updating customer data:", error);
 //             alert("Error updating customer data:");
-//             // Handle error
 //         }
 //     };
 //
-//
 //     const handlePasswordChangeSubmit = async (values) => {
 //         try {
-//             const token = localStorage.getItem('token');
-//             await put('/user/password/change', values, { //const newPassword =
+//             //const token = localStorage.getItem('token');
+//             const token = configObj.getToken();
+//             await put('/user/password/change', values, {
 //                 Authorization: `Bearer ${token}`
 //             });
 //             console.log("Password changed successfully:");
@@ -132,7 +124,6 @@
 //         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
 //             <Header />
 //             <Box sx={{ display: 'flex', marginTop: '0.5vw', marginLeft: '0.5vw' }}>
-//                 {/* Vertical Menu Section */}
 //                 <Box sx={{ backgroundColor: '#1b80e4', padding: '0.5vw', width: '14vw' }}>
 //                     <List>
 //                         <ListItem button
@@ -149,9 +140,9 @@
 //                                   sx={{
 //                                       borderRadius: '0.5rem',
 //                                       '&:hover': { backgroundColor: '#5fa6ec' },
-//                                       backgroundColor: activeMenuItem === 'Orders' ? '#5fa6ec' : 'transparent' // Apply active style
+//                                       backgroundColor: activeMenuItem === 'Orders' ? '#5fa6ec' : 'transparent'
 //                                   }}
-//                                   onClick={() => handleMenuItemClick('Orders')} // Set active item on click
+//                                   onClick={() => handleMenuItemClick('Orders')}
 //                         >
 //                             <ListItemText primary="Orders" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
 //                         </ListItem>
@@ -159,9 +150,9 @@
 //                                   sx={{
 //                                       borderRadius: '0.5rem',
 //                                       '&:hover': { backgroundColor: '#5fa6ec' },
-//                                       backgroundColor: activeMenuItem === 'Payments' ? '#5fa6ec' : 'transparent' // Apply active style
+//                                       backgroundColor: activeMenuItem === 'Payments' ? '#5fa6ec' : 'transparent'
 //                                   }}
-//                                   onClick={() => handleMenuItemClick('Payments')} // Set active item on click
+//                                   onClick={() => handleMenuItemClick('Payments')}
 //                         >
 //                             <ListItemText primary="Payments" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
 //                         </ListItem>
@@ -169,9 +160,9 @@
 //                                   sx={{
 //                                       borderRadius: '0.5rem',
 //                                       '&:hover': { backgroundColor: '#5fa6ec' },
-//                                       backgroundColor: activeMenuItem === 'Messages' ? '#5fa6ec' : 'transparent' // Apply active style
+//                                       backgroundColor: activeMenuItem === 'Messages' ? '#5fa6ec' : 'transparent'
 //                                   }}
-//                                   onClick={() => handleMenuItemClick('Messages')} // Set active item on click
+//                                   onClick={() => handleMenuItemClick('Messages')}
 //                         >
 //                             <ListItemText primary="Messages" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
 //                         </ListItem>
@@ -179,9 +170,9 @@
 //                                   sx={{
 //                                       borderRadius: '0.5rem',
 //                                       '&:hover': { backgroundColor: '#5fa6ec' },
-//                                       backgroundColor: activeMenuItem === 'Settings' ? '#5fa6ec' : 'transparent' // Apply active style
+//                                       backgroundColor: activeMenuItem === 'Settings' ? '#5fa6ec' : 'transparent'
 //                                   }}
-//                                   onClick={() => handleMenuItemClick('Settings')} // Set active item on click
+//                                   onClick={() => handleMenuItemClick('Settings')}
 //                         >
 //                             <ListItemText primary="Settings" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
 //                         </ListItem>
@@ -189,9 +180,9 @@
 //                                   sx={{
 //                                       borderRadius: '0.5rem',
 //                                       '&:hover': { backgroundColor: '#5fa6ec' },
-//                                       backgroundColor: activeMenuItem === 'Passwords' ? '#5fa6ec' : 'transparent' // Apply active style
+//                                       backgroundColor: activeMenuItem === 'Passwords' ? '#5fa6ec' : 'transparent'
 //                                   }}
-//                                   onClick={() => handleMenuItemClick('Passwords')} // Set active item on click
+//                                   onClick={() => handleMenuItemClick('Passwords')}
 //                         >
 //                             <ListItemText primary="Passwords" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
 //                         </ListItem>
@@ -199,24 +190,17 @@
 //                                   sx={{
 //                                       borderRadius: '0.5rem',
 //                                       '&:hover': { backgroundColor: '#5fa6ec' },
-//                                       backgroundColor: activeMenuItem === 'Logout' ? '#5fa6ec' : 'transparent' // Apply active style
+//                                       backgroundColor: activeMenuItem === 'Logout' ? '#5fa6ec' : 'transparent'
 //                                   }}
-//                                   onClick={() => handleMenuItemClick('Logout')} // Set active item on click
+//                                   onClick={() => handleMenuItemClick('Logout')}
 //                         >
 //                             <ListItemText primary="Logout" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
 //                         </ListItem>
 //                     </List>
-//
 //                 </Box>
 //
-//                 {/* Content Section */}
 //                 <Box sx={{ marginLeft: '3.5vw', marginRight: '3vw', flexGrow: 1 }}>
-//                     {/* User Details Section */}
-//                     <Card sx={{ marginBottom: '0.5vw',
-//                         backgroundColor: '#ffffb3',
-//                         borderRadius: '1rem',
-//                         border: '2px solid #bfbfbf',}}
-//                     >
+//                     <Card sx={{ marginBottom: '0.5vw', backgroundColor: '#ffffb3', borderRadius: '1rem', border: '2px solid #bfbfbf', }}>
 //                         <CardHeader
 //                             title={`Customer: ${customer.first_name} ${customer.last_name} Profile `}
 //                             sx={{ marginBottom: 0, paddingBottom: 0 }}
@@ -230,10 +214,237 @@
 //                     <Box sx={{ padding: '0.5vw' }}>
 //                         {content}
 //                     </Box>
+//                 </Box>
+//             </Box>
+//         </Box>
+//     );
+// };
+
+// import React, { useState, useEffect } from 'react';
+// import { ROUTE } from "../../router";
+// import { useNavigate } from 'react-router-dom';
+// import { Card, CardHeader, CardContent, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
+// import { getCustomer, updateCustomer, put } from '../../api';
+// import { Header } from "../../components";
+// import CustomerDataForm from './CustomerDataForm';
+// import PasswordChangeForm from './PasswordChangeForm';
+// import OrdersOfCustomer from "./OrdersOfCustomer";
+// import OrderEmptyPage from "./OrderEmptyPage";
+// import ChatInterface from './ChatInterface';
+// import { useSelector } from "react-redux";
+// import { selectUserId } from "../../ducks";
+// import { configObj } from "../../resources";
+// import {ErrorBoundary} from './../../components/Errors';
 //
-//                     {/* Message Exchange Form Section */}
+//
+// export const CustomerAccountPage = () => {
+//     const [customer, setCustomer] = useState(null);
+//     const [activeMenuItem, setActiveMenuItem] = useState('');
+//     const [content, setContent] = useState(null);
+//     const navigate = useNavigate();
+//     const userId = useSelector(selectUserId);
+//
+//     useEffect(() => {
+//         //const token = localStorage.getItem('token');
+//         const token = configObj.getToken()
+//         if (token) {
+//             fetchCustomerDetails(token);
+//         }
+//     }, []);
+//
+//     useEffect(() => {
+//         handleMenuItemClick('Settings');
+//     }, []);
+//
+//     const fetchCustomerDetails = async (token) => {
+//         try {
+//             const customerData = await getCustomer('/customer/token', { Authorization: `Bearer ${token}` });
+//             setCustomer(customerData);
+//             //console.log('customer:', customer);
+//         } catch (error) {
+//             console.error("Error fetching customer details:", error);
+//             setCustomer({ // Setting default empty values if the customer is not found
+//                 first_name: '',
+//                 last_name: '',
+//                 email: '',
+//                 phone_number: '',
+//                 zip_code: '',
+//                 address: ''
+//             });
+//         }
+//     };
+//
+//     const handleMenuItemClick = (menuItem) => {
+//         const { id } = userId;
+//         const idAdmin = configObj.adminUserId;
+//         setActiveMenuItem(menuItem);
+//         switch (menuItem) {
+//             case 'Home':
+//                 navigate(ROUTE.HOME);
+//                 break;
+//             case 'Orders':
+//                 setContent(<ErrorBoundary><OrdersOfCustomer /></ErrorBoundary>);
+//                 break;
+//             case 'Payments':
+//                 setContent(<ErrorBoundary><OrderEmptyPage /></ErrorBoundary>);
+//                 alert(menuItem);
+//                 break;
+//             case 'Messages':
+//                 setContent(<ErrorBoundary><ChatInterface userId={id} adminId={idAdmin} /></ErrorBoundary>);
+//                 break;
+//             case 'Settings':
+//                 setContent(
+//                     <ErrorBoundary>
+//                         <CustomerDataForm initialValues={customer} onSubmit={handleSubmit} />
+//                     </ErrorBoundary>
+//                 );
+//                 break;
+//             case 'Passwords':
+//                 setContent(
+//                     <ErrorBoundary>
+//                         <PasswordChangeForm onSubmit={handlePasswordChangeSubmit} />
+//                     </ErrorBoundary>
+//                 );
+//                 break;
+//             case 'Logout':
+//                 setContent(<ErrorBoundary><OrderEmptyPage /></ErrorBoundary>);
+//                 alert(menuItem);
+//                 break;
+//             default:
+//                 break;
+//         }
+//     };
+//
+//     const handleSubmit = async (values) => {
+//         try {
+//             //const token = localStorage.getItem('token');
+//             const token = configObj.getToken();
+//             const updatedCustomer = await updateCustomer('/customers/' + customer.id, values, {
+//                 Authorization: `Bearer ${token}`
+//             });
+//             setCustomer(updatedCustomer);
+//             console.log("Customer data updated successfully:", updatedCustomer);
+//             alert("Customer data updated successfully:");
+//         } catch (error) {
+//             console.error("Error updating customer data:", error);
+//             alert("Error updating customer data:");
+//         }
+//     };
+//
+//     const handlePasswordChangeSubmit = async (values) => {
+//         try {
+//             //const token = localStorage.getItem('token');
+//             const token = configObj.getToken();
+//             await put('/user/password/change', values, {
+//                 Authorization: `Bearer ${token}`
+//             });
+//             console.log("Password changed successfully:");
+//             alert("Password changed successfully:");
+//         } catch (error) {
+//             console.error("Error changing password:", error);
+//             alert("Error changing password:");
+//         }
+//     };
+//
+//     console.log('customer:', customer);
+//
+//     if (!customer) {
+//         return <div>Loading...</div>;
+//     }
+//
+//     return (
+//         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+//             <Header />
+//             <Box sx={{ display: 'flex', marginTop: '0.5vw', marginLeft: '0.5vw' }}>
+//                 <Box sx={{ backgroundColor: '#1b80e4', padding: '0.5vw', width: '14vw' }}>
+//                     <List>
+//                         <ListItem button
+//                                   sx={{
+//                                       borderRadius: '0.5rem',
+//                                       '&:hover': { backgroundColor: '#5fa6ec' },
+//                                       backgroundColor: activeMenuItem === 'Home' ? '#5fa6ec' : 'transparent'
+//                                   }}
+//                                   onClick={() => handleMenuItemClick('Home')}
+//                         >
+//                             <ListItemText primary="Home" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
+//                         </ListItem>
+//                         <ListItem button
+//                                   sx={{
+//                                       borderRadius: '0.5rem',
+//                                       '&:hover': { backgroundColor: '#5fa6ec' },
+//                                       backgroundColor: activeMenuItem === 'Orders' ? '#5fa6ec' : 'transparent'
+//                                   }}
+//                                   onClick={() => handleMenuItemClick('Orders')}
+//                         >
+//                             <ListItemText primary="Orders" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
+//                         </ListItem>
+//                         <ListItem button
+//                                   sx={{
+//                                       borderRadius: '0.5rem',
+//                                       '&:hover': { backgroundColor: '#5fa6ec' },
+//                                       backgroundColor: activeMenuItem === 'Payments' ? '#5fa6ec' : 'transparent'
+//                                   }}
+//                                   onClick={() => handleMenuItemClick('Payments')}
+//                         >
+//                             <ListItemText primary="Payments" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
+//                         </ListItem>
+//                         <ListItem button
+//                                   sx={{
+//                                       borderRadius: '0.5rem',
+//                                       '&:hover': { backgroundColor: '#5fa6ec' },
+//                                       backgroundColor: activeMenuItem === 'Messages' ? '#5fa6ec' : 'transparent'
+//                                   }}
+//                                   onClick={() => handleMenuItemClick('Messages')}
+//                         >
+//                             <ListItemText primary="Messages" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
+//                         </ListItem>
+//                         <ListItem button
+//                                   sx={{
+//                                       borderRadius: '0.5rem',
+//                                       '&:hover': { backgroundColor: '#5fa6ec' },
+//                                       backgroundColor: activeMenuItem === 'Settings' ? '#5fa6ec' : 'transparent'
+//                                   }}
+//                                   onClick={() => handleMenuItemClick('Settings')}
+//                         >
+//                             <ListItemText primary="Settings" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
+//                         </ListItem>
+//                         <ListItem button
+//                                   sx={{
+//                                       borderRadius: '0.5rem',
+//                                       '&:hover': { backgroundColor: '#5fa6ec' },
+//                                       backgroundColor: activeMenuItem === 'Passwords' ? '#5fa6ec' : 'transparent'
+//                                   }}
+//                                   onClick={() => handleMenuItemClick('Passwords')}
+//                         >
+//                             <ListItemText primary="Passwords" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
+//                         </ListItem>
+//                         <ListItem button
+//                                   sx={{
+//                                       borderRadius: '0.5rem',
+//                                       '&:hover': { backgroundColor: '#5fa6ec' },
+//                                       backgroundColor: activeMenuItem === 'Logout' ? '#5fa6ec' : 'transparent'
+//                                   }}
+//                                   onClick={() => handleMenuItemClick('Logout')}
+//                         >
+//                             <ListItemText primary="Logout" sx={{ '.MuiTypography-root': { fontSize: '1.2rem' } }} />
+//                         </ListItem>
+//                     </List>
+//                 </Box>
+//
+//                 <Box sx={{ marginLeft: '3.5vw', marginRight: '3vw', flexGrow: 1 }}>
+//                     <Card sx={{ marginBottom: '0.5vw', backgroundColor: '#ffffb3', borderRadius: '1rem', border: '2px solid #bfbfbf', }}>
+//                         <CardHeader
+//                             title={`Customer: ${customer.first_name} ${customer.last_name} Profile `}
+//                             sx={{ marginBottom: 0, paddingBottom: 0 }}
+//                         />
+//                         <CardContent>
+//                             <Typography>Email: {customer.email}</Typography>
+//                             <Typography>Telephone: {customer.phone_number}</Typography>
+//                         </CardContent>
+//                     </Card>
+//
 //                     <Box sx={{ padding: '0.5vw' }}>
-//                         {/* Message exchange form */}
+//                         {content}
 //                     </Box>
 //                 </Box>
 //             </Box>
@@ -245,7 +456,7 @@ import React, { useState, useEffect } from 'react';
 import { ROUTE } from "../../router";
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardContent, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
-import { getCustomer, updateCustomer, put } from '../../api';
+import { getCustomer, updateCustomer, put, post, postCustomer } from '../../api';
 import { Header } from "../../components";
 import CustomerDataForm from './CustomerDataForm';
 import PasswordChangeForm from './PasswordChangeForm';
@@ -253,10 +464,9 @@ import OrdersOfCustomer from "./OrdersOfCustomer";
 import OrderEmptyPage from "./OrderEmptyPage";
 import ChatInterface from './ChatInterface';
 import { useSelector } from "react-redux";
-import { selectUserId } from "../../ducks";
+import { selectUserId, selectUserEmail } from "../../ducks";
 import { configObj } from "../../resources";
-import {ErrorBoundary} from './../../components/Errors';
-
+import { ErrorBoundary } from './../../components/Errors';
 
 export const CustomerAccountPage = () => {
     const [customer, setCustomer] = useState(null);
@@ -264,18 +474,20 @@ export const CustomerAccountPage = () => {
     const [content, setContent] = useState(null);
     const navigate = useNavigate();
     const userId = useSelector(selectUserId);
+    const userEmail = useSelector(selectUserEmail);
 
     useEffect(() => {
-        //const token = localStorage.getItem('token');
-        const token = configObj.getToken()
+        const token = configObj.getToken();
         if (token) {
             fetchCustomerDetails(token);
         }
     }, []);
 
     useEffect(() => {
-        handleMenuItemClick('Settings');
-    }, []);
+        if (customer) {
+            handleMenuItemClick('Settings');
+        }
+    }, [customer]);
 
     const fetchCustomerDetails = async (token) => {
         try {
@@ -283,6 +495,14 @@ export const CustomerAccountPage = () => {
             setCustomer(customerData);
         } catch (error) {
             console.error("Error fetching customer details:", error);
+            setCustomer({
+                first_name: '',
+                last_name: '',
+                email: userEmail,
+                phone_number: '',
+                zip_code: '',
+                address: ''
+            });
         }
     };
 
@@ -327,25 +547,49 @@ export const CustomerAccountPage = () => {
         }
     };
 
+    // const handleSubmit = async (values) => {
+    //     try {
+    //         const token = configObj.getToken();
+    //         const updatedCustomer = await updateCustomer('/customers/' + customer.id, values, {
+    //             Authorization: `Bearer ${token}`
+    //         });
+    //         setCustomer(updatedCustomer);
+    //         console.log("Customer data updated successfully:", updatedCustomer);
+    //         alert("Customer data updated successfully:");
+    //     } catch (error) {
+    //         console.error("Error updating customer data:", error);
+    //         alert("Error updating customer data:");
+    //     }
+    // };
+
     const handleSubmit = async (values) => {
         try {
-            //const token = localStorage.getItem('token');
             const token = configObj.getToken();
-            const updatedCustomer = await updateCustomer('/customers/' + customer.id, values, {
-                Authorization: `Bearer ${token}`
-            });
-            setCustomer(updatedCustomer);
-            console.log("Customer data updated successfully:", updatedCustomer);
-            alert("Customer data updated successfully:");
+            if (customer.id) {
+                const updatedCustomer = await updateCustomer(`/customers/${customer.id}`, values, {
+                    Authorization: `Bearer ${token}`
+                });
+                setCustomer(updatedCustomer);
+                console.log("Customer data updated successfully:", updatedCustomer);
+                alert("Customer data updated successfully:");
+            } else {
+                const newCustomer = await post(`/customers`, {  //postCustomer
+                    ...values, user_id: userId, email: userEmail
+                }, {
+                    Authorization: `Bearer ${token}`
+                });
+                setCustomer(newCustomer);
+                console.log("Customer created successfully:", newCustomer);
+                alert("Customer created successfully:");
+            }
         } catch (error) {
-            console.error("Error updating customer data:", error);
-            alert("Error updating customer data:");
+            console.error("Error submitting customer data:", error);
+            alert("Error submitting customer data:");
         }
     };
 
     const handlePasswordChangeSubmit = async (values) => {
         try {
-            //const token = localStorage.getItem('token');
             const token = configObj.getToken();
             await put('/user/password/change', values, {
                 Authorization: `Bearer ${token}`
@@ -357,6 +601,8 @@ export const CustomerAccountPage = () => {
             alert("Error changing password:");
         }
     };
+
+    console.log('customer', customer);
 
     if (!customer) {
         return <div>Loading...</div>;

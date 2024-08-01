@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
         .max(100, 'Last name must be at most 100 characters')
         .required('Last name is required'),
     phone_number: Yup.string()
-        .matches(/^\+38\d{10}$/, 'Phone number must be 10 digits')
+        .matches(/^\+38\d{10}$/, 'Phone number must be contain symbol +, 2 digits of country code and 10 digits')
         .required('Phone number is required'),
     zip_code: Yup.string()
         .max(10, 'Zip code must be at most 10 characters'),

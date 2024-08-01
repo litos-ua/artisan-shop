@@ -66,6 +66,7 @@ export const logoutSuccess = createAction('LOGOUT_SUCCESS');
 const initialState = {
     isAuthenticated: false,
     id: null,
+    email: null,
     role: null,
 };
 
@@ -79,12 +80,14 @@ export const authSlice = createSlice({
             .addCase(loginSuccess, (state, action) => {
                 state.isAuthenticated = true;
                 state.id = action.payload.id;
+                state.email = action.payload.email;
                 state.role = action.payload.role;
                 localStorage.setItem('isAuthenticated', 'true');
             })
             .addCase(logoutSuccess, (state) => {
                 state.isAuthenticated = false;
                 state.id = null;
+                state.email = null;
                 state.role = null;
                 localStorage.setItem('isAuthenticated', 'false');
             });
@@ -94,6 +97,7 @@ export const authSlice = createSlice({
 // Selectors
 export const selectIsAuthenticated = state => state.auth.isAuthenticated;
 export const selectUserId = (state) => state.auth.id;
+export const selectUserEmail = (state) => state.auth.email;
 export const selectUserRole = (state) => state.auth.role;
 
 // Export reducer

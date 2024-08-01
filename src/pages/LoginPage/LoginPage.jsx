@@ -57,7 +57,7 @@ export function LoginPage() {
                 // Login successful
                 //dispatch(loginSuccess());
                 //console.log('id:', user.id, 'role:', user.role)
-                dispatch(loginSuccess({ id: user.id, role: user.role }));
+                dispatch(loginSuccess({ id: user.id, email: user.email, role: user.role }));
                 navigate(ROUTE.HOME);
                 setEmailConfirmed(true);
                 //localStorage.setItem('token', token);
