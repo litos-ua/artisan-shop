@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from "../../ducks";
 import { post } from "../../api";
 import { configObj } from '../../resources';
+import { useTranslation } from 'react-i18next';
 
 export function LoginPage() {
     const navigate = useNavigate();
@@ -20,26 +21,27 @@ export function LoginPage() {
     const [emailConfirmed, setEmailConfirmed] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [loginError, setLoginError] = useState("");
+    const { t } = useTranslation();
 
     const validationSchema = Yup.object().shape({
         email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
+            .email(t('formErrorMessage_invalidEmail'))
+            .required(t('formErrorMessage_emailRequired')),
         password: Yup.string()
-            .min(8, "Password must be at least 8 characters")
-            .required("Password is required"),
+            .min(8, t('formErrorMessage_passwordMinLength'))
+            .required(t('formErrorMessage_passwordRequired')),
     });
 
     const handleEmailChange = (e) => {
         const value = e.target.value;
         setEmail(value);
-        setEmailError(value.includes("@") ? "" : "Invalid email address");
+        setEmailError(value.includes("@") ? "" : t('formErrorMessage_invalidEmail'));
     };
 
     const handlePasswordChange = (e) => {
         const value = e.target.value;
         setPassword(value);
-        setPasswordError(value.length >= 8 ? "" : "Password must be at least 8 characters");
+        setPasswordError(value.length >= 8 ? "" : t('formErrorMessage_passwordMinLength'));
     };
 
     const handleSubmit = async (e) => {
@@ -49,54 +51,29 @@ export function LoginPage() {
             await validationSchema.validate({ email, password }, { abortEarly: false });
 
             const response = await post('/login', { email, password });
-            const {user, status, token} = response;
-            //console.log('USER', user.id);
-            //console.log('response', response);
+            const { user, status, token } = response;
 
             if (status === 201 && token) {
-                // Login successful
-                //dispatch(loginSuccess());
-                //console.log('id:', user.id, 'role:', user.role)
                 dispatch(loginSuccess({ id: user.id, email: user.email, role: user.role }));
                 navigate(ROUTE.HOME);
                 setEmailConfirmed(true);
-                //localStorage.setItem('token', token);
                 configObj.setToken(token);
             } else if (status === 207 && token) {
-                // Partial authentication due to unverified email
-                console.log('Token:', token);
                 navigate(`${ROUTE.EMAIL_VERIFICATION.replace(":email", user.email)}`);
-                setLoginError("Email not verified. You are partially authenticated. Please verify your email address.");
-                //localStorage.setItem('token', token);
+                setLoginError(t('formErrorMessage_emailNotVerified'));
                 configObj.setToken(token);
             }
         } catch (error) {
-            console.error("Login failed:", error);
             const { status } = error;
-            console.log('STATUS', status);
 
-            if (error) {
-                // Handle error response from server
-
-                if (status === 404) {
-                    // User not found error
-                    setLoginError("User not found. Please check your email.");
-                    console.log('setLoginError', setLoginError);
-                } else if (status === 403 || status === 401) {
-                    // Email not verified or invalid email/password error
-                    if (status === 403) {
-                        setLoginError("Email not verified. You are partially authenticated. Please verify your email address.");
-                    } else {
-                        setLoginError("Invalid email or password. Please try again.");
-                    }
-                    // setEmailConfirmed(false); // If needed, uncomment this line
-                } else {
-                    // Other errors
-                    setLoginError("An error occurred. Please try again later.");
-                }
+            if (status === 404) {
+                setLoginError(t("formErrorMessage_userNotFound"));
+            } else if (status === 403) {
+                setLoginError(t("formErrorMessage_emailNotVerified"));
+            } else if (status === 401) {
+                setLoginError(t("formErrorMessage_invalidEmailOrPassword"));
             } else {
-                // Handle other errors
-                setLoginError("An error occurred. Please try again later.");
+                setLoginError(t("formErrorMessage_genericError"));
             }
         }
     };
@@ -109,12 +86,12 @@ export function LoginPage() {
                     <Box sx={{ border: '2px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '80vw' }}>
                         <form onSubmit={handleSubmit}>
                             <Typography variant="h4" sx={{ marginBottom: "20px" }}>
-                                Login
+                                {t('login')}
                             </Typography>
                             <Box sx={{ width: "100%", marginBottom: "20px" }}>
                                 <TextField
                                     type="text"
-                                    label="Email Address"
+                                    label={t('emailAdr')}
                                     value={email}
                                     onChange={handleEmailChange}
                                     variant="outlined"
@@ -130,7 +107,7 @@ export function LoginPage() {
                             <Box sx={{ width: "100%", marginBottom: "10px" }}>
                                 <TextField
                                     type="password"
-                                    label="Password"
+                                    label={t('pas')}
                                     value={password}
                                     onChange={handlePasswordChange}
                                     variant="outlined"
@@ -150,7 +127,7 @@ export function LoginPage() {
                                     variant="contained"
                                     color="primary"
                                     sx={{ width: "100%", height: "100%", fontSize: '1rem' }}>
-                                    Login
+                                    {t('loginBut')}
                                 </Button>
                             </Box>
                         </form>
@@ -161,7 +138,6 @@ export function LoginPage() {
         </Box>
     );
 }
-
 
 
 

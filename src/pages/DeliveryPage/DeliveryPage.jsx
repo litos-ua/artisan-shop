@@ -1,40 +1,39 @@
+
 import React from 'react';
 import './DeliveryPage.css';
-import {Header} from "../../components";
-import {Footer} from "../../components";
-import {FOOTER_IMAGE} from "../../resources";
+import { Header, Footer } from "../../components";
+import { FOOTER_IMAGE } from "../../resources";
+import { useTranslation } from 'react-i18next';
 
 export function DeliveryPage() {
+    const { t } = useTranslation('footerLocale');
+
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="delivery-page__content">
-                <h1>Доставка і оплата</h1>
+                <h1>{t('deliveryPayment')}</h1>
 
                 <img
                     src={FOOTER_IMAGE.DELIVERY}
-                    alt="Доставка і оплата"
+                    alt={t('deliveryImageAlt')}
                     className="delivery-image"
                 />
 
-                <p>
-                    Ми пропонуємо різні способи доставки та оплати для вашого зручтва.
-                    Зверніть увагу на наші послуги та умови, щоб зробити ваше замовлення
-                    якомога приємнішим.
-                </p>
+                <p>{t('deliveryDescription')}</p>
 
-                <h2>Способи доставки</h2>
+                <h2>{t('deliveryMethods')}</h2>
                 <ul className="delivery-page__ul">
-                    <li>Кур'єрська доставка</li>
-                    <li>Поштова служба</li>
-                    <li>Самовивіз з пунктів видачі</li>
+                    <li>{t('courierDelivery')}</li>
+                    <li>{t('postalService')}</li>
+                    <li>{t('pickup')}</li>
                 </ul>
 
-                <h2>Способи оплати</h2>
+                <h2>{t('paymentMethods')}</h2>
                 <ul className="delivery-page__ul">
-                    <li>Готівковий розрахунок при отриманні</li>
-                    <li>Оплата банківською карткою онлайн</li>
-                    <li>Інші зручні способи оплати</li>
+                    <li>{t('cashOnDelivery')}</li>
+                    <li>{t('onlineCardPayment')}</li>
+                    <li>{t('otherPaymentMethods')}</li>
                 </ul>
             </div>
             <Footer />

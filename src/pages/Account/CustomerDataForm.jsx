@@ -2,27 +2,92 @@
 import { Box, Button, FormControl, Grid, TextField } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-
-const validationSchema = Yup.object().shape({
-    first_name: Yup.string()
-        .min(3, 'First name must be at least 3 characters')
-        .max(60, 'First name must be at most 60 characters')
-        .required('First name is required'),
-    last_name: Yup.string()
-        .min(3, 'Last name must be at least 3 characters')
-        .max(100, 'Last name must be at most 100 characters')
-        .required('Last name is required'),
-    phone_number: Yup.string()
-        .matches(/^\+38\d{10}$/, 'Phone number must be contain symbol +, 2 digits of country code and 10 digits')
-        .required('Phone number is required'),
-    zip_code: Yup.string()
-        .max(10, 'Zip code must be at most 10 characters'),
-    address: Yup.string()
-        .max(255, 'Address must be at most 255 characters')
-        .nullable(),
-});
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 const CustomerDataForm = ({ initialValues, onSubmit }) => {
+    const { t } = useTranslation();
+    const [nameError, setNameError] = useState("");
+    const [lastNameError, setLastNameError] = useState("");
+    const [phoneNumberError, setPhoneNumberError] = useState("");
+    const [zipCodeError, setZipCodeError] = useState("");
+    const [addressError, setAddressError] = useState("");
+
+    const validationSchema = Yup.object().shape({
+        first_name: Yup.string()
+            .min(3, t('formErrorMessage_firstNameMin'))
+            .max(50, t('formErrorMessage_firstNameMax'))
+            .required(t('formErrorMessage_firstNameRequired')),
+        last_name: Yup.string()
+            .min(3, t('formErrorMessage_lastNameMin'))
+            .max(100, t('formErrorMessage_lastNameMax'))
+            .required(t('formErrorMessage_lastNameRequired')),
+        phone_number: Yup.string()
+            .matches(/^\+38\d{10}$/, t('formErrorMessage_phoneNumberFormat'))
+            .required(t('formErrorMessage_phoneNumberRequired')),
+        zip_code: Yup.string()
+            .max(10, t('formErrorMessage_zipCodeMax')),
+        address: Yup.string()
+            .max(255, t('formErrorMessage_addressMax'))
+            .nullable(),
+    });
+
+    const handleFirstNameChange = (e, formik) => {
+        const value = e.target.value;
+        formik.setFieldValue('first_name', value);
+        setNameError(
+            value.length < 3
+                ? t('formErrorMessage_firstNameMin')
+                : value.length > 50
+                    ? t('formErrorMessage_firstNameMax')
+                    : ""
+        );
+    };
+
+    const handleLastNameChange = (e, formik) => {
+        const value = e.target.value;
+        formik.setFieldValue('last_name', value);
+        setLastNameError(
+            value.length < 3
+                ? t('formErrorMessage_lastNameMin')
+                : value.length > 100
+                    ? t('formErrorMessage_lastNameMax')
+                    : ""
+        );
+    };
+
+    // Utility function for handling phone number changes
+    const handlePhoneNumberChange = (e, formik) => {
+        const value = e.target.value;
+        formik.setFieldValue('phone_number', value);
+        setPhoneNumberError(
+            /^\+38\d{10}$/.test(value)
+                ? ""
+                : t('formErrorMessage_phoneNumberFormat')
+        );
+    };
+
+    const handleZipCodeChange = (e, formik) => {
+        const value = e.target.value;
+        formik.setFieldValue('zip_code', value);
+        setZipCodeError(
+            value.length <= 10
+                ? ""
+                : t('formErrorMessage_zipCodeMax')
+        );
+    };
+
+    const handleAddressChange = (e, formik) => {
+        const value = e.target.value;
+        formik.setFieldValue('address', value);
+        setAddressError(
+            value.length <= 255
+                ? ""
+                : t('formErrorMessage_addressMax')
+        );
+    };
+
+    // Return null if initial values are not provided
     if (!initialValues) {
         return null;
     }
@@ -49,60 +114,60 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="First Name"
+                                label={t('firstName')}
                                 value={formik.values.first_name || ''}
-                                onChange={formik.handleChange}
+                                onChange={(e) => handleFirstNameChange(e, formik)}
                                 name="first_name"
-                                error={formik.touched.first_name && Boolean(formik.errors.first_name)}
-                                helperText={formik.touched.first_name && formik.errors.first_name}
+                                error={!!nameError}
+                                helperText={nameError}
                                 InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="Last Name"
+                                label={t('lastName')}
                                 value={formik.values.last_name || ''}
-                                onChange={formik.handleChange}
+                                onChange={(e) => handleLastNameChange(e, formik)}
                                 name="last_name"
-                                error={formik.touched.last_name && Boolean(formik.errors.last_name)}
-                                helperText={formik.touched.last_name && formik.errors.last_name}
+                                error={!!lastNameError}
+                                helperText={lastNameError}
                                 InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="Phone Number"
+                                label={t('phoneNumber')}
                                 value={formik.values.phone_number || ''}
-                                onChange={formik.handleChange}
+                                onChange={(e) => handlePhoneNumberChange(e, formik)}
                                 name="phone_number"
-                                error={formik.touched.phone_number && Boolean(formik.errors.phone_number)}
-                                helperText={formik.touched.phone_number && formik.errors.phone_number}
+                                error={!!phoneNumberError}
+                                helperText={phoneNumberError}
                                 InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="Zip Code"
+                                label={t('zip')}
                                 value={formik.values.zip_code || ''}
-                                onChange={formik.handleChange}
+                                onChange={(e) => handleZipCodeChange(e, formik)}
                                 name="zip_code"
-                                error={formik.touched.zip_code && Boolean(formik.errors.zip_code)}
-                                helperText={formik.touched.zip_code && formik.errors.zip_code}
+                                error={!!zipCodeError}
+                                helperText={zipCodeError}
                                 InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Address"
+                                label={t('address')}
                                 value={formik.values.address || ''}
-                                onChange={formik.handleChange}
+                                onChange={(e) => handleAddressChange(e, formik)}
                                 name="address"
-                                error={formik.touched.address && Boolean(formik.errors.address)}
-                                helperText={formik.touched.address && formik.errors.address}
+                                error={!!addressError}
+                                helperText={addressError}
                                 InputProps={{ sx: { backgroundColor: '#ffffff' } }}
                                 fullWidth
                             />
@@ -113,9 +178,9 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
                                     variant="contained"
                                     className="submit"
                                     type="submit"
-                                    sx={{width: '20%', height: '5vh'}}
+                                    sx={{ width: '20%', height: '5vh' }}
                                 >
-                                    Submit
+                                    {t('submit')}
                                 </Button>
                             </Box>
                         </Grid>
@@ -127,5 +192,6 @@ const CustomerDataForm = ({ initialValues, onSubmit }) => {
 };
 
 export default CustomerDataForm;
+
 
 

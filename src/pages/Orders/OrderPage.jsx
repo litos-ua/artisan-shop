@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Footer, Header } from "../../components";
@@ -11,8 +10,9 @@ import { TextField, Radio, Checkbox, FormControl, FormControlLabel, FormGroup, F
 import OrderTable from './OrderTable';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { post } from "../../api";
-import {configObj} from "../../resources";
+import { get, post } from "../../api";
+import { configObj } from "../../resources";
+import { useTranslation } from 'react-i18next';
 
 export const OrderForm = () => {
     const navigate = useNavigate();
@@ -23,9 +23,18 @@ export const OrderForm = () => {
     const [userEmail, setUserEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [token, setToken] = useState('');
     const [openModal, setOpenModal] = useState(false);
     const [orderDetails, setOrderDetails] = useState(null);
+    const { t } = useTranslation();
+
+    const [name, setName] = useState('');
+    const [nameError, setNameError] = useState('');
+
+    const [surname, setSurname] = useState('');
+    const [surnameError, setSurnameError] = useState('');
+
+    const [phone, setPhone] = useState('+38');
+    const [phoneError, setPhoneError] = useState('');
 
     const handleCloseModal = () => {
         setOpenModal(false);
@@ -42,13 +51,36 @@ export const OrderForm = () => {
     }, [cartItems]);
 
     useEffect(() => {
-        //const token = localStorage.getItem('token');
         const token = configObj.getToken();
-
         if (isAuthenticated && token) {
-            fetchUserEmail(token);
+            fetchCustomer(token);
         }
     }, [isAuthenticated]);
+
+
+    const fetchCustomer = async (token) => {
+        setLoading(true);
+        try {
+            const response = await get('/customer/token', { Authorization: `Bearer ${token}` });
+
+            // Check if customer data exists
+            if (response && response.email) {
+                setUserEmail(response.email);
+                setName(response.first_name);
+                setSurname(response.last_name);
+                setPhone(response.phone_number);
+            } else {
+                // If customer data does not exist, fetch user email
+                await fetchUserEmail(token);
+            }
+        } catch (error) {
+            console.error("Error fetching customer data:", error);
+            //setError('Error fetching customer data'); // - This line blocks execution fetchUserEmail
+            await fetchUserEmail(token); // Attempt to fetch user email if customer data is not found
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const fetchUserEmail = async (token) => {
         setLoading(true);
@@ -63,41 +95,73 @@ export const OrderForm = () => {
         }
     };
 
+    const handleNameChange = (e) => {
+        const value = e.target.value;
+        setName(value);
+        setNameError(
+            value.length < 3
+                ? t('formErrorMessage_firstNameMin')
+                : value.length > 20
+                    ? t('formErrorMessage_nameMaxLength')
+                    : !/^[a-zA-Z]+(?:-[a-zA-Z]+)*$/.test(value)
+                        ? t('formErrorMessage_invalidNameFormat')
+                        : ""
+        );
+    };
+
+    const handleSurnameChange = (e) => {
+        const value = e.target.value;
+        setSurname(value);
+        setSurnameError(
+            value.length > 20
+                ? t('formErrorMessage_lastNameMax')
+                : !/^[a-zA-Z]*$/.test(value)
+                    ? t('formErrorMessage_invalidSurnameFormat')
+                    : ""
+        );
+    };
+
+    const handlePhoneChange = (e) => {
+        const value = e.target.value;
+        setPhone(value);
+        setPhoneError(
+            /^\+38\d{10}$/.test(value)
+                ? ""
+                : t('formErrorMessage_phoneNumberFormat')
+        );
+    };
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string()
-            .min(3, 'Ім\'я має складатися не менше ніж з 3 символів')
-            .max(20, 'Ім\'я має містити не більше 20 символів')
-            .matches(/^[a-zA-Z]+(?:-[a-zA-Z]+)*$/, 'Назва може містити лише літери та тире')
-            .required('Необхідно вказати ім\'я'),
-        surname: Yup.string().optional(),
+        name: Yup.string(),
         email: Yup.string()
-            .email('Невірна адреса електронної пошти')
-            .required('Email є обов\'язковий'),
-        phone: Yup.string()
-            .matches(/^\+38\d{10}$/, 'Телефон після +38 має містити 10 цифр')
-            .required('Телефон є обов\'язковий'),
+            .email(t('formErrorMessage_emailFormat'))
+            .required(t('formErrorMessage_emailRequired')),
         notes: Yup.string()
-            .max(100, 'Примітки мають містити не більше 100 символів'),
+            .max(100, t('formErrorMessage_notesMax')),
         advancePayment: Yup.boolean(),
         delivery: Yup.boolean(),
     });
 
     const handleSubmit = async (values) => {
         if (!isAuthenticated) {
-            alert('You need to log in to place an order.');
+            alert(t('alertErrorMessage_needLog'));
             navigate(ROUTE.LOGIN);
             return;
         }
 
         try {
-            console.log(values);
-            //const token = localStorage.getItem('token');
             const token = configObj.getToken();
             const response = await post('/order', {
                 ...values,
-                cartItems: cartItems.map(item => ({ productKey: item.productKey,quantityCount: item.quantityCount, price: item.price }))
-            }, { Authorization: `Bearer ${token}` }); //'Bearer 77|TOKEN'
+                name,
+                surname,
+                phone,
+                cartItems: cartItems.map(item => ({
+                    productKey: item.productKey,
+                    quantityCount: item.quantityCount,
+                    price: item.price
+                }))
+            }, { Authorization: `Bearer ${token}` });
 
             if (response && response.order_id) {
                 if (totalSum === response.total_amount) {
@@ -105,22 +169,17 @@ export const OrderForm = () => {
                     handleOpenModal();
                     dispatch(clearReduxStore());
                 } else {
-                    setError('Arrears for the amount')
-                    alert('Помилка у сумі замовлення');
+                    setError(t('alertErrorMessage_invalidAmount'));
+                    alert(t('alertErrorMessage_invalidAmount'));
                     navigate(ROUTE.CART);
                 }
             }
         } catch (error) {
-            console.error("Error placing order:", error);
-            setError('Error placing order');
-            alert('Помила при формуванні замовлення');
+            console.error(t("alertErrorMessage_errorPlacingOrder"), error);
+            setError(t("alertErrorMessage_errorPlacingOrder"));
+            alert(t("alertErrorMessage_errorPlacingOrder"));
             navigate(ROUTE.CART);
         }
-    };
-
-    const handlePhoneChange = (e, formik) => {
-        const { value } = e.target;
-        formik.setFieldValue('phone', value);
     };
 
     return (
@@ -129,7 +188,7 @@ export const OrderForm = () => {
             <OrderTable cartItems={cartItems} />
 
             <Typography variant="h5" className="order__total_amount" sx={{ marginBottom: '20px' }}>
-                Усього разом: {totalSum}
+                {t('totalAmount')}: {totalSum}
             </Typography>
 
             {loading ? (
@@ -139,46 +198,42 @@ export const OrderForm = () => {
             ) : (
                 <Formik
                     initialValues={{
-                        name: '',
-                        surname: '',
                         email: userEmail,
-                        phone: '+38',
-                        paymentType: 'Cash',
                         notes: '',
                         advancePayment: false,
                         delivery: false,
                     }}
                     validationSchema={validationSchema}
-                    //onSubmit={handleSubmit}
-                    onSubmit={(values) => handleSubmit(values, token)}
+                    onSubmit={handleSubmit}
                 >
                     {(formik) => (
                         <form onSubmit={formik.handleSubmit} className="order__form_input">
                             <Box className="input-group">
                                 <TextField
-                                    label="Ім'я"
-                                    fullWidth={true}
-                                    value={formik.values.name}
-                                    onChange={formik.handleChange}
+                                    label={t('firstName')}
+                                    fullWidth
+                                    // value={formik.values.name || ''}
+                                    value={name || ''}
+                                    onChange={(e) => handleNameChange(e, formik)}
                                     name="name"
-                                    error={formik.touched.name && Boolean(formik.errors.name)}
-                                    helperText={formik.touched.name && formik.errors.name}
+                                    error={!!nameError}
+                                    helperText={nameError}
                                 />
                                 <TextField
-                                    label="Прізвище (optional)"
-                                    fullWidth={true}
-                                    value={formik.values.surname}
-                                    onChange={formik.handleChange}
+                                    label={t('lastName') + " (optional)"}
+                                    fullWidth
+                                    value={surname || ''}
+                                    onChange={handleSurnameChange}
                                     name="surname"
-                                    error={formik.touched.surname && Boolean(formik.errors.surname)}
-                                    helperText={formik.touched.surname && formik.errors.surname}
+                                    error={!!surnameError}
+                                    helperText={surnameError}
                                 />
                             </Box>
                             <Box className="input-group">
                                 <TextField
                                     type="email"
                                     label="Email"
-                                    fullWidth={true}
+                                    fullWidth
                                     value={formik.values.email}
                                     onChange={formik.handleChange}
                                     name="email"
@@ -186,32 +241,32 @@ export const OrderForm = () => {
                                     helperText={formik.touched.email && formik.errors.email}
                                 />
                                 <TextField
-                                    label="Телефон"
-                                    fullWidth={true}
-                                    value={formik.values.phone}
-                                    onChange={(e) => handlePhoneChange(e, formik)}
+                                    label={t('phoneNumber')}
+                                    fullWidth
+                                    value={phone}
+                                    onChange={handlePhoneChange}
                                     name="phone"
-                                    error={formik.touched.phone && Boolean(formik.errors.phone)}
-                                    helperText={formik.touched.phone && formik.errors.phone}
+                                    error={!!phoneError}
+                                    helperText={phoneError}
                                 />
                             </Box>
                             <Box>
                                 <FormControl className="order__form_input-group">
-                                    <FormLabel className="order__form_radio-label" sx={{ fontSize: '1.0vw', marginBottom: 0, marginTop: 0, paddingBottom: 0, paddingTop: 0}}>
-                                        Форма оплати
+                                    <FormLabel className="order__form_radio-label" sx={{ fontSize: '1.0vw', marginBottom: '0', marginTop: '0', paddingBottom: '0', paddingTop: '0' }}>
+                                        {t('paymentForm')}
                                     </FormLabel>
-                                    <RadioGroup className="order__form_label" row={true} name="paymentType" value={formik.values.paymentType} onChange={formik.handleChange}>
+                                    <RadioGroup className="order__form_label" row name="paymentType" value={formik.values.paymentType} onChange={formik.handleChange}>
                                         <FormControlLabel
                                             value="Cash"
                                             control={<Radio />}
-                                            label="Готівка"
-                                            sx={{ marginBottom: 0, marginTop: 0, paddingBottom: 0, paddingTop: 0 }}
+                                            label={t('cash')}
+                                            sx={{ marginBottom: '0', marginTop: '0', paddingBottom: '0', paddingTop: '0' }}
                                         />
                                         <FormControlLabel
-                                            value="Сard"
+                                            value="Card"
                                             control={<Radio />}
-                                            label="Картка"
-                                            sx={{ marginBottom: 1, marginTop: 0, paddingBottom: 1, paddingTop: 0 }}
+                                            label={t('card')}
+                                            sx={{ marginBottom: '1', marginTop: '0', paddingBottom: '1', paddingTop: '0' }}
                                         />
                                     </RadioGroup>
                                 </FormControl>
@@ -219,19 +274,13 @@ export const OrderForm = () => {
                                 <FormControl className="order__form_input">
                                     <FormGroup>
                                         <FormControlLabel
-                                            control={<Checkbox
-                                                name="advancePayment"
-                                                checked={formik.values.advancePayment}
-                                                onChange={formik.handleChange} />}
-                                            label="AdvancePayment"
+                                            control={<Checkbox name="advancePayment" checked={formik.values.advancePayment} onChange={formik.handleChange} />}
+                                            label={t('advancePayment')}
                                             sx={{ marginTop: '14%', paddingTop: '10%', paddingLeft: '2vw' }}
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox
-                                                name="delivery"
-                                                checked={formik.values.delivery}
-                                                onChange={formik.handleChange} />}
-                                            label="Delivery"
+                                            control={<Checkbox name="delivery" checked={formik.values.delivery} onChange={formik.handleChange} />}
+                                            label={t('delivery')}
                                             sx={{ paddingLeft: '2vw' }}
                                         />
                                     </FormGroup>
@@ -239,8 +288,8 @@ export const OrderForm = () => {
 
                                 <FormControl className="order__form_input textarea" sx={{ width: '90%', marginLeft: '2vw' }}>
                                     <TextField
-                                        placeholder="Примітки"
-                                        multiline={true}
+                                        placeholder={t('notes')}
+                                        multiline
                                         minRows={'3'}
                                         size={"small"}
                                         value={formik.values.notes}
@@ -257,9 +306,9 @@ export const OrderForm = () => {
                                     variant="contained"
                                     className="order__form_submit"
                                     type="submit"
-                                    sx={{ fontSize: '1vw', marginLeftLeft: '100%' }}
+                                    sx={{ fontSize: '0.7vw', marginLeft: '70%', }}
                                 >
-                                    Замовити
+                                    {t('orderButton')}
                                 </Button>
                             </Box>
                         </form>
@@ -268,18 +317,17 @@ export const OrderForm = () => {
             )}
 
             <Footer />
-            {/* Modal to display order details */}
+            {/* Modal form to display order details */}
             <Dialog open={openModal} onClose={handleCloseModal}>
-                <DialogTitle>Order Details</DialogTitle>
+                <DialogTitle>{t('orderDetails')}</DialogTitle>
                 <DialogContent>
-                    <Typography>Ваше замовлення прийнято в обробку</Typography>
-                    <Typography>Order ID: {orderDetails?.order_id}</Typography>
-                    <Typography>Time of Creation: {orderDetails?.created_at}</Typography>
-                    <Typography>Total Amount: {orderDetails?.total_amount}</Typography>
-                    {/* Display other order details as needed */}
+                    <Typography>{t('systemMessOrderAccepted')}</Typography>
+                    <Typography>{t('orderID')}: {orderDetails?.order_id}</Typography>
+                    <Typography>{t('messageCreated')}: {orderDetails?.created_at}</Typography>
+                    <Typography>{t('totalAmount')}: {orderDetails?.total_amount}</Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseModal}>Close</Button>
+                    <Button onClick={handleCloseModal}>{t('close')}</Button>
                 </DialogActions>
             </Dialog>
         </Box>

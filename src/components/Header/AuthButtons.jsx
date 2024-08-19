@@ -104,12 +104,14 @@ import { ROUTE } from '../../router';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAndClearData, selectIsAuthenticated, selectUserRole } from '../../ducks';
+import { useTranslation } from 'react-i18next';
 
 export function AuthButtons() {
     const dispatch = useDispatch();
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const userRole = useSelector(selectUserRole);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleSignIn = () => {
         navigate(ROUTE.LOGIN);
@@ -136,7 +138,7 @@ export function AuthButtons() {
         <Box className="authbuttons">
             {!isAuthenticated && (
                 <>
-                    <Tooltip title="Login">
+                    <Tooltip title={t('login')}>
                         <IconButton
                             color="inherit"
                             aria-label="login"
@@ -146,7 +148,7 @@ export function AuthButtons() {
                             <LoginIcon />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Sign Up">
+                    <Tooltip title={t('register')}>
                         <IconButton
                             color="inherit"
                             aria-label="signup"
@@ -160,7 +162,7 @@ export function AuthButtons() {
             )}
             {isAuthenticated && (
                 <>
-                    <Tooltip title="Account">
+                    <Tooltip title={t('account')}>
                         <IconButton
                             color="inherit"
                             aria-label="account"
@@ -170,7 +172,7 @@ export function AuthButtons() {
                             <AccountCircleIcon />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Logout">
+                    <Tooltip title={t('logout')}>
                         <IconButton
                             color="inherit"
                             aria-label="logout"

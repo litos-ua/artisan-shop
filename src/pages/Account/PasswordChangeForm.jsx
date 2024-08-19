@@ -3,6 +3,7 @@ import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { TextField, FormControl, Button, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next'
 
 const passwordValidationSchema = Yup.object().shape({
     currentPassword: Yup.string()
@@ -17,6 +18,9 @@ const passwordValidationSchema = Yup.object().shape({
 });
 
 const PasswordChangeForm = ({ onSubmit }) => {
+
+    const { t } = useTranslation();
+
     return (
         <Formik
             initialValues={{ currentPassword: '', newPassword: '', confirmPassword: '' }}
@@ -25,10 +29,9 @@ const PasswordChangeForm = ({ onSubmit }) => {
             onSubmit={async (values, { resetForm }) => {
                 try {
                     await onSubmit(values);
-                    resetForm(); // Reset form values after successful submission
+                    resetForm();
                 } catch (error) {
                     console.error("Error submitting form:", error);
-                    // Handle error
                 }
             }}
         >
@@ -47,7 +50,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                         <Box className="input-group" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                             <TextField
                                 type="password"
-                                label="Current Password"
+                                label={t('currentPassword')}
                                 fullWidth={true}
                                 value={formik.values.currentPassword}
                                 onChange={formik.handleChange}
@@ -59,7 +62,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                             />
                             <TextField
                                 type="password"
-                                label="New Password"
+                                label={t('newPassword')}
                                 fullWidth={true}
                                 value={formik.values.newPassword}
                                 onChange={formik.handleChange}
@@ -71,7 +74,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                             />
                             <TextField
                                 type="password"
-                                label="Confirm Password"
+                                label={t('confirmPassword')}
                                 fullWidth={true}
                                 value={formik.values.confirmPassword}
                                 onChange={formik.handleChange}
@@ -88,7 +91,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                                 type="submit"
                                 sx={{ width: '20%', height: '5vh' }}
                             >
-                                Change Password
+                                {t('changePassword')}
                             </Button>
                         </Box>
                     </FormControl>

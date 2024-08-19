@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { Button, Box, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export function SearchForm() {
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleSearch = (event) => {
         event.preventDefault();
@@ -29,7 +31,7 @@ export function SearchForm() {
             <Box sx={{ display: 'flex', ml: '2vw'}}>
                 <TextField
                     type="text"
-                    placeholder="Пошук"
+                    placeholder={t('search')}
                     variant="outlined"
                     size="small"
                     sx={{ width: '15vw', borderRadius: 2, marginRight: '5px', backgroundColor:'#9797', }}

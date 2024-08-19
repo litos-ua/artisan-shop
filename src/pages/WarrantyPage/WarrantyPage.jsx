@@ -1,55 +1,46 @@
+
 import React from 'react';
 import './WarrantyPage.css';
-import {Header} from "../../components";
-import {Footer} from "../../components";
-import {FOOTER_IMAGE} from "../../resources";
+import { Header, Footer } from "../../components";
+import { FOOTER_IMAGE } from "../../resources";
+import { useTranslation } from 'react-i18next';
 
 export function WarrantyPage() {
+    const { t } = useTranslation('footerLocale');
+
     return (
         <div>
-            <Header/>
-            <h1>Гарантія та повернення</h1>
+            <Header />
+            <h1>{t('warrantyTitle')}</h1>
             <div className="warranty-page">
                 <div className="warranty-section">
-                    <p>
-                        Наша компанія гарантує вам високу якість продукції та надає можливість
-                        повернення товарів у випадку невдоволеності або дефектів.
-                    </p>
-
+                    <p>{t('warrantyText1')}</p>
                     <img
                         src={FOOTER_IMAGE.WARRANTY_1}
-                        alt="Якість"
+                        alt={t('warrantyAlt1')}
                         className="warranty-image"
                     />
                 </div>
 
                 <div className="warranty-section">
-                    <p>
-                        Ми дбаємо про наших клієнтів і готові вирішити всі питання, щоб ваш
-                        досвід покупок був максимально приємним.
-                    </p>
-
+                    <p>{t('warrantyText2')}</p>
                     <img
                         src={FOOTER_IMAGE.WARRANTY_2}
-                        alt="Стандарти"
+                        alt={t('warrantyAlt2')}
                         className="warranty-image"
                     />
                 </div>
 
                 <div className="warranty-section">
-                    <p>
-                        Якщо ви не задоволені придбаною продукцією, звертайтеся до нашої
-                        служби підтримки для повернення або обміну товару.
-                    </p>
-
+                    <p>{t('warrantyText3')}</p>
                     <img
                         src={FOOTER_IMAGE.WARRANTY_3}
-                        alt="Стандарти"
+                        alt={t('warrantyAlt3')}
                         className="warranty-image"
                     />
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

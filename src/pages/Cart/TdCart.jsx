@@ -2,9 +2,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { saveCartItemToReduxStore, increment, decrement } from "../../ducks";
+import { useTranslation } from 'react-i18next';
 
 export const TdCart = ({ productKey, image, price, quantityCount, setQuantityCount, onDelete }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     useEffect(() => {
         const cartData = {
             productKey,
@@ -57,7 +59,7 @@ export const TdCart = ({ productKey, image, price, quantityCount, setQuantityCou
                     className="cart__table_delete_btn"
                     onClick={() => onDelete(productKey)}
                 >
-                    Delete
+                    {t('delete')}
                 </button>
             </td>
         </tr>

@@ -19,11 +19,9 @@ export const dataFunc = (typeOfRepo, action, params=[]) => {
         },
     };
 
-    // console.log(actions[typeOfRepo][action]);
-    // console.log('params = ',...params);
 
     if (actions[typeOfRepo] && actions[typeOfRepo][action]) {
-        console.log()
+
         return actions[typeOfRepo][action](...params);
     } else {
         console.error('Action or repository type does not exist');

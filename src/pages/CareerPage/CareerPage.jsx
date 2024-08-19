@@ -1,44 +1,40 @@
+
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './CareerPage.css';
-import {Header} from "../../components";
-import {Footer} from "../../components";
-import {FOOTER_IMAGE} from "../../resources";
+import { Header } from "../../components";
+import { Footer } from "../../components";
+import { FOOTER_IMAGE } from "../../resources";
 
 export function CareerPage() {
+    const { t } = useTranslation('footerLocale');
+
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="career-page__content">
-                <h1>Кар'єра</h1>
-                <p>
-                    Разом з нами ви зможете реалізувати свій потенціал та розвинути свої навички.
-                    Ми шукаємо талановитих та мотивованих людей, які хочуть долучитися до нашої команди.
-                </p>
+                <h1>{t('careerPage.title')}</h1>
+                <p>{t('careerPage.description')}</p>
 
                 <img
                     src={FOOTER_IMAGE.CAREER}
-                    alt="Про нас"
-                    className="about-page__image"
+                    alt={t('careerPage.imageAlt')}
+                    className="career-page__image"
                 />
 
-                <h2 className="career-page__content__h2">Вакансії:</h2>
+                <h2 className="career-page__content__h2">{t('careerPage.vacanciesTitle')}</h2>
                 <ul>
-                    <li>Менеджер з продажу</li>
-                    <li>Маркетолог</li>
-                    <li>Програміст</li>
+                    <li>{t('careerPage.vacancies.salesManager')}</li>
+                    <li>{t('careerPage.vacancies.logistician')}</li>
+                    <li>{t('careerPage.vacancies.webDeveloper')}</li>
                 </ul>
 
-                <h2 className="career-page__content__h2">Як подати заявку:</h2>
-                <p>
-                    Для подання заявки на вакансію, надішліть своє резюме на нашу електронну пошту
-                    за адресою: hr@example.com.
-                </p>
+                <h2 className="career-page__content__h2">{t('careerPage.howToApplyTitle')}</h2>
+                <p>{t('careerPage.howToApply')}</p>
 
-                <p>
-                    Будь ласка, вкажіть в темі листа назву вакансії, на яку ви подаєте заявку.
-                </p>
+                <p>{t('careerPage.emailNote')}</p>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

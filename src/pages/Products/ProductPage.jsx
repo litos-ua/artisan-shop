@@ -8,12 +8,14 @@ import { Footer, Header } from '../../components';
 import { ROUTE } from '../../router';
 import { getProductById } from '../../api';
 import { setProductDetails } from '../../ducks';
+import { useTranslation } from 'react-i18next';
 
 export const Products = () => {
     const { productKey } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const productDetails = useSelector(state => state.productDetails[productKey]);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -38,7 +40,7 @@ export const Products = () => {
         return (
             <Box>
                 <Header />
-                <Typography variant="body1">Product not found</Typography>
+                <Typography variant="body1">{t('productNotFound')}</Typography>
                 <Footer />
             </Box>
         );
@@ -61,10 +63,10 @@ export const Products = () => {
                             <TableHead>
                                 <TableRow sx={{ backgroundColor: '#adc4dc' }}>
                                     <TableCell>
-                                        <Typography variant="h6">Characteristics</Typography>
+                                        <Typography variant="h6">{t('productCharacteristics')}</Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography variant="h6">Value</Typography>
+                                        <Typography variant="h6">{t('productValue')}</Typography>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
@@ -82,7 +84,7 @@ export const Products = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Typography variant="h6" color="primary" align="center" gutterBottom>Price: {Price}</Typography>
+                    <Typography variant="h6" color="primary" align="center" gutterBottom>{t('price')}: {Price}</Typography>
                     <Grid container justifyContent="center">
                         <Button
                             variant="contained"
@@ -90,7 +92,7 @@ export const Products = () => {
                             onClick={() => navigate(ROUTE.HOME)}
                             sx={{ marginRight: '0.5rem' }}
                         >
-                            Home
+                            {t('home')}
                         </Button>
                         <Button
                             variant="contained"
@@ -98,7 +100,7 @@ export const Products = () => {
                             // onClick={handleAddToCart}
                             onClick={() => handleAddToCart(itemName)}
                         >
-                            Add to Cart
+                            {t('addToCart')}
                         </Button>
                     </Grid>
                 </Grid>

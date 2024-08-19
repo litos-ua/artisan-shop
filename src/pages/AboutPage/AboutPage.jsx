@@ -1,41 +1,38 @@
+
 import React from 'react';
 import './AboutPage.css';
-import {Header} from "../../components";
-import {Footer} from "../../components";
-import {FOOTER_IMAGE} from "../../resources";
+import { Header, Footer } from "../../components";
+import { FOOTER_IMAGE } from "../../resources";
+import { useTranslation } from 'react-i18next';
 
 export function AboutPage() {
+    const { t } = useTranslation('footerLocale');
+
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="about-page__content">
-                <h1>Про нас</h1>
-                <p>
-                    Ми - ваш надійний партнер у світі покупок. Наш магазин пропонує широкий
-                    асортимент товарів високої якості за доступними цінами.
-                </p>
+                <h1>{t('aboutTitle')}</h1>
+                <p>{t('aboutText1')}</p>
 
                 <img
                     src={FOOTER_IMAGE.ABOUT}
-                    alt="Про нас"
+                    alt={t('aboutAlt')}
                     className="about-page__image"
                 />
 
-                <h2 className="about-page__content__h2">Наша місія:</h2>
-                <p>
-                    Ми прагнемо забезпечити нашим клієнтам кращий досвід покупок, пропонуючи
-                    якісні товари і відмінний сервіс.
-                </p>
+                <h2 className="about-page__content__h2">{t('aboutMissionTitle')}</h2>
+                <p>{t('aboutMissionText')}</p>
 
-                <h2 className="about-page__content__h2">Наші цінності:</h2>
+                <h2 className="about-page__content__h2">{t('aboutValuesTitle')}</h2>
                 <ul>
-                    <li>Якість</li>
-                    <li>Надійність</li>
-                    <li>Професіоналізм</li>
-                    <li>Відповідальність</li>
+                    <li>{t('aboutValueQuality')}</li>
+                    <li>{t('aboutValueReliability')}</li>
+                    <li>{t('aboutValueProfessionalism')}</li>
+                    <li>{t('aboutValueResponsibility')}</li>
                 </ul>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

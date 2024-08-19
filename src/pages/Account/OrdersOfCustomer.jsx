@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {CustomerAccountPage} from "./CustomerAccountPage";
+import { useTranslation } from 'react-i18next';
 
 const CustomerOrdersList = () => {
     const dispatch = useDispatch();
@@ -33,14 +34,16 @@ const CustomerOrdersList = () => {
         setCurrentPage(value);
     };
 
-    // Calculate the orders to display on current page
+    // --Calculate the orders to display on current page--
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
     const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
+    const { t } = useTranslation();
+
     return (
         <Box>
-            <Typography variant="h5" gutterBottom>List of Orders</Typography>
+            <Typography variant="h5" gutterBottom>{t('listOfOrders')}</Typography>
             {currentOrders.map(order => (
                 <Accordion key={order.id} style={{ marginBottom: '16px' }}>
                     <AccordionSummary
@@ -48,25 +51,25 @@ const CustomerOrdersList = () => {
                         aria-controls={`panel${order.id}-content`}
                         id={`panel${order.id}-header`}
                     >
-                        <Typography variant="h6">Order ID: {order.id}</Typography>
+                        <Typography variant="h6">{t('orderID')}: {order.id}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Box style={{ width: '100%' }}>
                             <Typography color="textSecondary" gutterBottom>
-                                Payment Status: {order.payment_status}
+                                {t('paymentStatus')}: {order.payment_status}
                             </Typography>
                             <Typography color="textSecondary" gutterBottom>
-                                Type of Payment: {order.type_of_payment}
+                                {t('typeOfPayment')}: {order.type_of_payment}
                             </Typography>
                             <Typography color="textSecondary" gutterBottom>
-                                Delivery Requirement: {order.delivery_requirement}
+                                {t('delivery')}: {order.delivery_requirement}
                             </Typography>
                             <Typography color="textSecondary" gutterBottom>
-                                Date: {new Date(order.updated_at).toLocaleString()}
+                                {t('data')}: {new Date(order.updated_at).toLocaleString()}
                             </Typography>
 
                             <Typography variant="subtitle1" component="h3" gutterBottom>
-                                Order Details:
+                                {t('orderDetails')}:
                                 <IconButton
                                     onClick={() => handleExpandClick(order.id)}
                                     aria-expanded={expandedOrderId === order.id}
@@ -81,16 +84,16 @@ const CustomerOrdersList = () => {
                                     <Table aria-label="order details table">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>Product</TableCell>
-                                                <TableCell align="right">Quantity</TableCell>
-                                                <TableCell align="right">Price</TableCell>
+                                                <TableCell>{t('productName')}</TableCell>
+                                                <TableCell align="right">{t('quantity')}</TableCell>
+                                                <TableCell align="right">{t('price')}</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
                                             {order.order_details.map((detail, index) => (
                                                 <TableRow key={index}>
                                                     <TableCell component="th" scope="row">
-                                                        {detail.product_name}
+                                                        {detail.product.name}
                                                     </TableCell>
                                                     <TableCell align="right">{detail.quantity}</TableCell>
                                                     <TableCell align="right">${detail.price}</TableCell>
@@ -102,7 +105,7 @@ const CustomerOrdersList = () => {
                             </Collapse>
 
                             <Typography variant="h6" component="p" style={{ marginTop: '16px' }}>
-                                Total Amount: ${order.total_amount}
+                                {t('totalAmount')}: ${order.total_amount}
                             </Typography>
                         </Box>
                     </AccordionDetails>

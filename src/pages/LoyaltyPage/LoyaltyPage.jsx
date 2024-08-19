@@ -1,50 +1,52 @@
+
 import React from 'react';
 import './LoyaltyPage.css';
-import {Header} from "../../components";
-import {Footer} from "../../components";
-import {FOOTER_IMAGE} from "../../resources";
+import { Header, Footer } from "../../components";
+import { FOOTER_IMAGE } from "../../resources";
+import { useTranslation } from 'react-i18next';
 
 export function LoyaltyPage() {
+    const { t } = useTranslation('footerLocale');
+
     return (
         <div className="loyalty-page">
-            <Header/>
+            <Header />
 
             <div className="loyalty-page__content">
-                <h1>Програма лояльності</h1>
+                <h1>{t('loyaltyTitle')}</h1>
 
                 <img
                     src={FOOTER_IMAGE.LOYALTY}
-                    alt="Програма лояльності"
+                    alt={t('loyaltyAlt')}
                     className="loyalty-image"
                 />
 
-                <p>
-                    Наша програма лояльності - це спеціальна пропозиція для наших постійних
-                    клієнтів. Долучайтеся до нашої програми та отримуйте регулярні
-                    знижки, бонуси та інші приємні бонуси.
-                </p>
-                <h2>Переваги участі в програмі:</h2>
+                <p>{t('loyaltyText1')}</p>
+
+                <h2>{t('loyaltyBenefitsTitle')}</h2>
                 <ul>
-                    <li>Знижки на всі товари</li>
-                    <li>Бонуси за кожну покупку</li>
-                    <li>Спеціальні пропозиції для учасників</li>
+                    <li>{t('loyaltyBenefit1')}</li>
+                    <li>{t('loyaltyBenefit2')}</li>
+                    <li>{t('loyaltyBenefit3')}</li>
                 </ul>
-                <h2>Як отримати бонуси:</h2>
+
+                <h2>{t('loyaltyHowToEarnTitle')}</h2>
                 <ol>
-                    <li>Зареєструйтеся в програмі лояльності</li>
-                    <li>Здійснюйте покупки та отримуйте бонуси за кожну покупку</li>
-                    <li>Обмінюйте бонуси на знижки та подарунки</li>
+                    <li>{t('loyaltyStep1')}</li>
+                    <li>{t('loyaltyStep2')}</li>
+                    <li>{t('loyaltyStep3')}</li>
                 </ol>
-                <h2>Бонусні правила:</h2>
+
+                <h2>{t('loyaltyRulesTitle')}</h2>
                 <ul>
-                    <li>За кожні 100 грн покупки отримайте 5 бонусів</li>
-                    <li>Бонуси можна використовувати на наступних покупках</li>
-                    <li>Спеціальні бонуси на дні народження</li>
+                    <li>{t('loyaltyRule1')}</li>
+                    <li>{t('loyaltyRule2')}</li>
+                    <li>{t('loyaltyRule3')}</li>
                 </ul>
             </div>
+
             <p className="loyalty-page__content__lastP">
-                Приєднуйтесь до нашої програми лояльності і насолоджуйтеся
-                ексклюзивними перевагами від нашого магазину🤗
+                {t('loyaltyLastText')}
             </p>
 
             <Footer />

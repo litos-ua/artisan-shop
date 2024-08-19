@@ -1,8 +1,12 @@
 import React from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import "./orders.css";
 
 const OrderTableComponent = ({ cartItems}) => {
+
+    const { t } = useTranslation();
+
     if (!cartItems) {
         return null;
     }
@@ -13,10 +17,10 @@ const OrderTableComponent = ({ cartItems}) => {
             >
                 <TableHead className="order__table_head">
                     <TableRow className="order__table_row">
-                        <TableCell className="order__table_product_key">Найменування</TableCell>
-                        <TableCell className="order__table_quantity">Кількість</TableCell>
-                        <TableCell className="order__table_price">Ціна</TableCell>
-                        <TableCell className="order__table_amount">Сума</TableCell>
+                        <TableCell className="order__table_product_key">{t('productName')}</TableCell>
+                        <TableCell className="order__table_quantity">{t('quantity')}</TableCell>
+                        <TableCell className="order__table_price">{t('price')}</TableCell>
+                        <TableCell className="order__table_amount">{t('total')}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody >

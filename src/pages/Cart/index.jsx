@@ -7,6 +7,7 @@ import './cart.css';
 import { ROUTE } from '../../router';
 import { TdCart } from './TdCart';
 import { saveCartItemToReduxStore, removeCartItemFromReduxStore } from "../../ducks";
+import { useTranslation } from 'react-i18next';
 
 export const Cart = () => {
     const location = useLocation();
@@ -17,6 +18,7 @@ export const Cart = () => {
     const price = queryParams.get('price');
     const image = queryParams.get('image');
     const allItems = useSelector(state => state.cart.cartItems);
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (productKey && price && image) {
@@ -45,10 +47,10 @@ export const Cart = () => {
                     <thead>
                     <tr className="cart__table_row">
                         <th></th>
-                        <th className="cart__table_product_key">Product Name</th>
-                        <th className="cart__table_quantity">Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
+                        <th className="cart__table_product_key">{t('productName')}</th>
+                        <th className="cart__table_quantity">{t('quantity')}</th>
+                        <th>{t('price')}</th>
+                        <th>{t('total')}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -72,10 +74,10 @@ export const Cart = () => {
                 </div>
                 <div className="cart__item_btn_group">
                     <button className="cart__item_btn" onClick={() => navigate(ROUTE.HOME)}>
-                        Повернутись до пошуку товарів
+                        {t('returnProductSearch')}
                     </button>
                     <button className="cart__item_btn" onClick={() => navigate(ROUTE.ORDER_FORM)}>
-                        Оформити замовлення
+                        {t('completeTheOrder')}
                     </button>
                 </div>
             </div>

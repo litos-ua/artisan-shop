@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { ROUTE } from "../../router";
 import * as Yup from 'yup';
 import { post } from "../../api";
+import { useTranslation } from 'react-i18next';
 
 export function RegistrationPage() {
-    const buttonName = "Register";
-    const resendButtonName = "Resend Verification Email";
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -24,28 +24,33 @@ export function RegistrationPage() {
     const [registrationMessage, setRegistrationMessage] = useState("");
     const [registrationError, setRegistrationError] = useState("");
 
+
     const validationSchema = Yup.object().shape({
         name: Yup.string()
-            .min(3, 'Name must be at least 3 characters')
-            .max(20, 'Name cannot be longer than 20 characters')
-            .matches(/^[a-zA-Z0-9_.-]+$/, 'Invalid name format')
-            .required('Name is required'),
+            .min(3, t('formErrorMessage_nameMinLength'))
+            .max(20, t('formErrorMessage_nameMaxLength'))
+            .matches(/^[a-zA-Z0-9_.-]+$/, t('formErrorMessage_invalidNameFormat'))
+            .required(t('formErrorMessage_nameRequired')),
         email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
+            .email(t('formErrorMessage_invalidEmail'))
+            .required(t('formErrorMessage_emailRequired')),
         password: Yup.string()
-            .min(8, "Password must be at least 8 characters")
+            .min(8, t('formErrorMessage_passwordMinLength'))
             .matches(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                "Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long"
+                /^[a-zA-Z0-9^_)(}{\]\[#$&*@!]*$/,
+                t('formErrorMessage_passwordInvalidCharacters')
             )
-            .required("Password is required"),
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9^_)(}{\]\[#$&*@!]{8,}$/,
+                t('formErrorMessage_passwordComplexity')
+            )
+            .required(t('formErrorMessage_passwordRequired')),
         confirmPassword: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Passwords must match')
-            .required('Confirm Password is required'),
+            .oneOf([Yup.ref('password'), null], t('formErrorMessage_passwordsMustMatch'))
+            .required(t('formErrorMessage_confirmPasswordRequired')),
         agreeToProcessing: Yup.boolean()
-            .oneOf([true], 'You must agree to the processing of personal data')
-            .required('You must agree to the processing of personal data')
+            .oneOf([true], t('formErrorMessage_agreeToProcessingRequired'))
+            .required(t('formErrorMessage_agreeToProcessingRequired'))
     });
 
     const handleNameChange = (e) => {
@@ -54,26 +59,41 @@ export function RegistrationPage() {
         setNameError(
             value.length >= 3 && value.length <= 20 && /^[a-zA-Z0-9_.-]+$/.test(value)
                 ? ""
-                : "Invalid name format"
+                : t('formErrorMessage_invalidNameFormat')
         );
     };
 
     const handleEmailChange = (e) => {
         const value = e.target.value;
         setEmail(value);
-        setEmailError(value.includes("@") ? "" : "Invalid email address");
+        setEmailError(value.includes("@") ? "" : t('formErrorMessage_invalidEmail'));
     };
 
     const handlePasswordChange = (e) => {
         const value = e.target.value;
         setPassword(value);
-        setPasswordError(value.length >= 8 ? "" : "Password must be at least 8 characters");
+
+        const allowedPattern = /^[a-zA-Z0-9^_)(}{\]\[#$&*@!]*$/;
+        const requiredPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9^_)(}{\]\[#$&*@!]{8,}$/;
+
+        if (!allowedPattern.test(value)) {
+            setPasswordError(t('formErrorMessage_passwordInvalidCharacters'));
+        }
+        else if (value.length < 8) {
+            setPasswordError(t('formErrorMessage_passwordMinLength'));
+        }
+        else if (!requiredPattern.test(value)) {
+            setPasswordError(t('formErrorMessage_passwordComplexity'));
+        }
+        else {
+            setPasswordError("");
+        }
     };
 
     const handleConfirmPasswordChange = (e) => {
         const value = e.target.value;
         setConfirmPassword(value);
-        setConfirmPasswordError(value === password ? "" : "Passwords must match");
+        setConfirmPasswordError(value === password ? "" : t('formErrorMessage_passwordsMustMatch'));
     };
 
     const handleAgreeToProcessingChange = (e) => {
@@ -87,29 +107,29 @@ export function RegistrationPage() {
             await validationSchema.validate({ name, email, password, confirmPassword, agreeToProcessing }, { abortEarly: false });
             const response = await post('/register', { name, email, password });
             setRegistrationError("");
-            setRegistrationMessage("Registration successful. Please check your email for verification.");
+            setRegistrationMessage(t('formErrorMessage_registrationSuccess'));
+            alert(registrationMessage);
             navigate(ROUTE.HOME);
             console.log("Registration successful:", response);
         } catch (error) {
             console.error("Registration failed:", error);
+            alert(t('formErrorMessage_registrationFailed'));
             setRegistrationError('');
             console.log('localError1', error.message);
             console.log('localError2', error.errors.email[0]);
             if (error && error.message && error.errors.email) {
-                // Construct error message from response
                 const errorMessage = `${error.message}. ${error.errors.email[0]}`;
-                setRegistrationError(errorMessage); // Display specific error message from server
-             } else {
-                 setRegistrationError("An error occurred. Please try again later."); // Display generic error message
+                setRegistrationError(errorMessage);
+            } else {
+                setRegistrationError(t('formErrorMessage_genericError'));
             }
         }
     };
 
     const handleResendVerificationEmail = async () => {
         try {
-            //const response = await post('/resend-verification-email', { email });
             const response = await post('/email/verification-notification', { email });
-            setRegistrationMessage("Verification email resent. Please check your email.");
+            setRegistrationMessage(t('formErrorMessage_verificationEmailResent'));
             console.log("Resend verification email successful:", response);
         } catch (error) {
             console.error("Resend verification email failed:", error);
@@ -124,7 +144,7 @@ export function RegistrationPage() {
                     <Box sx={{ border: '2px solid #ccc', borderRadius: '10px', padding: '20px', maxWidth: '80vw' }}>
                         <form onSubmit={handleSubmit}>
                             <Typography variant="h4" sx={{ marginBottom: "20px" }}>
-                                Registration
+                                {t('register')}
                             </Typography>
                             {registrationMessage && (
                                 <Typography variant="body1" color="success" sx={{ marginBottom: "20px" }}>
@@ -139,7 +159,7 @@ export function RegistrationPage() {
                             <Box sx={{ width: "100%", marginBottom: "20px" }}>
                                 <TextField
                                     type="text"
-                                    label="Name"
+                                    label={t('name')}
                                     value={name}
                                     onChange={handleNameChange}
                                     variant="outlined"
@@ -155,7 +175,7 @@ export function RegistrationPage() {
                             <Box sx={{ width: "100%", marginBottom: "20px" }}>
                                 <TextField
                                     type="text"
-                                    label="Email Address"
+                                    label={t('emailAdr')}
                                     value={email}
                                     onChange={handleEmailChange}
                                     variant="outlined"
@@ -171,7 +191,7 @@ export function RegistrationPage() {
                             <Box sx={{ width: "100%", marginBottom: "10px" }}>
                                 <TextField
                                     type="password"
-                                    label="Password"
+                                    label={t('pas')}
                                     value={password}
                                     onChange={handlePasswordChange}
                                     variant="outlined"
@@ -187,7 +207,7 @@ export function RegistrationPage() {
                             <Box sx={{ width: "100%", marginBottom: "10px" }}>
                                 <TextField
                                     type="password"
-                                    label="Confirm Password"
+                                    label={t('confirmPassword')}
                                     value={confirmPassword}
                                     onChange={handleConfirmPasswordChange}
                                     variant="outlined"
@@ -209,7 +229,7 @@ export function RegistrationPage() {
                                     onChange={handleAgreeToProcessingChange} // Handle checkbox change
                                 />
                                 <label htmlFor="agreeToProcessing" style={{ marginLeft: "8px" }}>
-                                    I agree to the processing of personal data.
+                                    {t('agreePersonalData')}
                                 </label>
                             </Box>
                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -218,14 +238,14 @@ export function RegistrationPage() {
                                     variant="contained"
                                     color="primary"
                                     sx={{ minWidth: "45%", fontSize: '1rem'}}>
-                                    {buttonName}
+                                    {t('signUpButtonName')}
                                 </Button>
                                 <Button
                                     variant="contained"
                                     color="secondary"
                                     onClick={handleResendVerificationEmail}
                                     sx={{ minWidth: "45%", fontSize: '1rem'}}>
-                                    {resendButtonName}
+                                    {t('signUpResendEmail')}
                                 </Button>
                             </Box>
                         </form>
@@ -236,5 +256,3 @@ export function RegistrationPage() {
         </Box>
     );
 }
-
-
